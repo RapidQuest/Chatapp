@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useAuth } from "../../contexts/Auth"
 import { Link, useHistory } from "react-router-dom"
 import {  Button,Alert } from "react-bootstrap"
-// import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './Join.css';
 
