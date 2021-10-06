@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-// import queryString from "query-string";
+import queryString from "query-string";
 import { useAuth } from "../../contexts/Auth"
 import io from "socket.io-client"; 
 import {  Button } from "react-bootstrap"
@@ -22,7 +22,7 @@ const Chat = ({ location }) => {
   const [users, setUsers] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const endPoint = 'localhost:5000';
+  const endPoint = 'localhost:3000';
 
   async function handleLogout() {
     setError("")
@@ -36,9 +36,7 @@ const Chat = ({ location }) => {
   }
 
   useEffect(()=>{
-    const { name, room } = {name: currentUser.email, room: 'test'};
-    console.log(currentUser.email);
-
+    const { name, room } = {name: currentUser.email, room: queryString.parse(location.search).room};
     socket = io(endPoint, { transports : ['websocket'] });
 
     setRoom(room);
@@ -49,7 +47,7 @@ const Chat = ({ location }) => {
         // alert(error);
       }
     });
-  },[endPoint, location.search]);
+  },[endPoint, currentUser.email,location.search]);
 
   useEffect(() => {
     socket.on('message', message => {
@@ -78,7 +76,7 @@ const sendMessage = (event) => {
           Log Out
         </Button>
       </div>
-      <TextContainer users={users}/>
+      {/* <TextContainer users={users}/> */}
     </div>
   )
 }

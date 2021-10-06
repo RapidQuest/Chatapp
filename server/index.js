@@ -2,6 +2,12 @@ const express = require('express');
 const socketio = require('socket.io');
 const http = require('http');
 const cors = require('cors');
+const path = require("path");
+
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+
+const config = require("./config/dev");
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./users')
 
 const PORT = process.env.PORT || 5000;
@@ -14,7 +20,7 @@ const io = socketio(server);
 
 app.use(cors());
 app.use(router);
-
+var messages = [];
 io.on('connect', (socket) => {
   socket.on('join', ({ name, room }, callback) => {
     const { error, user } = addUser({ id: socket.id, name, room });
@@ -50,4 +56,31 @@ io.on('connect', (socket) => {
   });
 });
 
-server.listen(PORT, ()=> console.log(`Server has started on ${PORT}`));
+const mongoose = require("mongoose");
+const connect = mongoose.connect(config.mongoURI)
+  .then(() => console.log('MongoDB Connected...'))
+  .catch(err => console.log(err));
+
+app.use(cors())
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(bodyParser.json());
+app.use(cookieParser());
+
+app.use('/api/users', require('./routes/users'));
+
+app.use('/uploads', express.static('uploads'));
+
+if (process.env.NODE_ENV === "production") {
+
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
+  });
+}
+
+app.listen(PORT, () => {
+  console.log(`Server Listening on ${PORT}`)
+});
