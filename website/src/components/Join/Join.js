@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/Auth"
 import { Link, useHistory } from "react-router-dom"
-import {  Button,Alert } from "react-bootstrap"
-import TextContainer from '../textContainer/textContainer';
+import Sidebar from '../sideBar/sideBar';
+// import {  Button,Alert } from "react-bootstrap"
+// import TextContainer from '../textContainer/textContainer';
 
 import './Join.css';
 
@@ -12,7 +13,7 @@ const Join = () => {
   const history = useHistory()
   const rooms = ['testRoom1','testRoom2','testRoom3'];
   const [room, setRoom] = useState('');
-
+  const users = [user1]
   async function handleLogout() {
     setError("")
     try {
@@ -24,8 +25,10 @@ const Join = () => {
   }
   return (
     <div className="joinOuterContainer">
-      <div className="joinInnerContainer">
-        <h1 className="heading">Join</h1>
+      {/* <div className="joinInnerContainer"> */}
+        
+      <Sidebar rooms={rooms} />
+        {/* <h1 className="heading">Join</h1>
           {error && <Alert variant="danger">{error}</Alert>}
           <strong className="text-light">Email:</strong> <p className="text-light">{currentUser.email}</p>
         <Link to={`/Chat?room=${room}`}>
@@ -35,9 +38,9 @@ const Join = () => {
         <Button variant="link" onClick={handleLogout}>
           Log Out
         </Button>
-      <TextContainer options={rooms}/>
-      </div>
-      </div>
+      <TextContainer options={rooms}/> 
+      </div>*/}
+      {/* </div> */}
     </div>
   )
 }

@@ -63,22 +63,72 @@ const sendMessage = (event) => {
   }
 }
   console.log(message, messages);
-
   return (
-    <div className="outerContainer">
-      <div className="containerC">
-          <InfoBar room={room} />
-          <Messages messages={messages} name={name} />
-          <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
-      </div>
-      <div className="text-center mt-2">
-        <Button variant="link" onClick={handleLogout}>
-          Log Out
-        </Button>
-      </div>
-      {/* <TextContainer users={users}/> */}
+    <div className="app" style={{ ...page }} >
+      {page.width <= 760 ?
+        <Redirect to="/chats" />
+        : <Redirect to="/" />}
+      {!user && !loader && !checkingVersion && !updating ?
+        <Login />
+        : user && !updating && chatsFetched ?
+          <div className="app__body">
+            <Sidebar chats={chats} pwa={pwaEvent} rooms={rooms} fetchRooms={fetchRooms} users={users} fetchUsers={fetchUsers} />
+            <TransitionGroup component={null} >
+              {page.width <= 760 ?
+                <Transition
+                  key={location.pathname.replace("/image", "")}
+                  timeout={260}
+                >
+                  {state => (
+                    <Route location={location} path={`${path}/room/:roomID`}>
+                      <Chat
+                        b={b}
+                        unreadMessages={chats?.length > 0 ? chats.find(cur => cur.id === pathID)?.unreadMessages : 0}
+                        animState={state}
+                      />
+                    </Route>
+                  )}
+                </Transition>
+                :
+                <CSSTransition
+                  key={location.pathname.replace("/image", "")}
+                  timeout={1010}
+                  classNames="page"
+                >
+                  {state => (
+                    <Route location={location} path={`${path}/room/:roomID`}>
+                      <Chat
+                        b={b}
+                        unreadMessages={chats?.length > 0 ? chats.find(cur => cur.id === pathID)?.unreadMessages : 0}
+                        animState={state}
+                      />
+                    </Route>
+                  )}
+                </CSSTransition>
+              }
+            </TransitionGroup>
+          </div> :
+          <div className="loader__container">
+            <CircularProgress />
+          </div>
+      }
     </div>
-  )
+  );
+  // return (
+  //   <div className="outerContainer">
+  //     <div className="containerC">
+  //         <InfoBar room={room} />
+  //         <Messages messages={messages} name={name} />
+  //         <Input message={message} setMessage={xsetMessage} sendMessage={sendMessage} />
+  //     </div>
+  //     <div className="text-center mt-2">
+  //       <Button variant="link" onClick={handleLogout}>
+  //         Log Out
+  //       </Button>
+  //     </div>
+  //     {/* <TextContainer users={users}/> */}
+  //   </div>
+  // )
 }
 
 export default Chat;
