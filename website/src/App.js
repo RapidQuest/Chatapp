@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 // import Dashboard from "./Dashboard"
 import Login from "./components/login"
 import PrivateRoute from "./components/privateRoute"
+import 'bootstrap/dist/css/bootstrap.min.css';
 // import ForgotPassword from "./ForgotPassword"
 // import UpdateProfile from "./UpdateProfile"
 import Join from "./components/Join/Join";

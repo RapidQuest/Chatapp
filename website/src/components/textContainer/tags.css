@@ -1,0 +1,135 @@
+.tag {
+    /* border: none;
+    border-radius: 3px;
+    padding: 0.3em 0.65em;
+    text-transform: capitalize;
+    font-size: 0.78rem;
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; */
+    /* default */
+    background-color: #E0E0DE;
+    color: #565665;
+}
+
+.tag.lightpink {
+    background-color: #F012BE
+
+}
+
+.tag.mustdo {
+    background-color: #0074D9
+
+}
+
+.tag.agenda {
+    background-color: #7FDBFF
+
+}
+
+.tag.someday {
+    background-color: #39CCCC
+
+}
+
+.tag.purple {
+    background-color: #B10DC9
+
+}
+
+.tag.bronze {
+    background-color: #FFDC00
+
+}
+
+.tag.aqua {
+    background-color: #01FF70
+
+}
+
+.tag.grey {
+    background-color: #3D9970
+
+}
+
+.tag.silver {
+    background-color: #85144b
+
+}
+
+.tag.brown {
+    background-color: #001f3f
+
+}
+
+.tag.cranberry {
+    background-color: #C30F1F;
+    color: #fff;
+}
+
+.tag.orange {
+    background-color: #D63C06;
+    color: #fff;
+}
+
+.tag.brightorange {
+    background-color: #eb9f2e;
+    color: #fff;
+}
+
+.tag.peach {
+    background-color: #FF8B00;
+    color: #000;
+}
+
+.tag.maringold {
+    background-color: #EDA000;
+    color: #000;
+}
+
+.tag.lightgreen {
+    background-color: #169F11;
+    color: #000;
+}
+
+.tag.darkgreen {
+    background-color: #096A0B;
+    color: #fff;
+}
+
+.tag.teal {
+    background-color: #02B6C4;
+    color: #000;
+}
+
+.tag.lightblue {
+    background-color: #3089C3;
+    color: #fff;
+}
+
+.tag.darkblue {
+    background-color: #003862;
+    color: #fff;
+}
+
+.tag.lavender {
+    background-color: #7360EE;
+    color: #fff;
+}
+
+.tag.plum {
+    background-color: #77004B;
+    color: #fff;
+}
+
+.tag.lightgray {
+    background-color: #787471;
+    color: #fff;
+}
+
+.tag.darkgray {
+    background-color: #3B4248;
+    color: #fff;
+}

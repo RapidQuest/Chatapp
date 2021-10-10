@@ -7,18 +7,26 @@ html, body {
 #root {
   height: 100vh;
 }
-
+.ml-50{
+  margin-left: 50px;
+}
 * {
   box-sizing: border-box;
 }
 
 .joinOuterContainer {
   display: flex;
-  justify-content: center;
-  text-align: center;
-  height: 100vh;
-  align-items: center;
-  background-color: #1A1A1D;
+  /* justify-content: center;
+  text-align: center; */
+  height: auto;
+  /* align-items: center; */
+  /* background-color: #F3F4F7; */
+}
+
+.right_border{
+  z-index: 5;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: rgba(243, 244, 247, 1);
 }
 
 .joinInnerContainer {
@@ -68,4 +76,48 @@ html, body {
 
 button:focus {
   outline: 0;
+}
+
+.searchInput{
+  width: 90%;
+  height: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+  padding-left: 1.5rem;
+  color: rgba(0, 0, 0, 0.48);
+
+  /* padding: 0.5rem; */
+}
+
+.sideBar{
+  width: 25vw;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+TextContainer{
+  max-height: 450px!important;
+}
+
+.chatArea{
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+.description{
+  margin-top: 20rem;
+  vertical-align: middle;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+
+.docLogo{
+  margin-top: 15rem;
+  font-size: 15rem;
+}
+
+.chatArea{
+  background-color: rgba(226, 214, 214, 0.09);
 }

@@ -1,16 +1,10 @@
 .textContainer {
   display: flex;
   flex-direction: column;
-  margin-left: 100px;
+  /* margin-left: 100px; */
   color: white;
   height: 60%;
   justify-content: space-between;
-}
-
-.activeContainer {
-  display: flex;
-  align-items: center;
-  margin-bottom: 50%;
 }
 
 .activeItem {
@@ -26,8 +20,50 @@
   margin-bottom: 0px;
 }
 
-@media (min-width: 320px) and (max-width: 1200px) {
+/* @media (min-width: 320px) and (max-width: 1200px) {
   .textContainer {
     display: none;
   }
+} */
+
+.block_item{
+  text-decoration: none;
+  height: 5rem;
+  display: block;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0px;
+}
+
+.block_item_container{
+  overflow-y: scroll;
+  max-height: 760px;
+  /* overflow: auto; */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.item_name{
+  text-align: left;
+  font-size: 1.25rem;
+}
+
+.lastMessage{
+  margin-top: -1rem;
+  text-align: left;
+  font-size: 1rem;
+}
+.item_role{
+  text-align: right;
+  font-size: 1rem;
+}
+
+#profileImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  /* background: #512DA8; */
+  font-size: 20px;
+  color: #fff;
+  text-align: center;
+  line-height: 52px;
+  margin: 8px 0;
 }
