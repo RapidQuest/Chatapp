@@ -6,13 +6,27 @@ import TextContainer from '../textContainer/textContainer';
 import { TransitionGroup } from "react-transition-group";
 
 import './Join.css';
+import FullChat from "../FullChat";
 
 const Join = () => {
+  const [UserSelected, setUserSelected] = useState(null)
   const [error, setError] = useState("")
   const { currentUser, logout } = useAuth()
   const location = useLocation();
   const history = useHistory()
-  const rooms = ['Ajit Chougule','Alex Carry','Arya Stark','Ashwini Chougule','Colin Sik','Jack Aranda','John Quil','Manny Jah','Olive Yew','Rose Bush'];
+  const allUsers = [
+    {_id: 12, name: 'Ajit Chougule', role: 'admin', lastMessage: "Something goes here.."},
+    {_id: 13242, name: 'Alex Carry', role: 'admin', lastMessage: "Something goes here.."},
+    {_id: 14322, name: 'Arya Stark', role: 'admin', lastMessage: "Something goes here.."},
+    {_id: 1212, name: 'Ashwini Chougule', role: 'admin', lastMessage: "Something goes here.."},
+    {_id: 1242, name: 'Colin Sik', role: 'admin', lastMessage: "Something goes here.."},
+    {_id: 1542, name: 'Jack Aranda', role: 'admin', lastMessage: "Something goes here.."},
+    {_id: 1672, name: 'John Quil', role: 'admin', lastMessage: "Something goes here.."},
+    {_id: 17652, name: 'Manny Jah', role: 'admin', lastMessage: "Something goes here.."},
+    {_id: 17542, name: 'Olive Yew', role: 'admin', lastMessage: "Something goes here.."},
+    {_id: 15432, name: 'Rose Bush', role: 'admin', lastMessage: "Something goes here.."}
+  ]
+
   const [room, setRoom] = useState('');
   async function handleLogout() {
     setError("")
@@ -39,17 +53,18 @@ const Join = () => {
             {/* <Button variant="link" onClick={handleLogout}>
               Log Out
             </Button> */}
-          <TextContainer options={rooms}/> 
+          <TextContainer fetchUsers={allUsers} selectedUser={setUserSelected}/> 
           </div>
         </div>
       </div>
       {/* <div className="joinInnerContainer"> */}
 
-    <div className="chatArea">
-      <span className="description">
-        <h1 className="docLogo"><i class="fas fa-user-md"></i></h1>
-        <h1>Keep Yourself connected</h1>
-      </span>
+      {UserSelected} ? <FullChat user={UserSelected}/>
+      :<div className="chatArea">
+        <span className="description">
+          <h1 className="docLogo"><i class="fas fa-user-md"></i></h1>
+          <h1>Keep Yourself connected</h1>
+        </span>
       
       {/* <TransitionGroup component={null} >
               {page.width <= 760 ?
