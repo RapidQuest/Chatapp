@@ -5,7 +5,7 @@ import './textContainer.css';
 import { Link } from "react-router-dom"
 import $ from 'jquery';
 
-const TextContainer = ({ options }) => {
+const TextContainer = ({ fetchUsers,selectedUser }) => {
   var tagCount = 0;
   var tagClasses = {};
   function getFirstString(name){
@@ -13,6 +13,10 @@ const TextContainer = ({ options }) => {
     var secondL = name[1].charAt(0);
     return firstL+secondL;
   };
+
+  function setSelectedUser(id){
+    
+  }
 
   function profileColor(tagName){
     const tagColors = [ "lightpink", "mustdo", "agenda", "someday", "purple", "bronze", "aqua", "grey",
@@ -36,34 +40,33 @@ const TextContainer = ({ options }) => {
   //                   {/* <img alt="Online Icon" src={onlineIcon}/> */}
   //                 </div>`
   //               )));
-  return (<div className="textContainer">
-    {
-      options
+  return (
+      fetchUsers
         ? (
           <div className="block_item_container">
               <h2>
-                {options.map((name,i) => (
-                <Link to={`/Chat?room=${name}`} key={i} style={{ textDecoration: 'none' }}>
-                  <div className="block_item btn">
+                {fetchUsers.map((user,i) => (
+                // <Link to={`/Chat?room=${name}`} key={i} style={{ textDecoration: 'none' }}>
+                  <div className="block_item btn" onClick={()=>{setSelectedUser(user._id)}} key={i}>
                     <div className="row">
                       <div className="col-2">
-                        <div className={"tag "+ profileColor(name)} id="profileImage">{
-                        name.split(' ').length>1 ?
-                        getFirstString(name.split(' '))
+                        <div className={"tag "+ profileColor(user._id)} id="profileImage">{
+                        user.name.split(' ').length>1 ?
+                        getFirstString(user.name.split(' '))
                         : 
-                        name.charAt(0)
+                        user.name.charAt(0)
                         }</div> 
                       </div>
                       <div className="col-10">
                         <div className="row">
-                          <p className="mt-2 col-8 item_name">{name}</p>
-                          <p className="mt-2 col-4 item_role">Admin</p>
+                          <p className="mt-2 col-8 item_name">{user.name}</p>
+                          <p className="mt-2 col-4 item_role">{user.role}</p>
                         </div>
-                        <p className="lastMessage">Yeah I think working with a traine...</p>
+                        <p className="lastMessage">{user.lastMessage}</p>
                       </div>
                     </div>
                   </div>
-                </Link>
+                // </Link>
                   // <div key={i} className="activeItem {name}">
                   //   {name}
                   //   {/* <img alt="Online Icon" src={onlineIcon}/> */}
@@ -73,8 +76,7 @@ const TextContainer = ({ options }) => {
           </div>
         )
         : null
-    }
-  </div>)
+    )
 };
 
 export default TextContainer;
