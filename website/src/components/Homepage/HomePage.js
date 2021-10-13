@@ -5,10 +5,10 @@ import {  Button,Alert } from "react-bootstrap"
 import UsersList from '../UsersList/index';
 import { TransitionGroup } from "react-transition-group";
 
-import './Join.css';
+import './Homepage.css';
 import FullChat from "../FullChat";
 
-const Join = () => {
+const HomePage = () => {
   const [selectedUser, setSelectedUser] = useState(null)
   const [error, setError] = useState("")
   const { currentUser, logout } = useAuth()
@@ -71,4 +71,4 @@ const Join = () => {
   )
 }
 
-export default Join;
+export default HomePage;
