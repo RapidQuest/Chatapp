@@ -5,7 +5,25 @@ import './UsersList.css';
 import ProfileImage from '../ProfileImage';
 
 const UsersList = ({ fetchUsers,selectedUser }) => {
+  var tagCount = 0;
+  var tagClasses = {};
 
+  function profileColor(tagName){
+    const tagColors = [ "lightpink", "mustdo", "agenda", "someday", "purple", "bronze", "aqua", "grey",
+                        "silver", "brown", "cranberry", "orange", "brightorange", "peach", "maringold",
+                        "lightgreen", "darkgreen", "teal", "lightblue", "darkblue", "lavender", "plum",
+                        "lightgray", "darkgray",
+                      ];
+    if(tagClasses[tagName]) {
+      return tagClasses[tagName]
+    }
+    tagClasses[tagName] = tagColors[tagCount]
+    tagCount++;
+    if(tagCount > tagColors.length) {
+      tagCount = 0;
+    }
+    return tagClasses[tagName]
+  };
   return (
       fetchUsers
         ? (
@@ -15,7 +33,7 @@ const UsersList = ({ fetchUsers,selectedUser }) => {
                   <div className="block_item btn" onClick={()=>{selectedUser(user)}} key={i}>
                     <div className="row">
                       <div className="col-2">
-                        <ProfileImage user={user}/>
+                        <ProfileImage user={user} color={profileColor(user._id)}/>
                       </div>
                       <div className="col-10">
                         <div className="row">
