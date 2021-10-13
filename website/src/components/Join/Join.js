@@ -2,20 +2,20 @@ import React, { useState } from "react";
 import { useAuth } from "../../contexts/Auth"
 import { Link, useLocation, useHistory } from "react-router-dom"
 import {  Button,Alert } from "react-bootstrap"
-import TextContainer from '../textContainer/textContainer';
+import UsersList from '../UsersList/index';
 import { TransitionGroup } from "react-transition-group";
 
 import './Join.css';
 import FullChat from "../FullChat";
 
 const Join = () => {
-  const [UserSelected, setUserSelected] = useState(null)
+  const [selectedUser, setSelectedUser] = useState(null)
   const [error, setError] = useState("")
   const { currentUser, logout } = useAuth()
   const location = useLocation();
   const history = useHistory()
   const allUsers = [
-    {_id: 12, name: 'Ajit Chougule', role: 'admin', lastMessage: "Something goes here.."},
+    {_id: 12, name: 'Ajit Chougule', role: 'Provider', lastMessage: "Something goes here.."},
     {_id: 13242, name: 'Alex Carry', role: 'admin', lastMessage: "Something goes here.."},
     {_id: 14322, name: 'Arya Stark', role: 'admin', lastMessage: "Something goes here.."},
     {_id: 1212, name: 'Ashwini Chougule', role: 'admin', lastMessage: "Something goes here.."},
@@ -53,55 +53,20 @@ const Join = () => {
             {/* <Button variant="link" onClick={handleLogout}>
               Log Out
             </Button> */}
-          <TextContainer fetchUsers={allUsers} selectedUser={setUserSelected}/> 
+          <UsersList fetchUsers={allUsers} selectedUser={setSelectedUser}/> 
           </div>
         </div>
       </div>
       {/* <div className="joinInnerContainer"> */}
 
-      {UserSelected} ? <FullChat user={UserSelected}/>
+      {selectedUser ? <FullChat user={selectedUser}/>
       :<div className="chatArea">
         <span className="description">
-          <h1 className="docLogo"><i class="fas fa-user-md"></i></h1>
+          <h1 className="docLogo"><i className="fas fa-user-md"></i></h1>
           <h1>Keep Yourself connected</h1>
         </span>
-      
-      {/* <TransitionGroup component={null} >
-              {page.width <= 760 ?
-                <Transition
-                  key={location.pathname.replace("/image", "")}
-                  timeout={260}
-                >
-                  {state => (
-                    <Route location={location} path={`${path}/room/:roomID`}>
-                      <Chat
-                        b={b}
-                        unreadMessages={chats?.length > 0 ? chats.find(cur => cur.id === pathID)?.unreadMessages : 0}
-                        animState={state}
-                      />
-                    </Route>
-                  )}
-                </Transition>
-                :
-                <CSSTransition
-                  key={location.pathname.replace("/image", "")}
-                  timeout={1010}
-                  classNames="page"
-                >
-                  {state => (
-                    <Route location={location} path={`${path}/room/:roomID`}>
-                      <Chat
-                        b={b}
-                        unreadMessages={chats?.length > 0 ? chats.find(cur => cur.id === pathID)?.unreadMessages : 0}
-                        animState={state}
-                      />
-                    </Route>
-                  )}
-                </CSSTransition>
-              }
-            </TransitionGroup> */}
     </div>
-        
+        }
     </div>
   )
 }

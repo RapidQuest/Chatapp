@@ -5,9 +5,9 @@ import './input.css';
 const Input = ({ setMessage, sendMessage, message }) => (
   <form className="form">
     <input
-      className="input"
+      className="input form-control shadow-none"
       type="text"
-      placeholder="Type a message..."
+      placeholder="Write a message..."
       value={message}
       onChange={({ target: { value } }) => setMessage(value)}
       onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null}

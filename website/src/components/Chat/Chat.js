@@ -9,11 +9,11 @@ import './Chat.css';
 import InfoBar from '../InfoBar/infoBar';
 import Input from '../input/input';
 import Messages from '../messages/messages';
-import TextContainer from '../textContainer/textContainer';
+// import UsersList from '../UsersList/index';
 
 let socket;
 
-const Chat = ({ location }) => {
+const Chat = ({ user }) => {
   const { currentUser, logout } = useAuth();
   const [error, setError] = useState("")
   const history = useHistory()
@@ -22,7 +22,7 @@ const Chat = ({ location }) => {
   const [users, setUsers] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const endPoint = 'localhost:3000';
+  const endPoint = 'localhost:5000';
 
   async function handleLogout() {
     setError("")
@@ -36,7 +36,7 @@ const Chat = ({ location }) => {
   }
 
   useEffect(()=>{
-    const { name, room } = {name: currentUser.email, room: queryString.parse(location.search).room};
+    const { name, room } = {name: "Vanshaj", room: user._id};
     socket = io(endPoint, { transports : ['websocket'] });
 
     setRoom(room);
@@ -47,7 +47,7 @@ const Chat = ({ location }) => {
         // alert(error);
       }
     });
-  },[endPoint, currentUser.email,location.search]);
+  },[endPoint, user._id]);
 
   useEffect(() => {
     socket.on('message', message => {
@@ -66,16 +66,15 @@ const sendMessage = (event) => {
   return (
     <div className="outerContainer">
       <div className="containerC">
-          <InfoBar room={room} />
+          <InfoBar user={user} room={room} />
           <Messages messages={messages} name={name} />
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>
       <div className="text-center mt-2">
-        <Button variant="link" onClick={handleLogout}>
+        {/* <Button variant="link" onClick={handleLogout}>
           Log Out
-        </Button>
+        </Button> */}
       </div>
-      {/* <TextContainer users={users}/> */}
     </div>
   )
 }

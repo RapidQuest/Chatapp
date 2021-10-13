@@ -1,19 +1,14 @@
   
 import React from 'react';
-
-import onlineIcon from '../../icons/onlineIcon.png';
-import closeIcon from '../../icons/closeIcon.png';
+import ProfileImage from '../ProfileImage';
 
 import './InfoBar.css';
 
-const InfoBar = ({ room }) => (
+const InfoBar = ({ user ,room }) => (
   <div className="infoBar">
     <div className="leftInnerContainer">
-      <img className="onlineIcon" src={onlineIcon} alt="online icon" />
-      <h3>{room}</h3>
-    </div>
-    <div className="rightInnerContainer">
-      <a href="/"><img src={closeIcon} alt="close icon" /></a>
+      <ProfileImage user={user}/>
+      <h4 className="text-dark userName">{user.name}<br/><h6>{user.role}</h6></h4>
     </div>
   </div>
 );

@@ -1,17 +1,19 @@
 .messageBox {
   background: #F3F3F3;
-  border-radius: 20px;
+  border-radius: 4px;
   padding: 5px 20px;
   color: white;
   display: inline-block;
   max-width: 80%;
+  height: 50px;
 }
 
 .messageText {
+  color: rgba(0, 0, 0, 0.68);
   width: 100%;
   letter-spacing: 0;
   float: left;
-  font-size: 1.1em;
+  font-size: 1.25rem;
   word-wrap: break-word;
 }
 
@@ -22,7 +24,7 @@
 .messageContainer {
   display: flex;
   justify-content: flex-end;
-  padding: 0 5%;
+  padding: 0 3%;
   margin-top: 3px;
 }
 

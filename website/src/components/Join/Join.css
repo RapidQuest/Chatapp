@@ -96,10 +96,6 @@ button:focus {
   align-items: center;
 }
 
-TextContainer{
-  max-height: 450px!important;
-}
-
 .chatArea{
   width: 100%;
   justify-content: center;

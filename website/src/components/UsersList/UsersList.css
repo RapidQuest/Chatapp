@@ -35,8 +35,8 @@
 }
 
 .block_item_container{
+  max-height: calc(100vh - 82px);
   overflow: auto;
-  height: 100%;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -46,6 +46,7 @@
 }
 
 .lastMessage{
+  line-height: 1.5rem;
   margin-top: -1rem;
   text-align: left;
   font-size: 1rem;
@@ -55,14 +56,7 @@
   font-size: 1rem;
 }
 
-#profileImage {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  /* background: #512DA8; */
-  font-size: 20px;
-  color: #fff;
-  text-align: center;
-  line-height: 52px;
-  margin: 8px 0;
+.active{
+  background-color: rgba(170, 170, 170, 0.2);
+  z-index: 9;
 }
