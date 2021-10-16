@@ -1,5 +1,6 @@
   
 .form {
+  padding: 3%;
   display: flex;
   justify-content: center;
   padding-bottom: 1rem;
@@ -11,7 +12,7 @@
   /* border: none; */
   border-radius: 4px;
   /* padding: 5%; */
-  width: 62vw;
+  /* width: 62vw; */
   font-size: 1.2em;
 }
 
@@ -28,6 +29,6 @@ input:focus, textarea:focus, select:focus{
   display: inline-block;
   border: none;
   border-radius: 4px;
-  width: 5vw;
-  margin-left: 1.5rem;
+  width: 6rem;
+  margin-left: 4%;
 }

@@ -4,11 +4,24 @@
   justify-content: space-between;
   background: #F3F4F7;
   border-radius: 0px;
-  height: 82px;
   width: 100%;
+}
+@media (min-width: 1001px){
+  .infoBar{
+    height: 82px;
+  }
+}
+
+@media (max-width: 1000px){
+  .infoBar{
+    height: 74px;
+  }
 }
 
 .userName{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin-left: 2%;
   margin-bottom: -0.5rem;
 }

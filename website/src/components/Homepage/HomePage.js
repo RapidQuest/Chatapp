@@ -58,7 +58,7 @@ const HomePage = () => {
         </div>
       </div>
       {/* <div className="joinInnerContainer"> */}
-
+      <div className="chatBox">
       {selectedUser ? <FullChat user={selectedUser}/>
       :<div className="chatArea">
         <span className="description">
@@ -67,6 +67,7 @@ const HomePage = () => {
         </span>
     </div>
         }
+        </div>
     </div>
   )
 }

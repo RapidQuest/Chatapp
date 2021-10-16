@@ -80,7 +80,6 @@ button:focus {
 
 .searchInput{
   width: 90%;
-  height: 50px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 0.5rem;
   padding-left: 1.5rem;
@@ -89,8 +88,17 @@ button:focus {
   /* padding: 0.5rem; */
 }
 
+@media (min-width: 480px) and (max-width: 1290px) {
+  .sideBar {
+    width: 35vw;
+  }
+}
+@media (min-width: 1291px){
+  .sideBar{
+    width: 25vw;
+  }
+}
 .sideBar{
-  width: 25vw;
   justify-content: center;
   text-align: center;
   align-items: center;
@@ -108,10 +116,36 @@ button:focus {
   color: rgba(0, 0, 0, 0.5);
 }
 
+@media (max-width: 1000px){
+  .docLogo{
+    margin-top: 10rem;
+    font-size: 10rem;
+  }
+  .searchInput{
+    height: 40px;
+  }
+}
 
-.docLogo{
-  margin-top: 15rem;
-  font-size: 15rem;
+@media (max-width: 760px){
+  .chatBox{
+    display: hidden;
+  }
+}
+
+@media (min-width: 761px){
+  .chatBox{
+    display: contents;
+  }
+}
+
+@media (min-width: 1001px){
+  .docLogo{
+    margin-top: 10rem;
+    font-size: 13rem;
+  }
+  .searchInput{
+    height: 48px;
+  }
 }
 
 .chatArea{
