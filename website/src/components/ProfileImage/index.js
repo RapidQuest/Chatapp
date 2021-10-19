@@ -1,7 +1,7 @@
 import React from 'react'
 import './profileImage.css'
 
-export default function ProfileImage({ user,color }) {  
+export default function ProfileImage({ user }) {  
   
   function getFirstString(name){
     var firstL = name[0].charAt(0);
@@ -11,7 +11,7 @@ export default function ProfileImage({ user,color }) {
 
   return (
     <div>
-      <div className={"tag "+ color} id="profileImage">{
+      <div className={"tag "+ user.color} id="profileImage">{
       user.name.split(' ').length>1 ?
       getFirstString(user.name.split(' '))
       : 

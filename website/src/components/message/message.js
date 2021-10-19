@@ -1,16 +1,17 @@
 import React from 'react';
-
+import { useState, useEffect } from 'react';
 import './message.css';
 
 
-const Message = ({ message: { text, user }, name }) => {
-  let isSentByCurrentUser = false;
+const Message = ({ message, id }) => {
+  const [isSentByCurrentUser, setIsSentByCurrentUser] = useState(false)
+  console.log(message);
+  useEffect(() =>{
+    if(message.user === 10) {
+      setIsSentByCurrentUser(true);
+    }
+  }, [message]);
 
-  // const trimmedName = name.trim().toLowerCase();
-
-  if(user === name) {
-    isSentByCurrentUser = true;
-  }
 
   return (
     isSentByCurrentUser
@@ -18,14 +19,14 @@ const Message = ({ message: { text, user }, name }) => {
         <div className="messageContainer justifyEnd">
           <p className="sentText pr-10">12/09 1:00 PM</p>
           <div className="messageBox backgroundLight2">
-            <p className="messageText colorDark">{text}</p>
+            <p className="messageText colorDark">{message.text}</p>
           </div>
         </div>
         )
-        : (
+        : ( 
           <div className="messageContainer justifyStart">
             <div className="messageBox backgroundLight">
-              <p className="messageText colorDark">{text}</p>
+              <p className="messageText colorDark">{message.text}</p>
             </div>
             <p className="sentText pl-10 ">12/09 1:00 PM</p>
           </div>

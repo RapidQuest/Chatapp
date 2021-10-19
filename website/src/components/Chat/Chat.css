@@ -27,8 +27,14 @@
   }
 }
 
-@media (min-width: 480px) and (max-width: 1290px) {
+@media (min-width: 761px) and (max-width: 1290px) {
   .containerC {
     width: 65vw;
   }
+}
+
+@media (max-width: 760px){
+  .containerC{
+    width: 100vw;
+  }  
 }

@@ -12,6 +12,16 @@
   }
 }
 
+@media (max-width: 760){
+  .backButton {
+    display: block;
+  }
+}
+@media (min-width: 761){
+  .backButton{
+    display: none;
+  }
+}
 @media (max-width: 1000px){
   .infoBar{
     height: 74px;

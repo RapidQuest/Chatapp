@@ -50,17 +50,17 @@ const Chat = ({ user }) => {
   },[endPoint, user._id]);
 
   useEffect(() => {
-    socket.on('message', message => {
-      setMessages(messages => [ ...messages, message ]);
-    });
-}, []);
+    const message = {text: user.name + ", Welcome " + user._id, user: user._id}
+    setMessages(messages => [...messages, message]);
+}, [user]);
 
 const sendMessage = (event) => {
   event.preventDefault();
-
-  if(message) {
-    socket.emit('sendMessage', message, () => setMessage(''));
-  }
+  setMessages(messages => [...messages, {text: message, user: 10}]);
+  setMessage("")
+  // if(message) {
+  //   socket.emit('sendMessage', message, () => setMessage(''));
+  // }
 }
   console.log(message, messages);
   return (

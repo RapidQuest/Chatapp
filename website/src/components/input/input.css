@@ -30,5 +30,5 @@ input:focus, textarea:focus, select:focus{
   border: none;
   border-radius: 4px;
   width: 6rem;
-  margin-left: 4%;
+  margin-left: 1%;
 }
