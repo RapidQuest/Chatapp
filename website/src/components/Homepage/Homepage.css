@@ -79,7 +79,7 @@ button:focus {
 .searchInput{
   height: 100%;
   width: 100%;
-  padding: 0.5rem;
+  /* padding: 0.5rem; */
   color: rgba(0, 0, 0, 0.48);
   border-radius: 0;
 
@@ -155,4 +155,12 @@ button:focus {
 
 .chatArea{
   background-color: rgba(226, 214, 214, 0.09);
+}
+
+.border_left_0{
+  border-left: none;
+}
+
+.bg-white{
+  background-color: white;
 }

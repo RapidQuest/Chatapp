@@ -1,10 +1,20 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 // import onlineIcon from '../../icons/onlineIcon.png';
 import './tags.css';
 import './UsersList.css';
 import ProfileImage from '../ProfileImage';
+import {useWindowDimensions} from '../Homepage/HomePage'
 
 const UsersList = ({ fetchUsers,selectedUser }) => {
+  const { height, width } = useWindowDimensions();
+
+  function Onselect(){
+    let elements = document.getElementsByClassName('block_item btn activeClass');
+    for(let i=0;i<elements.length;i++){
+      elements[i].classList.remove("activeClass");
+    }
+  }
+
 
   return (
       fetchUsers
@@ -12,15 +22,19 @@ const UsersList = ({ fetchUsers,selectedUser }) => {
           <div className="block_item_container" id="items">
               <h2>
                 {fetchUsers.map((user,i) => (
-                  <div className="block_item btn" onClick={()=>{selectedUser(user)}} key={i}>
+                  <div className="block_item btn" id={user._id} onClick={()=>{
+                    selectedUser(user);
+                    Onselect();
+                    document.getElementById(user._id).classList.add("activeClass");
+                    }} key={i}>
                     <div className="row">
-                      <div className="col-2">
+                      <div className={width<=760? "col-1" : "col-2" }>
                         <ProfileImage user={user}/>
                       </div>
-                      <div className="col-10">
-                        <div className="row">
-                          <h6 className="mt-2 col-8 item_name">{user.name}</h6>
-                          <p className="mt-2 col-4 item_role">{user.role}</p>
+                      <div className={width<=760? "col-11 leftPadInMob" : "col-10 leftPadInMob" }>
+                        <div className="row paddingTop">
+                          <h6 className="col-8 item_name">{user.name}</h6>
+                          <p className="col-4 item_role">{user.role}</p>
                         </div>
                         <p className="lastMessage">{user.lastMessage}</p>
                       </div>

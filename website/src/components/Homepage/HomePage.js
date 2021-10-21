@@ -3,7 +3,6 @@ import { useAuth } from "../../contexts/Auth";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import { Button, Alert } from "react-bootstrap";
 import UsersList from "../UsersList/index";
-import { TransitionGroup } from "react-transition-group";
 
 import "./Homepage.css";
 import FullChat from "../FullChat";
@@ -12,42 +11,16 @@ const HomePage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [error, setError] = useState("");
   const { currentUser, logout } = useAuth();
-  const location = useLocation();
   const history = useHistory();
   const { height, width } = useWindowDimensions();
-  function getWindowDimensions() {
-    const { innerWidth: width, innerHeight: height } = window;
-    return {
-      width,
-      height,
-    };
-  }
-
-  function useWindowDimensions() {
-    const [windowDimensions, setWindowDimensions] = useState(
-      getWindowDimensions()
-    );
-
-    useEffect(() => {
-      function handleResize() {
-        setWindowDimensions(getWindowDimensions());
-      }
-
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    return windowDimensions;
-  }
-
-  console.log(height, width);
 
   const allUsers = [
     {
       _id: 12,
       name: "Ajit Chougule",
       role: "Provider",
-      lastMessage: "Something goes here..",
+      lastMessage:
+        "Something goes here..Something goes here..Something goes here..Something goes here..",
     },
     {
       _id: 13242,
@@ -157,10 +130,8 @@ const HomePage = () => {
     return tagClasses[tagName];
   }
 
-  useEffect(() => {
-    allUsers.forEach((user, index) => {
-      user.color = profileColor(user._id);
-    });
+  allUsers.forEach((user, index) => {
+    user.color = profileColor(user._id);
   });
 
   useEffect(() => {
@@ -169,81 +140,39 @@ const HomePage = () => {
   });
 
   function displayChatInMobile() {
-      document.getElementById("sideBar").style.display = "none";
-      document.getElementById("chatBox").style.display = "block";
+    document.getElementById("sideBar").style.display = "none";
+    document.getElementById("chatBox").style.display = "block";
   }
 
   return (
     <>
-      {width < 760 ? (
-        <div className="joinOuterContainer ">
-          <div className="right_border">
-            <div className="sideBar" id="sideBar">
-              <div class="input-group searchInput mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text h-100" id="basic-addon1">
-                    <i class="fas fa-search"></i>
-                  </span>
-                </div>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Username"
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                />
+      <div className="joinOuterContainer ">
+        <div className="right_border">
+          <div className="sideBar" id="sideBar">
+            <div className="input-group searchInput px-3 pt-3 mb-3">
+              <div className="input-group-prepend">
+                <span
+                  className="input-group-text bg-white rounded-0 h-100"
+                  id="basic-addon1"
+                >
+                  <i className="fas fa-search"></i>
+                </span>
               </div>
-              {error && <Alert variant="danger">{error}</Alert>}
-              <div className="w-100 text-center mt-2">
-                <UsersList
-                  fetchUsers={allUsers}
-                  selectedUser={setSelectedUser}
-                />
-              </div>
+              <input
+                type="text"
+                className="form-control rounded-0 border_left_0"
+                placeholder="Search here..."
+                aria-label="Search"
+                aria-describedby="basic-addon1"
+              />
             </div>
-          </div>
-          <div className="chatBox" id="chatBox">
-            {selectedUser ? (
-              <FullChat user={selectedUser} />
-            ) : null}
+            {error && <Alert variant="danger">{error}</Alert>}
+            <div className="w-100 text-center mt-2">
+              <UsersList fetchUsers={allUsers} selectedUser={setSelectedUser} />
+            </div>
           </div>
         </div>
-      ) : (
-        <div className="joinOuterContainer ">
-          <div className="right_border">
-            <div className="sideBar" id="sideBar">
-              <div class="input-group searchInput mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text h-100" id="basic-addon1">
-                    <i class="fas fa-search"></i>
-                  </span>
-                </div>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Username"
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                />
-              </div>
-              {/* <input className="searchInput mt-3 mb-2" style={{ fontFamily: "FontAwesome", fontSize: "20px"  }} placeholder='&#xf002;  Search here...'/> */}
-              {/* <h1 className="heading">Join</h1> */}
-              {error && <Alert variant="danger">{error}</Alert>}
-              {/* <strong className="text-dark">Email:</strong> <p className="text-dark">{currentUser.email}</p> */}
-              {/* <Link to={`/Chat?room=${room}`}>
-            <button className="button mt-20" type="submit">Chat Now!</button>
-          </Link> */}
-              <div className="w-100 text-center mt-2">
-                {/* <Button variant="link" onClick={handleLogout}>
-              Log Out
-            </Button> */}
-                <UsersList
-                  fetchUsers={allUsers}
-                  selectedUser={setSelectedUser}
-                />
-              </div>
-            </div>
-          </div>
+        {width > 760 ? (
           <div className="chatBox">
             {selectedUser ? (
               <FullChat user={selectedUser} />
@@ -258,10 +187,38 @@ const HomePage = () => {
               </div>
             )}
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="chatBox" id="chatBox">
+            {selectedUser ? <FullChat user={selectedUser} /> : null}
+          </div>
+        )}
+      </div>
     </>
   );
 };
 
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+}
+
+export const useWindowDimensions = () => {
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions()
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return windowDimensions;
+};
 export default HomePage;

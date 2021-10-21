@@ -32,3 +32,9 @@ input:focus, textarea:focus, select:focus{
   width: 6rem;
   margin-left: 1%;
 }
+
+@media (max-width: 760px){
+  .input {
+    height: 42px;
+  }
+}

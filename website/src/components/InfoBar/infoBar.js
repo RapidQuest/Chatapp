@@ -1,10 +1,14 @@
   
-import React from 'react';
+import React, { useState, useEffect } from "react";
+
 import ProfileImage from '../ProfileImage';
+import {useWindowDimensions} from '../Homepage/HomePage'
 
 import './InfoBar.css';
 
 const InfoBar = ({ user ,room }) => {
+    const { height, width } = useWindowDimensions();
+
     let styles = {
       color: '#000',
       fontSize: '1.5rem',
@@ -12,9 +16,15 @@ const InfoBar = ({ user ,room }) => {
 
     return (<div className="infoBar">
       <div className="leftInnerContainer">
-        <div className="backButton"><i class="fas fa-chevron-left" style={styles}></i></div>
-        <ProfileImage user={user}/>
-        <h4 className="text-dark userName">{user.name}<br/><h6>{user.role}</h6></h4>
+        {user && width < 760
+        ?
+        <div className="backButton" id="backButton" onClick={()=>{window.location.reload();}}><i className="fas fa-chevron-left" id="back_icon" style={styles}></i></div> 
+        : 
+        null}
+        <span className="profileWrapper">
+          <ProfileImage user={user}/>
+        </span>
+        <h4 className="text-dark userName">{user.name}<br/><p className="userRole">{user.role}</p></h4>
       </div>
     </div>);
   };

@@ -17,9 +17,9 @@
 }
 
 @media (min-width: 320px) and (max-width: 480px) {
-  .outerContainer {
+  /* .outerContainer {
     height: 100%;
-  }
+  } */
 
   .containerC {
     width: 100%;

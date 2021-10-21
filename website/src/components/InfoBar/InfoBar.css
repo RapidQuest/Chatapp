@@ -8,23 +8,33 @@
 }
 @media (min-width: 1001px){
   .infoBar{
-    height: 82px;
+    height: 72px;
   }
 }
 
-@media (max-width: 760){
-  .backButton {
-    display: block;
-  }
+.backButton{
+  font-size: 1.5rem;
+  color: rgb(37, 36, 36);
+  font-weight: 600;
+  padding-right: 5%;
 }
-@media (min-width: 761){
-  .backButton{
-    display: none;
-  }
-}
+
 @media (max-width: 1000px){
   .infoBar{
-    height: 74px;
+    height: 72px;
+  }
+}
+
+@media (max-width: 760px){
+  .userName{
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .userRole{
+    font-size: 14px;
+    font-weight: 400;
   }
 }
 
@@ -34,6 +44,14 @@
   text-overflow: ellipsis;
   margin-left: 2%;
   margin-bottom: -0.5rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.userRole{
+  font-size: 16px;
+  font-weight: 400;
 }
 
 .leftInnerContainer {
@@ -53,4 +71,8 @@
 
 .onlineIcon {
   margin-right: 5%;
+}
+
+.profileWrapper{
+  margin-top: -5px;
 }

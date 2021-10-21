@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from "react";
-import queryString from "query-string";
 import { useAuth } from "../../contexts/Auth"
 import io from "socket.io-client"; 
 import {  Button } from "react-bootstrap"
@@ -22,6 +21,7 @@ const Chat = ({ user }) => {
   const [users, setUsers] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [backButton, clickedBackButton] = useState(null);
   const endPoint = 'localhost:5000';
 
   async function handleLogout() {
@@ -65,8 +65,8 @@ const sendMessage = (event) => {
   console.log(message, messages);
   return (
     <div className="outerContainer">
-      <div className="containerC">
-          <InfoBar user={user} room={room} />
+      <div className="containerC" id={user._id}>
+          <InfoBar user={user} room={room}  />
           <Messages messages={messages} name={name} />
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>
