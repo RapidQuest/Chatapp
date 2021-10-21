@@ -50,8 +50,10 @@ const Chat = ({ user }) => {
   },[endPoint, user._id]);
 
   useEffect(() => {
+    setMessages("")
     const message = {text: user.name + ", Welcome " + user._id, user: user._id}
     setMessages(messages => [...messages, message]);
+    console.log(messages);
 }, [user]);
 
 const sendMessage = (event) => {

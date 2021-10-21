@@ -7,20 +7,18 @@ html, body {
 #root {
   height: 100vh;
 }
+
 .ml-50{
   margin-left: 50px;
 }
+
 * {
   box-sizing: border-box;
 }
 
 .joinOuterContainer {
   display: flex;
-  /* justify-content: center;
-  text-align: center; */
   height: auto;
-  /* align-items: center; */
-  /* background-color: #F3F4F7; */
 }
 
 .right_border{
@@ -148,9 +146,6 @@ button:focus {
     margin-top: 10rem;
     font-size: 13rem;
   }
-  /* .searchInput{
-    height: 48px;
-  } */
 }
 
 .chatArea{
