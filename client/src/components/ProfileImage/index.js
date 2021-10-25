@@ -1,5 +1,5 @@
 import React from 'react'
-import './profileImage.css'
+import './style.css'
 
 export default function ProfileImage({ user }) {  
   

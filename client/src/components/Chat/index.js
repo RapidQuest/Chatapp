@@ -4,10 +4,10 @@ import io from "socket.io-client";
 import {  Button } from "react-bootstrap"
 import {  useHistory } from "react-router-dom"
 
-import './Chat.css';
-import InfoBar from '../InfoBar/infoBar';
-import Input from '../input/input';
-import Messages from '../messages/messages';
+import './style.css';
+import InfoBar from '../InfoBar';
+import Input from '../input';
+import Messages from '../messages';
 // import UsersList from '../UsersList/index';
 
 let socket;

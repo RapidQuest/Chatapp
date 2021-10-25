@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from "react";
 
 import ProfileImage from '../ProfileImage';
-import {useWindowDimensions} from '../Homepage/HomePage'
+import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 
-import './InfoBar.css';
+import './style.css';
 
 const InfoBar = ({ user ,room }) => {
     const { height, width } = useWindowDimensions();

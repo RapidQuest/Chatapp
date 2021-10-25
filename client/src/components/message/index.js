@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import './message.css';
+import './style.css';
 
 
 const Message = ({ message, id }) => {

@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 // import onlineIcon from '../../icons/onlineIcon.png';
 import './tags.css';
-import './UsersList.css';
+import './style.css';
 import ProfileImage from '../ProfileImage';
-import {useWindowDimensions} from '../Homepage/HomePage'
+import { useWindowDimensions } from '../../hooks/useWindowDimensions';
 
 const UsersList = ({ fetchUsers,selectedUser }) => {
   const { height, width } = useWindowDimensions();

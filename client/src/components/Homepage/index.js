@@ -3,8 +3,9 @@ import { useAuth } from "../../contexts/Auth";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import { Button, Alert } from "react-bootstrap";
 import UsersList from "../UsersList/index";
+import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 
-import "./Homepage.css";
+import "./style.css";
 import FullChat from "../FullChat";
 
 const HomePage = () => {
@@ -197,28 +198,4 @@ const HomePage = () => {
   );
 };
 
-function getWindowDimensions() {
-  const { innerWidth: width, innerHeight: height } = window;
-  return {
-    width,
-    height,
-  };
-}
-
-export const useWindowDimensions = () => {
-  const [windowDimensions, setWindowDimensions] = useState(
-    getWindowDimensions()
-  );
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowDimensions(getWindowDimensions());
-    }
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  return windowDimensions;
-};
 export default HomePage;

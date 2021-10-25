@@ -10,8 +10,8 @@ import PrivateRoute from "./components/privateRoute"
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import ForgotPassword from "./ForgotPassword"
 // import UpdateProfile from "./UpdateProfile"
-import HomePage from "./components/Homepage/HomePage";
-import Chat from "./components/Chat/Chat";
+import HomePage from "./components/Homepage";
+import Chat from "./components/Chat";
 
 const App = () => {
   return (
@@ -20,7 +20,6 @@ const App = () => {
           <Switch>
             {/* <PrivateRoute exact path="/" component={Dashboard} /> */}
             <Route path="/" exact component={HomePage} />
-            <Route path="/chat" component={Chat} />
             {/* <PrivateRoute path="/update-profile" component={UpdateProfile} /> */}
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
