@@ -22,7 +22,7 @@ const UsersList = ({ fetchUsers,selectedUser }) => {
           <div className="block_item_container" id="items">
               <h2>
                 {fetchUsers.map((user,i) => (
-                  <div className="block_item btn" id={user._id} onClick={()=>{
+                  <div className="block_item hover btn" id={user._id} onClick={()=>{
                     selectedUser(user);
                     Onselect();
                     document.getElementById(user._id).classList.add("activeClass");

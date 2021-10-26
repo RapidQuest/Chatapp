@@ -7,6 +7,8 @@
   justify-content: space-between;
 }
 
+
+
 .activeItem {
   display: flex;
   align-items: center;

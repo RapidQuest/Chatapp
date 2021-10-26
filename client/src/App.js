@@ -11,7 +11,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // import ForgotPassword from "./ForgotPassword"
 // import UpdateProfile from "./UpdateProfile"
 import HomePage from "./components/Homepage";
-import Chat from "./components/Chat";
 
 const App = () => {
   return (

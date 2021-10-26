@@ -2,7 +2,7 @@ import React from 'react';
 
 import './style.css';
 
-const Input = ({ setMessage, sendMessage, message }) => (
+const Input = ({  message , setMessage,sendMessage}) => (
   <form className="form">
     <input
       className="input form-control shadow-none"

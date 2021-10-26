@@ -22,60 +22,70 @@ const HomePage = () => {
       role: "Provider",
       lastMessage:
         "Something goes here..Something goes here..Something goes here..Something goes here..",
+        messages:[]
     },
     {
       _id: 13242,
       name: "Alex Carry",
       role: "admin",
       lastMessage: "Something goes here..",
+      messages:[]
     },
     {
       _id: 14322,
       name: "Arya Stark",
       role: "admin",
       lastMessage: "Something goes here..",
+      messages:[]
     },
     {
       _id: 1212,
       name: "Ashwini Chougule",
       role: "admin",
       lastMessage: "Something goes here..",
+      messages:[]
     },
     {
       _id: 1242,
       name: "Colin Sik",
       role: "admin",
       lastMessage: "Something goes here..",
+      messages:[]
     },
     {
       _id: 1542,
       name: "Jack Aranda",
       role: "admin",
       lastMessage: "Something goes here..",
+      messages:[]
     },
     {
       _id: 1672,
       name: "John Quil",
       role: "admin",
       lastMessage: "Something goes here..",
+      messages:[]
     },
     {
       _id: 17652,
       name: "Manny Jah",
       role: "admin",
       lastMessage: "Something goes here..",
+      messages:[]
     },
     {
       _id: 17542,
       name: "Olive Yew",
       role: "admin",
       lastMessage: "Something goes here..",
+      messages:[]
     },
     {
       _id: 15432,
       name: "Rose Bush",
       role: "admin",
       lastMessage: "Something goes here..",
+      messages:[]
     },
   ];
 
