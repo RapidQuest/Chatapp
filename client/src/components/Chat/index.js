@@ -6,8 +6,8 @@ import {  useHistory } from "react-router-dom"
 
 import './style.css';
 import InfoBar from '../InfoBar';
-import Input from '../input';
-import Messages from '../messages';
+import Input from '../Input';
+import Messages from '../Messages';
 // import UsersList from '../UsersList/index';
 
 let socket;
