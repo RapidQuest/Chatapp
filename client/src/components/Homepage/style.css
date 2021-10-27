@@ -18,7 +18,7 @@ html, body {
 
 .joinOuterContainer {
   display: flex;
-  height: auto;
+  height: 100%;
 }
 
 .right_border{

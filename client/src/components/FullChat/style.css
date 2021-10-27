@@ -19,11 +19,12 @@
 .containerC {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   background: #FFFFFF;
   border-radius: 0px;
   height: 100%;
   width: 100%;
+  position: relative;
 }
 
 @media (min-width: 320px) and (max-width: 480px) {
