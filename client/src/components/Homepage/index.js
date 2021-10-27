@@ -171,7 +171,7 @@ const HomePage = () => {
               </div>
               <input
                 type="text"
-                className="form-control rounded-0 border_left_0"
+                className="form-control rounded-0 border_left_0 shadow-none"
                 placeholder="Search here..."
                 aria-label="Search"
                 aria-describedby="basic-addon1"
@@ -186,7 +186,7 @@ const HomePage = () => {
         {width > 760 ? (
           <div className="chatBox">
             {selectedUser ? (
-              <FullChat user={selectedUser} />
+              <FullChat user={selectedUser}/>
             ) : (
               <div className="chatArea">
                 <span className="description">

@@ -1,5 +1,6 @@
 const express = require('express');
 const socketio = require('socket.io');
+const initiateMongoServer = require('./config/dev.js');
 const http = require('http');
 const cors = require('cors');
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./users')
@@ -11,6 +12,8 @@ const router = require('./router');
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
+
+initiateMongoServer(); // Connects to mongo db
 
 app.use(cors());
 app.use(router);

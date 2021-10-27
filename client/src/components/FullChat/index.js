@@ -11,7 +11,7 @@ import './style.css'
 
 let socket;
 
-export default function FullChat({ user }) {
+export default function FullChat({ user,setUser }) {
   const { logout } = useAuth();
   const [error, setError] = useState("")
   const history = useHistory()
@@ -86,7 +86,7 @@ let allMessages =  (user.messages==null? messages: user.messages);
     <div className="fullContainer">
     <div className="outerContainer">
       <div className="containerC" id={user._id}>
-          <InfoBar user={user} room={room}  />
+          <InfoBar user={user} room={room} />
           <Messages messages={allMessages} id={currentUser.id} />
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>

@@ -107,49 +107,49 @@
 
 @media(max-width: 630px) and (min-width: 570px){
   .leftPadInMob{
-    padding-left:4%;
+    padding-left:5%;
   }
 }
 
 @media(max-width: 570px) and (min-width: 500px){
   .leftPadInMob{
-    padding-left:5%;
+    padding-left: 6%;
   }
 }
 
 @media(max-width: 500px) and (min-width: 480px){
   .leftPadInMob{
-    padding-left:6%;
+    padding-left: 7%;
   }
 }
 
 @media(max-width: 480px) and (min-width: 430px){
   .leftPadInMob{
-    padding-left:7%;
+    padding-left: 8%;
   }
 }
 
 @media(max-width: 430px) and (min-width: 400px){
   .leftPadInMob{
-    padding-left:8%;
+    padding-left: 9%;
   }
 }
 
 @media(max-width: 400px) and (min-width: 370px){
   .leftPadInMob{
-    padding-left:10%;
+    padding-left:11%;
   }
 }
 
 @media(max-width: 370px) and (min-width: 330px){
   .leftPadInMob{
-    padding-left:12%;
+    padding-left:13%;
   }
 }
 
 @media(max-width: 330px){
   .leftPadInMob{
-    padding-left:14%;
+    padding-left:15%;
   }
 }
 
