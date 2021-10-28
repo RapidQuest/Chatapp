@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/Auth";
-import { Link, useLocation, useHistory } from "react-router-dom";
-import { Button, Alert } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+import {  Alert } from "react-bootstrap";
 import UsersList from "../UsersList/index";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 

@@ -1,15 +1,11 @@
 import React from 'react';
 
 import Signup from "./components/Signup"
-import { Container } from "react-bootstrap"
 import { AuthProvider } from "./contexts/Auth"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-// import Dashboard from "./Dashboard"
 import Login from "./components/login"
 import PrivateRoute from "./components/privateRoute"
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import ForgotPassword from "./ForgotPassword"
-// import UpdateProfile from "./UpdateProfile"
 import HomePage from "./components/Homepage";
 
 const App = () => {

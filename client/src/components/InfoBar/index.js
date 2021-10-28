@@ -1,5 +1,5 @@
   
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import ProfileImage from '../ProfileImage';
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
@@ -18,7 +18,7 @@ const InfoBar = ({ user ,room }) => {
       <div className="leftInnerContainer">
         {user && width < 760
         ?
-        <div className="backButton" id="backButton" onClick={()=>{window.location.reload();}}><i className="fas fa-chevron-left" id="back_icon" style={styles}></i></div> 
+        <div className="backButton" id="backButton"><i className="fas fa-chevron-left" id="back_icon" style={styles}></i></div> 
         : 
         null}
         <span className="profileWrapper">

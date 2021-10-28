@@ -30,7 +30,7 @@
 }
 
 .block_item_container{
-  max-height: calc(100vh - 82px);
+  max-height: calc(100vh - 70px);
   overflow: auto;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }

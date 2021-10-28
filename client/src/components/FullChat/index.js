@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { useAuth } from "../../contexts/Auth"
 import io from "socket.io-client"; 
-import {  Button } from "react-bootstrap"
 import {  useHistory } from "react-router-dom"
 
 import InfoBar from '../InfoBar';
@@ -11,7 +10,7 @@ import './style.css'
 
 let socket;
 
-export default function FullChat({ user,setUser }) {
+export default function FullChat({ user,selectedUser }) {
   const { logout } = useAuth();
   const [error, setError] = useState("")
   const history = useHistory()
@@ -24,7 +23,6 @@ export default function FullChat({ user,setUser }) {
   const currentUser = {id:2512, name:"Vanshaj"};
   let existingMessages = JSON.parse(localStorage.getItem(user._id));
   var current = new Date();
-  console.log(current.toLocaleString());
 
   async function handleLogout() {
     setError("")
@@ -44,12 +42,19 @@ export default function FullChat({ user,setUser }) {
     setRoom(room);
     setName(name)
 
-    socket.emit('join', { name, room }, (error) => {
+    socket.emit('join', { user, currentUser }, (error) => {
       if(error) {
         // alert(error);
       }
     });
   },[endPoint, user._id]);
+
+//   useEffect(() => {
+//     socket.on('message', message => {
+//       setMessages(messages => [...messages, message]);
+//       if(existingMessages == null) localStorage.setItem(user._id, JSON.stringify(message));
+//     });
+// }, [user]);
 
   useEffect(() => {
     setMessages("")
@@ -61,6 +66,24 @@ export default function FullChat({ user,setUser }) {
 
 const sendMessage = (event) => {
   event.preventDefault();
+
+  // if(message) {
+  //   socket.emit('sendMessage', message, () => {
+
+  //     setMessages(messages => [...messages, [{value: message, time: current.toLocaleString(), sentBy: currentUser.id}]]);
+  //     setMessage("")
+  //     if(existingMessages == null){
+  //       existingMessages = [];
+  //       localStorage.setItem(user._id, JSON.stringify(messages)); 
+  //     }
+      
+  //     existingMessages.push({value: message, time: current.toLocaleString(), sentBy: currentUser.id})
+    
+  //     localStorage.setItem(user._id, JSON.stringify(existingMessages))
+    
+  //   });
+  // }
+
   setMessages(messages => [...messages, {value: message, time: current.toLocaleString(), sentBy: currentUser.id}]);
   setMessage("")
   if(existingMessages == null){
@@ -74,12 +97,11 @@ const sendMessage = (event) => {
   console.log(existingMessages);
 
 
-  // if(message) {
-  //   socket.emit('sendMessage', message, () => setMessage(''));
-  // }
+  if(message) {
+    socket.emit('sendMessage', message, () => setMessage(''));
+  }
 }
 user.messages = JSON.parse(localStorage.getItem(user._id))
-console.log(messages);
 
 let allMessages =  (user.messages==null? messages: user.messages);
 
@@ -88,7 +110,7 @@ let allMessages =  (user.messages==null? messages: user.messages);
     <div className="fullContainer">
     <div className="outerContainer">
       <div className="containerC" id={user._id}>
-          <InfoBar user={user} room={room} />
+          <InfoBar user={user} room={room} setUser={selectedUser} />
           <Messages messages={allMessages} id={currentUser.id} />
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>

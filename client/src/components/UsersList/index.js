@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 // import onlineIcon from '../../icons/onlineIcon.png';
 import './tags.css';
 import './style.css';
@@ -6,7 +6,7 @@ import ProfileImage from '../ProfileImage';
 import { useWindowDimensions } from '../../hooks/useWindowDimensions';
 
 const UsersList = ({ fetchUsers,selectedUser }) => {
-  const { height, width } = useWindowDimensions();
+  const {  width } = useWindowDimensions();
 
   function Onselect(){
     let elements = document.getElementsByClassName('block_item btn activeClass');

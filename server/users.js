@@ -1,14 +1,14 @@
 const users = [];
 
-const addUser = ({ id, name, room })=>{
+const joinUsers = ({ id, userToChat, currentUser })=>{
   // name = name.trim().toLowerCase();
   // room = room.trim().toLowerCase();
 
-  const existingUsers = users.find((user) => user.room === room && user.name === name);
+  const existingUsers = users.find((user) => user.userToChat === userToChat && user.currentUser === currentUser);
 
-  if(existingUsers) return { error: 'Username is taken.' };
+  if(existingUsers) return;
 
-  const user = { id, name, room };
+  const user = { id, userToChat, currentUser };
 
   users.push(user);
   return { user };
@@ -29,4 +29,4 @@ const getUser = (id) => users.find((user) => user.id === id);
 
 const getUsersInRoom = (room) => users.filter((user) => user.room === room);
 
-module.exports = { addUser, removeUser, getUser, getUsersInRoom };
+module.exports = { joinUsers, removeUser, getUser, getUsersInRoom };

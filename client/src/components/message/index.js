@@ -9,7 +9,7 @@ const Message = ({ message, id }) => {
     if(message.sentBy === id) {
       setIsSentByCurrentUser(true);
     }
-  }, [message]);
+  }, [message, id]);
 
 
   return (
