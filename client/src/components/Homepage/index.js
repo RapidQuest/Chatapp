@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/Auth";
-import { useHistory } from "react-router-dom";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import UsersList from "../UsersList/index";
 import useMediaQuery from "../../hooks/useMediaQuery";
