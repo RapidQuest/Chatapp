@@ -4,8 +4,8 @@ import io from "socket.io-client";
 import {  useHistory } from "react-router-dom"
 
 import InfoBar from '../InfoBar';
-import Input from '../input';
-import Messages from '../messages';
+import Input from '../Input';
+import Messages from '../Messages';
 import './style.css'
 
 let socket;
