@@ -156,6 +156,12 @@ button:focus {
   border-left: none;
 }
 
+.form-control:focus {
+  outline: none;
+  border: 1px solid #ced4da;
+  border-left: none;
+}
+
 .bg-white{
   background-color: white;
 }
