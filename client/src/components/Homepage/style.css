@@ -109,19 +109,14 @@ button:focus {
 
 .chatArea{
   width: 100%;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
 }
 .description{
-  margin-top: 20rem;
   vertical-align: middle;
   color: rgba(0, 0, 0, 0.5);
 }
 
 @media (max-width: 1000px){
   .docLogo{
-    margin-top: 10rem;
     font-size: 10rem;
   }
   /* .searchInput{
@@ -129,21 +124,8 @@ button:focus {
   } */
 }
 
-@media (max-width: 760px){
-  .chatBox{
-    display: none;
-  }
-}
-
-@media (min-width: 761px){
-  .chatBox{
-    display: contents;
-  }
-}
-
 @media (min-width: 1001px){
   .docLogo{
-    margin-top: 10rem;
     font-size: 13rem;
   }
 }

@@ -3,10 +3,10 @@ import React, {useState, useEffect} from 'react';
 import './tags.css';
 import './style.css';
 import ProfileImage from '../ProfileImage';
-import { useWindowDimensions } from '../../hooks/useWindowDimensions';
+import useMediaQuery from '../../hooks/useMediaQuery';
 
-const UsersList = ({ fetchUsers,selectedUser }) => {
-  const { height, width } = useWindowDimensions();
+const UsersList = ({ fetchUsers,setSelectedUser }) => {
+  const isSmall = useMediaQuery("(max-width: 760px)", false)
 
   function Onselect(){
     let elements = document.getElementsByClassName('block_item btn activeClass');
@@ -15,7 +15,6 @@ const UsersList = ({ fetchUsers,selectedUser }) => {
     }
   }
 
-
   return (
       fetchUsers
         ? (
@@ -23,15 +22,15 @@ const UsersList = ({ fetchUsers,selectedUser }) => {
               <h2>
                 {fetchUsers.map((user,i) => (
                   <div className="block_item hover btn" id={user._id} onClick={()=>{
-                    selectedUser(user);
+                    setSelectedUser(user);
                     Onselect();
                     document.getElementById(user._id).classList.add("activeClass");
                     }} key={i}>
                     <div className="row">
-                      <div className={width<=760? "col-1" : "col-2" }>
+                      <div className={isSmall ? "col-1" : "col-2" }>
                         <ProfileImage user={user}/>
                       </div>
-                      <div className={width<=760? "col-11 leftPadInMob" : "col-10 leftPadInMob" }>
+                      <div className={isSmall ? "col-11 leftPadInMob" : "col-10 leftPadInMob" }>
                         <div className="row paddingTop">
                           <h6 className="col-8 item_name">{user.name}</h6>
                           <p className="col-4 item_role">{user.role}</p>
