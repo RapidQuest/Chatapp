@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/Auth";
 import { useHistory } from "react-router-dom";
-import {  Alert } from "react-bootstrap";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import UsersList from "../UsersList/index";
-import { useWindowDimensions } from "../../hooks/useWindowDimensions";
+import useMediaQuery from "../../hooks/useMediaQuery";
+import SideBar from "../SideBar"
+
 
 import "./style.css";
 import FullChat from "../FullChat";
 
 const HomePage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
-  const [error, setError] = useState("");
+  
   const { currentUser, logout } = useAuth();
   const history = useHistory();
-  const { height, width } = useWindowDimensions();
+  const isSmall = useMediaQuery("(max-width: 760px)", false)
 
   const allUsers = [
     {
@@ -90,15 +92,6 @@ const HomePage = () => {
   ];
 
   const [room, setRoom] = useState("");
-  async function handleLogout() {
-    setError("");
-    try {
-      await logout();
-      history.push("/login");
-    } catch {
-      setError("Failed to log out");
-    }
-  }
 
   var tagCount = 0;
   var tagClasses = {};
@@ -145,63 +138,38 @@ const HomePage = () => {
     user.color = profileColor(user._id);
   });
 
-  useEffect(() => {
-    // if(!selectedUser) document.getElementById("sideBar").style.display = "none";
-    if (width <= 760 && selectedUser) displayChatInMobile();
-  });
-
-  function displayChatInMobile() {
-    document.getElementById("sideBar").style.display = "none";
-    document.getElementById("chatBox").style.display = "block";
-  }
 
   return (
     <>
       <div className="joinOuterContainer ">
-        <div className="right_border">
-          <div className="sideBar" id="sideBar">
-            <div className="input-group searchInput px-3 pt-3 mb-3">
-              <div className="input-group-prepend">
-                <span
-                  className="input-group-text bg-white rounded-0 h-100"
-                  id="basic-addon1"
-                >
-                  <i className="fas fa-search"></i>
-                </span>
-              </div>
-              <input
-                type="text"
-                className="form-control rounded-0 border_left_0 shadow-none"
-                placeholder="Search here..."
-                aria-label="Search"
-                aria-describedby="basic-addon1"
-              />
+        
+        {isSmall ? (
+           selectedUser ? (
+            <div className="chatBox" id="chatBox">
+              <FullChat setSelectedUser={setSelectedUser} user={selectedUser} />
             </div>
-            {error && <Alert variant="danger">{error}</Alert>}
-            <div className="w-100 text-center mt-2">
-              <UsersList fetchUsers={allUsers} selectedUser={setSelectedUser} />
-            </div>
-          </div>
-        </div>
-        {width > 760 ? (
-          <div className="chatBox">
-            {selectedUser ? (
-              <FullChat user={selectedUser}/>
-            ) : (
-              <div className="chatArea">
-                <span className="description">
-                  <h1 className="docLogo">
-                    <i className="fas fa-user-md"></i>
-                  </h1>
-                  <h1>Keep Yourself connected</h1>
-                </span>
-              </div>
-            )}
-          </div>
+           ) : (
+            <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} />
+           )
+          
         ) : (
-          <div className="chatBox" id="chatBox">
-            {selectedUser ? <FullChat user={selectedUser} /> : null}
-          </div>
+          <>
+            <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} />
+            <div className="chatBox">
+              {selectedUser ? (
+                <FullChat setSelectedUser={setSelectedUser} user={selectedUser}/>
+              ) : (
+                <div className="chatArea">
+                  <span className="description">
+                    <h1 className="docLogo">
+                      <i className="fas fa-user-md"></i>
+                    </h1>
+                    <h1>Keep Yourself connected</h1>
+                  </span>
+                </div>
+              )}
+            </div>
+          </>
         )}
       </div>
     </>

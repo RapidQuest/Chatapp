@@ -17,6 +17,11 @@
   color: rgb(37, 36, 36);
   font-weight: 600;
   padding-right: 5%;
+  cursor: pointer;
+}
+
+#back_icon {
+  color: rgb(125,125,125);
 }
 
 @media (max-width: 1000px){

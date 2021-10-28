@@ -10,7 +10,8 @@ import './style.css'
 
 let socket;
 
-export default function FullChat({ user,selectedUser }) {
+export default function FullChat({ user, setSelectedUser }) {
+  
   const { logout } = useAuth();
   const [error, setError] = useState("")
   const history = useHistory()
@@ -105,12 +106,11 @@ user.messages = JSON.parse(localStorage.getItem(user._id))
 
 let allMessages =  (user.messages==null? messages: user.messages);
 
-
   return (
     <div className="fullContainer">
     <div className="outerContainer">
       <div className="containerC" id={user._id}>
-          <InfoBar user={user} room={room} setUser={selectedUser} />
+          <InfoBar user={user} room={room} setSelectedUser={setSelectedUser}/>
           <Messages messages={allMessages} id={currentUser.id} />
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>

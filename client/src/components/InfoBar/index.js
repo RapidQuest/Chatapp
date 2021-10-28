@@ -2,23 +2,20 @@
 import React from "react";
 
 import ProfileImage from '../ProfileImage';
-import { useWindowDimensions } from "../../hooks/useWindowDimensions";
+import useMediaQuery from '../../hooks/useMediaQuery';
+
 
 import './style.css';
 
-const InfoBar = ({ user ,room }) => {
-    const { height, width } = useWindowDimensions();
+const InfoBar = ({ user, room, setSelectedUser}) => {
+    const isSmall = useMediaQuery("(max-width: 760px)", false)
 
-    let styles = {
-      color: '#000',
-      fontSize: '1.5rem',
-    }
 
     return (<div className="infoBar">
       <div className="leftInnerContainer">
-        {user && width < 760
+        {user && isSmall 
         ?
-        <div className="backButton" id="backButton"><i className="fas fa-chevron-left" id="back_icon" style={styles}></i></div> 
+        <div className="backButton" id="backButton" onClick={() => setSelectedUser(null)}><i className="fas fa-chevron-left" id="back_icon"></i></div> 
         : 
         null}
         <span className="profileWrapper">
