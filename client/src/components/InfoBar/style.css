@@ -2,17 +2,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #F3F4F7;
+  background: #f3f4f7;
   border-radius: 0px;
   width: 100%;
 }
-@media (min-width: 1001px){
-  .infoBar{
+@media (min-width: 1001px) {
+  .infoBar {
     height: 72px;
   }
 }
 
-.backButton{
+.backButton {
   font-size: 1.5rem;
   color: rgb(37, 36, 36);
   font-weight: 600;
@@ -21,29 +21,29 @@
 }
 
 #back_icon {
-  color: rgb(125,125,125);
+  color: rgb(125, 125, 125);
 }
 
-@media (max-width: 1000px){
-  .infoBar{
+@media (max-width: 1000px) {
+  .infoBar {
     height: 72px;
   }
 }
 
-@media (max-width: 760px){
-  .userName{
+@media (max-width: 760px) {
+  .userName {
     margin-top: 10px;
     font-size: 1rem;
     font-weight: 600;
   }
 
-  .userRole{
+  .userRole {
     font-size: 14px;
     font-weight: 400;
   }
 }
 
-.userName{
+.userName {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -54,7 +54,7 @@
   margin-top: 0.5rem;
 }
 
-.userRole{
+.userRole {
   font-size: 16px;
   font-weight: 400;
 }
@@ -78,6 +78,6 @@
   margin-right: 5%;
 }
 
-.profileWrapper{
+.profileWrapper {
   margin-top: -5px;
 }

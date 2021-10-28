@@ -7,8 +7,6 @@
   justify-content: space-between;
 }
 
-
-
 .activeItem {
   display: flex;
   align-items: center;
@@ -22,48 +20,48 @@
   margin-bottom: 0px;
 }
 
-.block_item{
+.block_item {
   text-decoration: none;
   display: block;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 0px;
 }
 
-.block_item_container{
+.block_item_container {
   max-height: calc(100vh - 70px);
   overflow: auto;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
-@media (max-width: 1000px){
-  .item_name{
+@media (max-width: 1000px) {
+  .item_name {
     font-size: 1.1rem;
   }
-  .lastMessage{
+  .lastMessage {
     font-size: 0.9rem;
   }
-  .item_role{
+  .item_role {
     font-size: 0.9rem;
   }
-  .block_item{
+  .block_item {
     height: 4.5rem;
   }
 }
 
-@media (min-width: 1001px){
-  .item_name{
+@media (min-width: 1001px) {
+  .item_name {
     font-size: 1.2rem;
   }
-  .lastMessage{
+  .lastMessage {
     font-size: 1rem;
   }
-  .item_role{
+  .item_role {
     font-size: 1rem;
   }
-  .block_item{
+  .block_item {
     height: 4.5rem;
   }
 }
-.item_name{
+.item_name {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -72,7 +70,7 @@
   text-overflow: hidden;
 }
 
-.lastMessage{
+.lastMessage {
   /* line-height: 2.5rem; */
   white-space: nowrap;
   overflow: hidden;
@@ -80,79 +78,79 @@
   margin-top: -1rem;
   text-align: left;
 }
-.item_role{
+.item_role {
   text-align: right;
 }
 
-.active{
+.active {
   background-color: rgba(170, 170, 170, 0.2);
   z-index: 9;
 }
 
-@media (max-width: 760px){
-  .paddingTop{
+@media (max-width: 760px) {
+  .paddingTop {
     padding-top: 4px;
   }
 }
 
-.paddingTop{
+.paddingTop {
   padding-top: 8px;
 }
 
-@media (max-width: 660px) and (min-width: 630px){
-  .leftPadInMob{
-    padding-left:3%;
+@media (max-width: 660px) and (min-width: 630px) {
+  .leftPadInMob {
+    padding-left: 3%;
   }
 }
 
-@media(max-width: 630px) and (min-width: 570px){
-  .leftPadInMob{
-    padding-left:5%;
+@media (max-width: 630px) and (min-width: 570px) {
+  .leftPadInMob {
+    padding-left: 5%;
   }
 }
 
-@media(max-width: 570px) and (min-width: 500px){
-  .leftPadInMob{
+@media (max-width: 570px) and (min-width: 500px) {
+  .leftPadInMob {
     padding-left: 6%;
   }
 }
 
-@media(max-width: 500px) and (min-width: 480px){
-  .leftPadInMob{
+@media (max-width: 500px) and (min-width: 480px) {
+  .leftPadInMob {
     padding-left: 7%;
   }
 }
 
-@media(max-width: 480px) and (min-width: 430px){
-  .leftPadInMob{
+@media (max-width: 480px) and (min-width: 430px) {
+  .leftPadInMob {
     padding-left: 8%;
   }
 }
 
-@media(max-width: 430px) and (min-width: 400px){
-  .leftPadInMob{
+@media (max-width: 430px) and (min-width: 400px) {
+  .leftPadInMob {
     padding-left: 9%;
   }
 }
 
-@media(max-width: 400px) and (min-width: 370px){
-  .leftPadInMob{
-    padding-left:11%;
+@media (max-width: 400px) and (min-width: 370px) {
+  .leftPadInMob {
+    padding-left: 11%;
   }
 }
 
-@media(max-width: 370px) and (min-width: 330px){
-  .leftPadInMob{
-    padding-left:13%;
+@media (max-width: 370px) and (min-width: 330px) {
+  .leftPadInMob {
+    padding-left: 13%;
   }
 }
 
-@media(max-width: 330px){
-  .leftPadInMob{
-    padding-left:15%;
+@media (max-width: 330px) {
+  .leftPadInMob {
+    padding-left: 15%;
   }
 }
 
-.activeClass{
+.activeClass {
   background: rgba(170, 170, 170, 0.2);
 }

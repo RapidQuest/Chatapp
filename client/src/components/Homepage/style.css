@@ -1,5 +1,6 @@
-html, body {
-  font-family: 'Roboto', sans-serif;
+html,
+body {
+  font-family: "Roboto", sans-serif;
   padding: 0;
   margin: 0;
 }
@@ -8,7 +9,7 @@ html, body {
   height: 100vh;
 }
 
-.ml-50{
+.ml-50 {
   margin-left: 50px;
 }
 
@@ -21,7 +22,7 @@ html, body {
   height: 100%;
 }
 
-.right_border{
+.right_border {
   z-index: 5;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   background-color: rgba(243, 244, 247, 1);
@@ -45,15 +46,15 @@ html, body {
 }
 
 .button {
-    color: #fff !important;
-    text-transform: uppercase;
-    text-decoration: none;
-    background: #2979FF;
-    padding: 20px;
-    border-radius: 5px;
-    display: inline-block;
-    border: none;
-    width: 100%;
+  color: #fff !important;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: #2979ff;
+  padding: 20px;
+  border-radius: 5px;
+  display: inline-block;
+  border: none;
+  width: 100%;
 }
 
 .mt-20 {
@@ -74,7 +75,7 @@ button:focus {
   outline: 0;
 }
 
-.searchInput{
+.searchInput {
   height: 100%;
   width: 100%;
   /* padding: 0.5rem; */
@@ -90,33 +91,33 @@ button:focus {
   }
 }
 
-@media (max-width: 760px){
-  .sideBar{
+@media (max-width: 760px) {
+  .sideBar {
     width: 100vw;
   }
 }
 
-@media (min-width: 1291px){
-  .sideBar{
+@media (min-width: 1291px) {
+  .sideBar {
     width: 25vw;
   }
 }
-.sideBar{
+.sideBar {
   justify-content: center;
   text-align: center;
   align-items: center;
 }
 
-.chatArea{
+.chatArea {
   width: 100%;
 }
-.description{
+.description {
   vertical-align: middle;
   color: rgba(0, 0, 0, 0.5);
 }
 
-@media (max-width: 1000px){
-  .docLogo{
+@media (max-width: 1000px) {
+  .docLogo {
     font-size: 10rem;
   }
   /* .searchInput{
@@ -124,17 +125,17 @@ button:focus {
   } */
 }
 
-@media (min-width: 1001px){
-  .docLogo{
+@media (min-width: 1001px) {
+  .docLogo {
     font-size: 13rem;
   }
 }
 
-.chatArea{
+.chatArea {
   background-color: rgba(226, 214, 214, 0.09);
 }
 
-.border_left_0{
+.border_left_0 {
   border-left: none;
 }
 
@@ -144,6 +145,6 @@ button:focus {
   border-left: none;
 }
 
-.bg-white{
+.bg-white {
   background-color: white;
 }

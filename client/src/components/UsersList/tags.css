@@ -1,5 +1,5 @@
 .tag {
-    /* border: none;
+  /* border: none;
     border-radius: 3px;
     padding: 0.3em 0.65em;
     text-transform: capitalize;
@@ -9,127 +9,117 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; */
-    /* default */
-    background-color: #E0E0DE;
-    color: #565665;
+  /* default */
+  background-color: #e0e0de;
+  color: #565665;
 }
 
 .tag.lightpink {
-    background-color: #F012BE
-
+  background-color: #f012be;
 }
 
 .tag.mustdo {
-    background-color: #0074D9
-
+  background-color: #0074d9;
 }
 
 .tag.agenda {
-    background-color: #7FDBFF
-
+  background-color: #7fdbff;
 }
 
 .tag.someday {
-    background-color: #39CCCC
-
+  background-color: #39cccc;
 }
 
 .tag.purple {
-    background-color: #B10DC9
-
+  background-color: #b10dc9;
 }
 
 .tag.bronze {
-    background-color: #FFDC00
-
+  background-color: #ffdc00;
 }
 
 .tag.aqua {
-    background-color: #01FF70
-
+  background-color: #01ff70;
 }
 
 .tag.grey {
-    background-color: #3D9970
-
+  background-color: #3d9970;
 }
 
 .tag.silver {
-    background-color: #85144b
-
+  background-color: #85144b;
 }
 
 .tag.brown {
-    background-color: #001f3f
-
+  background-color: #001f3f;
 }
 
 .tag.cranberry {
-    background-color: #C30F1F;
-    color: #fff;
+  background-color: #c30f1f;
+  color: #fff;
 }
 
 .tag.orange {
-    background-color: #D63C06;
-    color: #fff;
+  background-color: #d63c06;
+  color: #fff;
 }
 
 .tag.brightorange {
-    background-color: #eb9f2e;
-    color: #fff;
+  background-color: #eb9f2e;
+  color: #fff;
 }
 
 .tag.peach {
-    background-color: #FF8B00;
-    color: #000;
+  background-color: #ff8b00;
+  color: #000;
 }
 
 .tag.maringold {
-    background-color: #EDA000;
-    color: #000;
+  background-color: #eda000;
+  color: #000;
 }
 
 .tag.lightgreen {
-    background-color: #169F11;
-    color: #000;
+  background-color: #169f11;
+  color: #000;
 }
 
 .tag.darkgreen {
-    background-color: #096A0B;
-    color: #fff;
+  background-color: #096a0b;
+  color: #fff;
 }
 
 .tag.teal {
-    background-color: #02B6C4;
-    color: #000;
+  background-color: #02b6c4;
+  color: #000;
 }
 
 .tag.lightblue {
-    background-color: #3089C3;
-    color: #fff;
+  background-color: #3089c3;
+  color: #fff;
 }
 
 .tag.darkblue {
-    background-color: #003862;
-    color: #fff;
+  background-color: #003862;
+  color: #fff;
 }
 
 .tag.lavender {
-    background-color: #7360EE;
-    color: #fff;
+  background-color: #7360ee;
+  color: #fff;
 }
 
 .tag.plum {
-    background-color: #77004B;
-    color: #fff;
+  background-color: #77004b;
+  color: #fff;
 }
 
 .tag.lightgray {
-    background-color: #787471;
-    color: #fff;
+  background-color: #787471;
+  color: #fff;
 }
 
 .tag.darkgray {
-    background-color: #3B4248;
-    color: #fff;
+  background-color: #3b4248;
+  color: #fff;
 }

@@ -3,18 +3,17 @@ import { useAuth } from "../../contexts/Auth";
 import { Link, useLocation, useHistory } from "react-router-dom";
 import UsersList from "../UsersList/index";
 import useMediaQuery from "../../hooks/useMediaQuery";
-import SideBar from "../SideBar"
-
+import SideBar from "../SideBar";
 
 import "./style.css";
 import FullChat from "../FullChat";
 
 const HomePage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
-  
+
   const { currentUser, logout } = useAuth();
   const history = useHistory();
-  const isSmall = useMediaQuery("(max-width: 760px)", false)
+  const isSmall = useMediaQuery("(max-width: 760px)", false);
 
   const allUsers = [
     {
@@ -23,70 +22,70 @@ const HomePage = () => {
       role: "Provider",
       lastMessage:
         "Something goes here..Something goes here..Something goes here..Something goes here..",
-        messages:[]
+      messages: [],
     },
     {
       _id: 13242,
       name: "Alex Carry",
       role: "admin",
       lastMessage: "Something goes here..",
-      messages:[]
+      messages: [],
     },
     {
       _id: 14322,
       name: "Arya Stark",
       role: "admin",
       lastMessage: "Something goes here..",
-      messages:[]
+      messages: [],
     },
     {
       _id: 1212,
       name: "Ashwini Chougule",
       role: "admin",
       lastMessage: "Something goes here..",
-      messages:[]
+      messages: [],
     },
     {
       _id: 1242,
       name: "Colin Sik",
       role: "admin",
       lastMessage: "Something goes here..",
-      messages:[]
+      messages: [],
     },
     {
       _id: 1542,
       name: "Jack Aranda",
       role: "admin",
       lastMessage: "Something goes here..",
-      messages:[]
+      messages: [],
     },
     {
       _id: 1672,
       name: "John Quil",
       role: "admin",
       lastMessage: "Something goes here..",
-      messages:[]
+      messages: [],
     },
     {
       _id: 17652,
       name: "Manny Jah",
       role: "admin",
       lastMessage: "Something goes here..",
-      messages:[]
+      messages: [],
     },
     {
       _id: 17542,
       name: "Olive Yew",
       role: "admin",
       lastMessage: "Something goes here..",
-      messages:[]
+      messages: [],
     },
     {
       _id: 15432,
       name: "Rose Bush",
       role: "admin",
       lastMessage: "Something goes here..",
-      messages:[]
+      messages: [],
     },
   ];
 
@@ -132,31 +131,28 @@ const HomePage = () => {
     }
     return tagClasses[tagName];
   }
-  
+
   allUsers.forEach((user, index) => {
     user.color = profileColor(user._id);
   });
 
-
   return (
     <>
       <div className="joinOuterContainer ">
-        
         {isSmall ? (
-           selectedUser ? (
+          selectedUser ? (
             <div className="chatBox" id="chatBox">
               <FullChat setSelectedUser={setSelectedUser} user={selectedUser} />
             </div>
-           ) : (
+          ) : (
             <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} />
-           )
-          
+          )
         ) : (
           <>
             <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} />
             <div className="chatBox">
               {selectedUser ? (
-                <FullChat setSelectedUser={setSelectedUser} user={selectedUser}/>
+                <FullChat setSelectedUser={setSelectedUser} user={selectedUser} />
               ) : (
                 <div className="chatArea">
                   <span className="description">

@@ -1,11 +1,11 @@
-.fullContainer{
+.fullContainer {
   width: 75vw;
 }
 
-@media (max-width: 760px){
-  .fullContainer{
+@media (max-width: 760px) {
+  .fullContainer {
     width: 100vw;
-  }  
+  }
 }
 
 .outerContainer {
@@ -13,19 +13,18 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #1A1A1D;
+  background-color: #1a1a1d;
 }
 
 .containerC {
   display: flex;
   flex-direction: column;
   /* justify-content: space-between; */
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 0px;
   height: 100%;
   width: 100%;
   position: relative;
-
 }
 
 @media (min-width: 320px) and (max-width: 480px) {
@@ -39,8 +38,8 @@
   }
 }
 
-@media (max-width: 760px){
-  .containerC{
+@media (max-width: 760px) {
+  .containerC {
     width: 100vw;
-  }  
+  }
 }
