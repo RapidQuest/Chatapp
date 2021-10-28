@@ -23,6 +23,8 @@ export default function FullChat({ user,setUser }) {
   const endPoint = 'localhost:5000';
   const currentUser = {id:2512, name:"Vanshaj"};
   let existingMessages = JSON.parse(localStorage.getItem(user._id));
+  var current = new Date();
+  console.log(current.toLocaleString());
 
   async function handleLogout() {
     setError("")
@@ -51,7 +53,7 @@ export default function FullChat({ user,setUser }) {
 
   useEffect(() => {
     setMessages("")
-    const message = [{ sentBy: currentUser.name, time:"today", value: user.name + ", Welcome " + user._id}]
+    const message = [{ sentBy: currentUser.name, time: current.toLocaleString(), value: user.name + ", Welcome " + user._id}]
     setMessages(messages => [...messages, message]);
     if(existingMessages == null) localStorage.setItem(user._id, JSON.stringify(message));
      
@@ -59,14 +61,14 @@ export default function FullChat({ user,setUser }) {
 
 const sendMessage = (event) => {
   event.preventDefault();
-  setMessages(messages => [...messages, {value: message, time:"today", sentBy: currentUser.id}]);
+  setMessages(messages => [...messages, {value: message, time: current.toLocaleString(), sentBy: currentUser.id}]);
   setMessage("")
   if(existingMessages == null){
     existingMessages = [];
     localStorage.setItem(user._id, JSON.stringify(messages)); 
   }
   
-  existingMessages.push({value: message, time:"today", sentBy: currentUser.id})
+  existingMessages.push({value: message, time: current.toLocaleString(), sentBy: currentUser.id})
 
   localStorage.setItem(user._id, JSON.stringify(existingMessages))
   console.log(existingMessages);

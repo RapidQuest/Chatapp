@@ -140,7 +140,7 @@ const HomePage = () => {
     }
     return tagClasses[tagName];
   }
-
+  
   allUsers.forEach((user, index) => {
     user.color = profileColor(user._id);
   });

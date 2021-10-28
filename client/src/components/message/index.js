@@ -16,9 +16,9 @@ const Message = ({ message, id }) => {
     isSentByCurrentUser
       ? (
         <div className="messageContainer justifyEnd">
-          <p className="sentText pr-10">12/09 1:00 PM</p>
+          <p className="sentText pr-10">{message.time}</p>
           <div className="messageBox backgroundLight2">
-            <p className="messageText colorDark">{message.value} sent by {message.sentBy}</p>
+            <p className="messageText colorDark">{message.value}</p>
           </div>
         </div>
         )
@@ -27,7 +27,7 @@ const Message = ({ message, id }) => {
             <div className="messageBox backgroundLight">
               <p className="messageText colorDark">{message.value}</p>
             </div>
-            <p className="sentText pl-10 ">12/09 1:00 PM</p>
+            <p className="sentText pl-10 ">{message.time}</p>
           </div>
         )
   );
