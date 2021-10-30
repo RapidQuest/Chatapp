@@ -7,7 +7,7 @@ import "./style.css";
 const Messages = ({ messages, id }) => {
   return (
     <div className="messages">
-      {messages.map((message, i) => (
+      {Object.keys(messages).map((message, i) => (
         <div key={i}>
           <Message message={message} id={id} />
           {}

@@ -11,8 +11,23 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  function signup(email, password) {
-    return Auth.createUserWithEmailAndPassword(email, password);
+  function signup(name, email, password, role) {
+    let user = {
+      "name": name,
+      "email": email,
+      "password": password,
+      "role": role,
+      "chatId":[]
+  }
+  return fetch('http://localhost:5000/users/register', {
+      method: 'POST',
+      body: JSON.stringify(user),
+      headers: {
+          'Content-Type': 'application/json'
+      },
+  })
+  .then(res => res.json()) 
+  .then(data => console.log(data));
   }
 
   function login(email, password) {

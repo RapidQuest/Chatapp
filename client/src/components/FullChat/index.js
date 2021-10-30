@@ -38,82 +38,83 @@ export default function FullChat({ user, setSelectedUser }) {
   useEffect(() => {
     const { name, room } = { name: currentUser.name, room: user._id };
     socket = io(endPoint, { transports: ["websocket"] });
-
     setRoom(room);
     setName(name);
-
-    socket.emit("join", { user, currentUser }, (error) => {
+    console.log(name, room);
+    socket.emit("join", { name , room }, (error) => {
       if (error) {
         // alert(error);
       }
     });
   }, [endPoint, user._id]);
 
-  //   useEffect(() => {
-  //     socket.on('message', message => {
-  //       setMessages(messages => [...messages, message]);
-  //       if(existingMessages == null) localStorage.setItem(user._id, JSON.stringify(message));
-  //     });
-  // }, [user]);
-
-  useEffect(() => {
-    setMessages("");
-    const message = [
-      {
-        sentBy: currentUser.name,
-        time: current.toLocaleString(),
-        value: user.name + ", Welcome " + user._id,
-      },
-    ];
-    setMessages((messages) => [...messages, message]);
-    if (existingMessages == null) localStorage.setItem(user._id, JSON.stringify(message));
+    useEffect(() => {
+      socket.on('message', message => {
+        setMessages(messages => [...messages, message]);
+        if(existingMessages == null) localStorage.setItem(user._id, JSON.stringify(message));
+        
+      });
   }, [user]);
+
+  // useEffect(() => {
+  //   setMessages("");
+  //   const message = [
+  //     {
+  //       sentBy: currentUser.name,
+  //       time: current.toLocaleString(),
+  //       value: user.name + ", Welcome " + user._id,
+  //     },
+  //   ];
+  //   setMessages((messages) => [...messages, message]);
+  //   if (existingMessages == null) localStorage.setItem(user._id, JSON.stringify(message));
+  // }, [user]);
 
   const sendMessage = (event) => {
     event.preventDefault();
 
-    // if(message) {
-    //   socket.emit('sendMessage', message, () => {
+    if(message) {
+      socket.emit('sendMessage', message, () => {
 
-    //     setMessages(messages => [...messages, [{value: message, time: current.toLocaleString(), sentBy: currentUser.id}]]);
-    //     setMessage("")
-    //     if(existingMessages == null){
-    //       existingMessages = [];
-    //       localStorage.setItem(user._id, JSON.stringify(messages));
-    //     }
+        setMessages(messages => [...messages, {value: message, time: current.toLocaleString(), sentBy: currentUser.id}]);
+        setMessage("")
+        if(existingMessages == null){
+          existingMessages = [];
+          localStorage.setItem(user._id, JSON.stringify(messages));
+        }
+        console.log(messages);
+        existingMessages.push({value: message, time: current.toLocaleString(), sentBy: currentUser.id})
 
-    //     existingMessages.push({value: message, time: current.toLocaleString(), sentBy: currentUser.id})
+        localStorage.setItem(user._id, JSON.stringify(existingMessages))
 
-    //     localStorage.setItem(user._id, JSON.stringify(existingMessages))
-
-    //   });
-    // }
-
-    setMessages((messages) => [
-      ...messages,
-      { value: message, time: current.toLocaleString(), sentBy: currentUser.id },
-    ]);
-    setMessage("");
-    if (existingMessages == null) {
-      existingMessages = [];
-      localStorage.setItem(user._id, JSON.stringify(messages));
+      });
     }
 
-    existingMessages.push({
-      value: message,
-      time: current.toLocaleString(),
-      sentBy: currentUser.id,
-    });
+    // setMessages((messages) => [
+    //   ...messages,
+    //   { value: message, time: current.toLocaleString(), sentBy: currentUser.id },
+    // ]);
+    // setMessage("");
+    // if (existingMessages == null) {
+    //   existingMessages = [];
+    //   localStorage.setItem(user._id, JSON.stringify(messages));
+    // }
 
-    localStorage.setItem(user._id, JSON.stringify(existingMessages));
-    console.log(existingMessages);
+    // existingMessages.push({
+    //   value: message,
+    //   time: current.toLocaleString(),
+    //   sentBy: currentUser.id,
+    // });
+
+    // localStorage.setItem(user._id, JSON.stringify(existingMessages));
+    // console.log(existingMessages);
 
     if (message) {
       socket.emit("sendMessage", message, () => setMessage(""));
     }
   };
-  user.messages = JSON.parse(localStorage.getItem(user._id));
 
+  user.messages = JSON.parse(localStorage.getItem(user._id));
+  // console.log(user.messages);
   let allMessages = user.messages == null ? messages : user.messages;
 
   return (

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useAuth } from "../../contexts/Auth";
-import { Link, useLocation, useHistory } from "react-router-dom";
-import UsersList from "../UsersList/index";
+import { useHistory } from "react-router-dom";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import SideBar from "../SideBar";
 
@@ -155,12 +154,12 @@ const HomePage = () => {
                 <FullChat setSelectedUser={setSelectedUser} user={selectedUser} />
               ) : (
                 <div className="chatArea">
-                  <span className="description">
+                  <div className="description">
                     <h1 className="docLogo">
                       <i className="fas fa-user-md"></i>
                     </h1>
                     <h1>Keep Yourself connected</h1>
-                  </span>
+                  </div>
                 </div>
               )}
             </div>

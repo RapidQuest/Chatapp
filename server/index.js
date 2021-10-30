@@ -1,48 +1,67 @@
 const express = require("express");
 const socketio = require("socket.io");
-const initiateMongoServer = require("./config/dev.js");
 const http = require("http");
 const cors = require("cors");
-const { addUser, removeUser, getUser, getUsersInRoom } = require("./users");
+
+var current = new Date();
 
 const PORT = process.env.PORT || 5000;
-
+var bodyParser = require('body-parser');
+const { addUser, joinUser, removeUser, getUser, getUsersInRoom } = require('./users')
 const router = require("./router");
+const db = require("./db");
+const { log } = require("console");
+const dbName = "chatApp";
+const collectionName = "users";
+db.initialize(dbName, collectionName, function(dbCollection) { // successCallback
+  // get all items
+  dbCollection.find().toArray(function(err, result) {
+      if (err) throw err;
+        console.log(result);
+  });
+
+  // << db CRUD routes >>
+  app.post("/users/register", (request, response) => {
+    const item = request.body;
+    dbCollection.insertOne(item, (error, result) => { // callback of insertOne
+        if (error) throw error;
+        addUser(item, dbCollection,response);
+    });
+});
+}, function(err) { // failureCallback
+  throw (err);
+});
+
 
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
-
-initiateMongoServer(); // Connects to mongo db
-
+ 
 app.use(cors());
 app.use(router);
+app.use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on("connect", (socket) => {
-  socket.on("join", ({ userToChat, currentUser }, callback) => {
-    const { error, user } = joinUsers({ id: socket.id, userToChat, currentUser });
+  socket.on("join", ({ name,room  }, callback) => {
+    const { error, user } = joinUser({ id: socket.id, name, room });
 
-    if (error) return callback(error);
-
+    if(error) return callback(error);
     socket.join(user.room);
 
-    socket.emit("message", {
-      sentBy: currentUser.name,
-      time: current.toLocaleString(),
-      value: user.name + ", Welcome " + user._id,
-    });
-    // socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} has joined!` });
+    // socket.emit('message', { sentBy: 'admin', time: current.toLocaleString(), value: `${user.name}, welcome to room ${user.room}.`});
+    // socket.broadcast.to(user.room).emit('message', {value: message, time: current.toLocaleString(), sentBy: currentUser.id});
 
-    io.to(user?.room).emit("roomData", { room: user.room, users: getUsersInRoom(user.room) });
+    io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
 
     callback();
   });
 
   socket.on("sendMessage", (message, callback) => {
     const user = getUser(socket.id);
-
-    io.to(user.room).emit("message", { user: user.name, text: message });
-    io.to(user.room).emit("roomData", { room: user.room, users: getUsersInRoom(user.room) });
+    io.to(user.room).emit("message", { value: message, time: current.toLocaleString(), sentBy: user.name });
+    // io.to(user.room).emit("roomData", { room: user.room, users: getUsersInRoom(user.room) });
 
     callback();
   });
