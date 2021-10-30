@@ -7,7 +7,7 @@ var current = new Date();
 
 const PORT = process.env.PORT || 5000;
 var bodyParser = require('body-parser');
-const { addUser, joinUser, removeUser, getUser, getUsersInRoom } = require('./users')
+const { addUser, login, joinUser, removeUser, getUser, getUsersInRoom } = require('./users')
 const router = require("./router");
 const db = require("./db");
 const { log } = require("console");
@@ -27,7 +27,15 @@ db.initialize(dbName, collectionName, function(dbCollection) { // successCallbac
         if (error) throw error;
         addUser(item, dbCollection,response);
     });
-});
+
+  });
+  app.post("/users/login", (req, res) =>{
+    login(req, res, dbCollection)
+  });
+  app.get("/users/", (req,res) => {
+    getUser(req, res, dbCollection);
+  });
+
 }, function(err) { // failureCallback
   throw (err);
 });

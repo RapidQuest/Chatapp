@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Auth } from "../firebase";
 
 const AuthContext = React.createContext();
-
+const apiUrl = 'http://localhost:5000/';
 export function useAuth() {
   return useContext(AuthContext);
 }
@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
       "role": role,
       "chatId":[]
   }
-  return fetch('http://localhost:5000/users/register', {
+  return fetch( apiUrl + 'users/register', {
       method: 'POST',
       body: JSON.stringify(user),
       headers: {
@@ -30,9 +30,60 @@ export function AuthProvider({ children }) {
   .then(data => console.log(data));
   }
 
-  function login(email, password) {
-    return Auth.signInWithEmailAndPassword(email, password);
-  }
+// LOGIN FUNCTION
+function loginUser(email, password) {
+  let user = {
+    "email": email,
+    "password": password
+}
+	fetch(  apiUrl + 'users/login', {
+		method: 'post',
+		body: JSON.stringify(user),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	})
+		.then((response) => {
+			if (response.status == 200) {
+				return response.json();
+			} else {
+				return response.json().then((json) => {
+					throw new Error(json.message);
+				});
+			}
+		})
+		.then(function (data) {
+      console.log(data);
+      localStorage.setItem('token', data);
+			storeProfileInfo('./homepage', true);
+		})
+		.catch(function (json) {
+		});
+}
+
+function storeProfileInfo(url, redirect) {
+	console.log(apiUrl + 'users/getuser');
+	fetch(apiUrl + 'users/', {
+		method: 'get',
+		headers: {
+			token: localStorage.getItem('token'),
+		},
+	})
+		.then((response) => {
+			if (response.status == 200) {
+				console.log('All Ok getting user data');
+				return response.json();
+			}
+		})
+		.then((json) => {
+			console.log('Storing user data');
+			localStorage.setItem('userInfo', JSON.stringify(json));
+			if (redirect) {
+				window.location.href = url;
+			} else {
+			}
+		});
+}
 
   function logout() {
     return Auth.signOut();
@@ -61,7 +112,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     currentUser,
-    login,
+    loginUser,
     signup,
     logout,
     resetPassword,

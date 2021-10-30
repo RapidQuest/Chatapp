@@ -1,3 +1,4 @@
+
 const users = [];
 
 const addUser = async (item, db,response) => {
@@ -14,8 +15,54 @@ const addUser = async (item, db,response) => {
       if (_error) throw _error;
       response.json(_result);
   });
-
 }
+
+const login = async (req, res, db) => {
+	console.log(req.body);
+	const { email, password } = req.body;
+  try {
+		let user = await db.findOne({
+			email,
+		});
+		if (!user)
+			return res.status(400).json({
+				message: 'User Not Exist',
+			});
+
+		const isMatch = await password == user.password;
+		if (!isMatch)
+			return res.status(400).json({
+				message: 'Incorrect Password !',
+			});
+      console.log(user);
+      res.status(200).json(user._id)
+      
+	} catch (e) {
+		console.error(e);
+		res.status(500).json({
+			message: 'Server Error',
+		});
+	}
+}
+
+
+const getUser = async (req, res, db) => {
+	try {
+    console.log(req.headers.token);
+    const id = req.headers.token;
+		// request.user is getting fetched from Middleware after token authentication
+		const user = await db.findById(id, function (error, data) {
+			res.json(data);
+		});
+    
+    console.log(user);
+	} catch (e) {
+		res.send({ message: 'Error in Fetching user' });
+    console.log(e);
+	}
+};
+
+
 const joinUser = ({ id, name, room })=>{
   // name = name.trim().toLowerCase();
   // room = room.trim().toLowerCase();
@@ -40,9 +87,9 @@ const removeUser = (id)=>{
 };
 
 
-const getUser = (id) => users.find((user) => user.id === id);
+// const getUser = (id) => users.find((user) => user.id === id);
 
 
 const getUsersInRoom = (room) => users.filter((user) => user.room === room);
 
-module.exports = { addUser ,joinUser, removeUser, getUser, getUsersInRoom };
+module.exports = {getUser, addUser ,login ,joinUser, removeUser, getUser, getUsersInRoom };

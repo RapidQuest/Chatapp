@@ -50,7 +50,7 @@ export default function FullChat({ user, setSelectedUser }) {
 
     useEffect(() => {
       socket.on('message', message => {
-        setMessages(messages => [...messages, message]);
+        setMessages(messages => [...messages,  {value: message, time: current.toLocaleString(), sentBy: currentUser.id}]);
         if(existingMessages == null) localStorage.setItem(user._id, JSON.stringify(message));
         
       });
