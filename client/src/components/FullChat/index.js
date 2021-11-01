@@ -126,9 +126,9 @@ export default function FullChat({ user, setSelectedUser }) {
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
         </div>
         <div className="text-center mt-2">
-          {/* <Button variant="link" onClick={handleLogout}>
+          <div className="btn" variant="link" onClick={handleLogout}>
           Log Out
-        </Button> */}
+        </div>
         </div>
       </div>
     </div>

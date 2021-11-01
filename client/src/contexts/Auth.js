@@ -1,3 +1,4 @@
+import { json } from "body-parser";
 import React, { useContext, useState, useEffect } from "react";
 import { Auth } from "../firebase";
 
@@ -6,7 +7,6 @@ const apiUrl = 'http://localhost:5000/';
 export function useAuth() {
   return useContext(AuthContext);
 }
-
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
@@ -54,39 +54,78 @@ function loginUser(email, password) {
 		})
 		.then(function (data) {
       console.log(data);
-      localStorage.setItem('token', data);
-			storeProfileInfo('./homepage', true);
+      localStorage.setItem('token', data.id);
+      localStorage.setItem('allUsers', JSON.stringify(data.allUsersData));
+			storeProfileInfo('./homepage', data.loggedUser, true);
 		})
 		.catch(function (json) {
 		});
 }
 
-function storeProfileInfo(url, redirect) {
-	console.log(apiUrl + 'users/getuser');
-	fetch(apiUrl + 'users/', {
-		method: 'get',
+function createChatId(id, currntUser, ChatTo){
+  const data = {
+    "chatId" : id,
+    "currentUser": currentUser,
+    "chatWith": ChatTo
+  }
+	fetch(  apiUrl + 'users/createChat', {
+		method: 'post',
+		body: JSON.stringify(data),
 		headers: {
-			token: localStorage.getItem('token'),
+			'Content-Type': 'application/json',
 		},
 	})
 		.then((response) => {
 			if (response.status == 200) {
-				console.log('All Ok getting user data');
 				return response.json();
+			} else {
+				return response.json().then((json) => {
+					throw new Error(json.message);
+				});
 			}
 		})
-		.then((json) => {
-			console.log('Storing user data');
-			localStorage.setItem('userInfo', JSON.stringify(json));
-			if (redirect) {
-				window.location.href = url;
-			} else {
-			}
+		.then(function (data) {
+      console.log(data);
+		})
+		.catch(function (json) {
 		});
+
+}
+
+function storeProfileInfo(url, user ,redirect) {
+  localStorage.setItem("currentUser", JSON.stringify(user))
+  console.log(localStorage.getItem("currentUser"));
+  if (redirect) {
+    window.location.href = url;
+  } else {
+  }
+	// fetch(apiUrl + 'users/', {
+	// 	method: 'get',
+	// 	headers: {
+	// 		token: localStorage.getItem('token'),
+	// 	},
+	// })
+	// 	.then((response) => {
+	// 		if (response.status == 200) {
+	// 			console.log('All Ok getting user data');
+	// 			return response.json();
+	// 		}
+  //     else{
+  //       console.log('error');
+  //     }
+	// 	})
+	// 	.then((json) => {
+	// 		console.log('Storing user data');
+	// 		localStorage.setItem('userInfo', JSON.stringify(json));
+	// 		if (redirect) {
+	// 			// window.location.href = url;
+	// 		} else {
+	// 		}
+	// 	});
 }
 
   function logout() {
-    return Auth.signOut();
+    return localStorage.setItem('token', null) && localStorage.setItem('allUsers', null)
   }
 
   function resetPassword(email) {
@@ -102,13 +141,10 @@ function storeProfileInfo(url, redirect) {
   }
 
   useEffect(() => {
-    const unsubscribe = Auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
+      setCurrentUser(
+        localStorage.getItem('currentUser'));
       setLoading(false);
-    });
-
-    return unsubscribe;
-  }, []);
+  }, [ localStorage.getItem('currentUser')]);
 
   const value = {
     currentUser,

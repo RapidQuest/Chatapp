@@ -1,4 +1,4 @@
-var userSchema = 'user';
+var userSchema = 'users';
 
 module.exports = {
 	userSchema:userSchema,

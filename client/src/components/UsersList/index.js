@@ -1,12 +1,18 @@
 import React from "react";
+import { v4 as uuidv4 } from 'uuid';
 // import onlineIcon from '../../icons/onlineIcon.png';
 import "./tags.css";
 import "./style.css";
 import ProfileImage from "../ProfileImage";
+import { useAuth } from "../../contexts/Auth";
 import useMediaQuery from "../../hooks/useMediaQuery";
 
 const UsersList = ({ fetchUsers, setSelectedUser }) => {
   const isSmall = useMediaQuery("(max-width: 760px)", false);
+  const { currentUser, logout } = useAuth();
+  const currentUserParsed = JSON.parse(currentUser)
+  const id = uuidv4();
+  console.log(id);
 
   function Onselect() {
     let elements = document.getElementsByClassName("block_item btn activeClass");
@@ -15,12 +21,17 @@ const UsersList = ({ fetchUsers, setSelectedUser }) => {
     }
   }
 
+  function checkUser(user, parsedCurrentUser){
+    return user._id === parsedCurrentUser._id
+  }
+
   return fetchUsers ? (
     <div className="block_item_container" id="items">
       <h2>
         {fetchUsers.map((user, i) => (
-          <div
-            className="block_item hover btn"
+          
+            <div
+            className={checkUser(user, currentUserParsed) ? "block_item hover btn hide": "block_item hover btn"}
             id={user._id}
             onClick={() => {
               setSelectedUser(user);
@@ -38,10 +49,12 @@ const UsersList = ({ fetchUsers, setSelectedUser }) => {
                   <h6 className="col-8 item_name">{user.name}</h6>
                   <p className="col-4 item_role">{user.role}</p>
                 </div>
-                <p className="lastMessage">{user.lastMessage}</p>
+                <p className="lastMessage">{user._id}</p>
               </div>
             </div>
           </div>
+          
+          
         ))}
       </h2>
     </div>

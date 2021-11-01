@@ -7,17 +7,20 @@ var current = new Date();
 
 const PORT = process.env.PORT || 5000;
 var bodyParser = require('body-parser');
-const { addUser, login, joinUser, removeUser, getUser, getUsersInRoom } = require('./users')
+const { addUser,createChat, login, joinUser, removeUser, getUser, getUsersInRoom } = require('./users')
 const router = require("./router");
 const db = require("./db");
 const { log } = require("console");
 const dbName = "chatApp";
 const collectionName = "users";
+
 db.initialize(dbName, collectionName, function(dbCollection) { // successCallback
   // get all items
+  let allUsers;
   dbCollection.find().toArray(function(err, result) {
       if (err) throw err;
-        console.log(result);
+        allUsers = result;
+        console.log(allUsers);
   });
 
   // << db CRUD routes >>
@@ -30,10 +33,15 @@ db.initialize(dbName, collectionName, function(dbCollection) { // successCallbac
 
   });
   app.post("/users/login", (req, res) =>{
-    login(req, res, dbCollection)
+    login(req, res, dbCollection, allUsers)
   });
-  app.get("/users/", (req,res) => {
-    getUser(req, res, dbCollection);
+
+  app.get("/users", (req,res) => {
+    getUser(req, res, allUsers);
+  });
+
+  app.put("/users/createChat", (req, res) =>{
+    createChat(req, res, dbCollection)
   });
 
 }, function(err) { // failureCallback

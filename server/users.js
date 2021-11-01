@@ -1,4 +1,4 @@
-
+const User = require('./models/User');
 const users = [];
 
 const addUser = async (item, db,response) => {
@@ -17,7 +17,7 @@ const addUser = async (item, db,response) => {
   });
 }
 
-const login = async (req, res, db) => {
+const login = async (req, res, db, allUsers) => {
 	console.log(req.body);
 	const { email, password } = req.body;
   try {
@@ -35,7 +35,7 @@ const login = async (req, res, db) => {
 				message: 'Incorrect Password !',
 			});
       console.log(user);
-      res.status(200).json(user._id)
+      res.status(200).json({id:user._id, allUsersData :allUsers, loggedUser: user})
       
 	} catch (e) {
 		console.error(e);
@@ -45,12 +45,37 @@ const login = async (req, res, db) => {
 	}
 }
 
+const createChat = async (req, res, db) => {
+	const { chatId, currentUser, chatWith } = req.body;
+  
+  try {
+		let user1 = await User.findById(currentUser._id, function (err, data) {
+			console.log(data);
+		});
+		// let user1 = await User.findOne({
+    //   $or: [{ email: currentUser.email }],
+    // });
+		// if (!user1)
+		// 	return res.status(400).json({
+		// 		message: 'User Not Exist',
+		// 	});
+      // console.log(user1);
+      // res.status(200).json({id:user._id, allUsersData :allUsers, loggedUser: user})
+      
+	} catch (e) {
+		console.error(e);
+		res.status(500).json({
+			message: 'Server Error',
+		});
+	}
+	
+}
+
 
 const getUser = async (req, res, db) => {
 	try {
     console.log(req.headers.token);
     const id = req.headers.token;
-		// request.user is getting fetched from Middleware after token authentication
 		const user = await db.findById(id, function (error, data) {
 			res.json(data);
 		});
@@ -92,4 +117,4 @@ const removeUser = (id)=>{
 
 const getUsersInRoom = (room) => users.filter((user) => user.room === room);
 
-module.exports = {getUser, addUser ,login ,joinUser, removeUser, getUser, getUsersInRoom };
+module.exports = {getUser,createChat, addUser ,login ,joinUser, removeUser, getUser, getUsersInRoom };
