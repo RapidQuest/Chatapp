@@ -87,36 +87,6 @@ function getAllUsers(loggedUser){
 
 }
 
-function createChatId(id, currntUser, ChatTo){
-  const data = {
-    "chatId" : id,
-    "currentUser": currntUser,
-    "chatWith": ChatTo
-  }
-	fetch(  apiUrl + 'users/createChat', {
-		method: 'post',
-		body: JSON.stringify(data),
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	})
-		.then((response) => {
-			if (response.status == 200) {
-				return response.json();
-			} else {
-				return response.json().then((json) => {
-					throw new Error(json.message);
-				});
-			}
-		})
-		.then(function (data) {
-      console.log(data);
-		})
-		.catch(function (json) {
-		});
-
-}
-
 function storeProfileInfo(url, user ,redirect) {
   localStorage.setItem("currentUser", JSON.stringify(user))
   console.log(localStorage.getItem("currentUser"));

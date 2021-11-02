@@ -116,6 +116,105 @@ export default function FullChat({ user, setSelectedUser }) {
   user.messages = JSON.parse(localStorage.getItem(user._id));
   // console.log(user.messages);
   let allMessages = user.messages == null ? messages : user.messages;
+  
+  function stringToHash(string) {
+    var hash = 0;
+    if (string.length == 0) return hash;
+    for (let i = 0; i < string.length; i++) {
+         var char = string.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return hash;
+}
+ createChatId(currentUser, user);
+
+  function createChatId(currntUser, ChatTo){
+    const string1 = currntUser.name + ChatTo.name;
+    const string2 = ChatTo.name + currntUser.name;
+    const chatId1 = stringToHash(string1);
+    const chatId2 = stringToHash(string2);
+    console.log(chatId1, chatId2);
+    const apiUrl = 'http://localhost:5000/';
+
+    fetch(  apiUrl + 'chats/getChat', {
+      method: 'get',
+      headers: {
+        'id': chatId1,
+      },
+    })
+      .then((response) => {
+        console.log(response.status);
+        if (response.status == 200) {
+          return response.json();
+        } else {
+          return response.json().then((json) => {
+            throw new Error(json.message);
+          });
+        }
+      })
+      .then(function (data) {
+        if(data == null){
+          
+          fetch(  apiUrl + 'chats/getChat', {
+            method: 'get',
+            headers: {
+              'id': chatId2,
+            },
+          })
+          .then((response) => {
+            if (response.status == 200) {
+              return response.json();
+            } else {
+              return response.json().then((json) => {
+                throw new Error(json.message);
+              });
+            }
+          })
+          .then(function (data) {
+            if(data == null){
+              
+              const data = {
+                "chatid" : chatId2
+              }
+              fetch(  apiUrl + 'chats/createChat', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+              })
+              .then((response) => {
+                if (response.status == 200) {
+                  return response.json();
+                } else {
+                  return response.json().then((json) => {
+                    throw new Error(json.message);
+                  });
+                }
+              })
+              .then(function (data) {
+                console.log(data);
+              })
+              .catch(function (json) {
+              });
+
+            }
+            else{
+              console.log(data);
+            }
+          })
+          .catch(function (json) {
+          });
+        }
+        else{
+          console.log(data);
+        }
+      })
+      .catch(function (json) {
+      });
+  
+  }
 
   return (
       <div className="outerContainer">

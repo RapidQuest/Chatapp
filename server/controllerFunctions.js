@@ -1,4 +1,5 @@
 const  User = require("./models/User");
+const  Chat = require("./models/Chats");
 
 // DEFINE CONTROLLER FUNCTIONS
 
@@ -67,3 +68,25 @@ return res.status(404).send(err);
 res.status(200).json({ message:"User successfully deleted"});
 });
 };
+
+exports.createNewChat = (req, res) => {
+  console.log(req.body);
+let  newChat = new Chat (req.body);
+newChat.save((err, chat) => {
+if (err) {
+res.status(500).send(err);
+}
+res.status(201).json(chat);
+});
+};
+
+exports.getChat = async (req, res) => {
+	console.log(req.headers.id);
+  Chat.findOne({ chatid : req.headers.id }, (err, chat) => {
+  if (err) {
+  res.status(500).send(err);
+  }
+  res.status(200).json(chat);
+  });
+}
+
