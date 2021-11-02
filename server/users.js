@@ -21,7 +21,7 @@ const login = async (req, res, db, allUsers) => {
 	console.log(req.body);
 	const { email, password } = req.body;
   try {
-		let user = await db.findOne({
+		let user = await User.findOne({
 			email,
 		});
 		if (!user)
@@ -46,7 +46,7 @@ const login = async (req, res, db, allUsers) => {
 }
 
 const createChat = async (req, res, db) => {
-	const { chatId, currentUser, chatWith } = req.body;
+	const { chatId , currentUser, chatWith } = req.body;
   
   try {
 		let user1 = await User.findById(currentUser._id, function (err, data) {
@@ -76,6 +76,7 @@ const getUser = async (req, res, db) => {
 	try {
     console.log(req.headers.token);
     const id = req.headers.token;
+		console.log(db);
 		const user = await db.findById(id, function (error, data) {
 			res.json(data);
 		});

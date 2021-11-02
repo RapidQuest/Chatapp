@@ -31,7 +31,7 @@ export function AuthProvider({ children }) {
   }
 
 // LOGIN FUNCTION
-function loginUser(email, password) {
+const loginUser = async (email, password) => {
   let user = {
     "email": email,
     "password": password
@@ -54,18 +54,43 @@ function loginUser(email, password) {
 		})
 		.then(function (data) {
       console.log(data);
-      localStorage.setItem('token', data.id);
-      localStorage.setItem('allUsers', JSON.stringify(data.allUsersData));
-			storeProfileInfo('./homepage', data.loggedUser, true);
+      localStorage.setItem('token', data.loggedUser._id);
+      getAllUsers(data.loggedUser);
 		})
 		.catch(function (json) {
 		});
 }
 
+function getAllUsers(loggedUser){
+	fetch(  apiUrl + 'users/getUsers', {
+		method: 'get',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	})
+		.then((response) => {
+			if (response.status == 200) {
+				return response.json();
+			} else {
+				return response.json().then((json) => {
+					throw new Error(json.message);
+				});
+			}
+		})
+		.then(function (data) {
+      console.log(data);
+      localStorage.setItem('allUsers', JSON.stringify(data));
+			storeProfileInfo('./homepage', loggedUser, true);
+		})
+		.catch(function (json) {
+		});
+
+}
+
 function createChatId(id, currntUser, ChatTo){
   const data = {
     "chatId" : id,
-    "currentUser": currentUser,
+    "currentUser": currntUser,
     "chatWith": ChatTo
   }
 	fetch(  apiUrl + 'users/createChat', {
@@ -125,7 +150,7 @@ function storeProfileInfo(url, user ,redirect) {
 }
 
   function logout() {
-    return localStorage.setItem('token', null) && localStorage.setItem('allUsers', null)
+    return localStorage.clear()
   }
 
   function resetPassword(email) {

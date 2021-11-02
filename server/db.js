@@ -1,27 +1,20 @@
-const MongoClient = require("mongodb").MongoClient;
+const  mongoose = require("mongoose");
 
-const dbConnectionUrl = `mongodb+srv://chatApp:asdfghjkl@cluster0.8inzn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+//Assign MongoDB connection string to Uri and declare options settings
+var  uri = `mongodb+srv://chatApp:asdfghjkl@cluster0.8inzn.mongodb.net/chatApp?retryWrites=true&w=majority`;
 
-function initialize(
-    dbName,
-    dbCollectionName,
-    successCallback,
-    failureCallback
-) {
-    MongoClient.connect(dbConnectionUrl, function(err, dbInstance) {
-        if (err) {
-            console.log(`[MongoDB connection] ERROR: ${err}`);
-            failureCallback(err); // this should be "caught" by the calling function
-        } else {
-            const dbObject = dbInstance.db(dbName);
-            const dbCollection = dbObject.collection(dbCollectionName);
-            console.log("[MongoDB connection] SUCCESS");
-
-            successCallback(dbCollection);
-        }
-    });
-}
-
-module.exports = {
-    initialize
+// Declare a variable named option and assign optional settings
+const  options = {
+useNewUrlParser:  true,
+useUnifiedTopology:  true
 };
+
+// Connect MongoDB Atlas using mongoose connect method
+mongoose.connect(uri, options).then(() => {
+console.log("Database connection established!");
+},
+err  => {
+{
+console.log("Error connecting Database instance due to:", err);
+}
+});

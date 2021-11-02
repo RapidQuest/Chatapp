@@ -115,14 +115,20 @@
   }
 }
 
+.block_item:hover {
+  background-color: #e9e9e9;
+}
+
 @media (max-width: 500px) and (min-width: 480px) {
   .leftPadInMob {
     padding-left: 7%;
   }
 }
+
 .hide{
   display: none;
 }
+
 @media (max-width: 480px) and (min-width: 430px) {
   .leftPadInMob {
     padding-left: 8%;

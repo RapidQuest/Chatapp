@@ -11,14 +11,25 @@ const UsersList = ({ fetchUsers, setSelectedUser }) => {
   const isSmall = useMediaQuery("(max-width: 760px)", false);
   const { currentUser, logout } = useAuth();
   const currentUserParsed = JSON.parse(currentUser)
-  const id = uuidv4();
-  console.log(id);
+  // const id = uuidv4();
+  // console.log(id);
 
   function Onselect() {
     let elements = document.getElementsByClassName("block_item btn activeClass");
     for (let i = 0; i < elements.length; i++) {
       elements[i].classList.remove("activeClass");
     }
+  }
+
+  function stringToHash(string) {
+      var hash = 0;
+      if (string.length == 0) return hash;
+      for (let i = 0; i < string.length; i++) {
+           var char = string.charCodeAt(i);
+          hash = ((hash << 5) - hash) + char;
+          hash = hash & hash;
+      }
+      return hash;
   }
 
   function checkUser(user, parsedCurrentUser){
