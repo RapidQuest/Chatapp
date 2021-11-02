@@ -7,8 +7,6 @@ export default function index({ allUsers, setSelectedUser }) {
     <div>
       <div className="sideBar" id="sideBar">
       <Search
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
         />
         <div className="w-100 text-center mt-2">
           <UsersList fetchUsers={allUsers} setSelectedUser={setSelectedUser} />
