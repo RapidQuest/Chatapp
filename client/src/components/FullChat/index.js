@@ -118,19 +118,17 @@ export default function FullChat({ user, setSelectedUser }) {
   let allMessages = user.messages == null ? messages : user.messages;
 
   return (
-    <div className="fullContainer">
       <div className="outerContainer">
         <div className="containerC" id={user._id}>
           <InfoBar user={user} room={room} setSelectedUser={setSelectedUser} />
           <Messages messages={allMessages} id={currentUser.id} />
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
         </div>
-        <div className="text-center mt-2">
+        {/* <div className="text-center mt-2">
           <div className="btn" variant="link" onClick={handleLogout}>
           Log Out
         </div>
-        </div>
+        </div> */}
       </div>
-    </div>
   );
 }

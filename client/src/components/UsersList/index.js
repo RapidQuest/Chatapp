@@ -38,7 +38,6 @@ const UsersList = ({ fetchUsers, setSelectedUser }) => {
 
   return fetchUsers ? (
     <div className="block_item_container" id="items">
-      <h2>
         {fetchUsers.map((user, i) => (
           
             <div
@@ -67,7 +66,6 @@ const UsersList = ({ fetchUsers, setSelectedUser }) => {
           
           
         ))}
-      </h2>
     </div>
   ) : null;
 };
