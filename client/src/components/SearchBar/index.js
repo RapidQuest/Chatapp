@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function index({ searchQuery, setSearchQuery }) {
+export default function index() {
   return (
     <>
     <div className="input-group searchInput px-3 pt-3 mb-3">
@@ -10,8 +10,6 @@ export default function index({ searchQuery, setSearchQuery }) {
         </span>
       </div>
       <input
-        value={searchQuery}
-        onInput={e => setSearchQuery(e.target.value)}
         type="text"
         className="form-control rounded-0 border_left_0 shadow-none"
         placeholder="Search here..."
