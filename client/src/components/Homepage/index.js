@@ -75,11 +75,11 @@ const HomePage = () => {
               <FullChat setSelectedUser={setSelectedUser} user={selectedUser} />
             </div>
           ) : (
-            <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} />
+            <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} user={selectedUser}  />
           )
         ) : (
           <>
-            <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} />
+            <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} user={selectedUser}  />
             <div className="chatBox">
               {selectedUser ? (
                 <FullChat setSelectedUser={setSelectedUser} user={selectedUser} />

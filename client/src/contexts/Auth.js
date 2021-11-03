@@ -139,7 +139,7 @@ function storeProfileInfo(url, user ,redirect) {
       setCurrentUser(
         localStorage.getItem('currentUser'));
       setLoading(false);
-  }, [ localStorage.getItem('currentUser')]);
+  },[]);
 
   const value = {
     currentUser,
@@ -149,6 +149,7 @@ function storeProfileInfo(url, user ,redirect) {
     resetPassword,
     updateEmail,
     updatePassword,
+    storeProfileInfo
   };
 
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;

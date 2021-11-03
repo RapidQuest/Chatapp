@@ -52,7 +52,7 @@ res.status(201).json(user);
 };
 
 exports.updateUser = (req, res) => {
-  User.findOneAndUpdate({ _id:req.params.id }, req.body, { new:true }, (err, user) => {
+  User.findOneAndUpdate({ _id:req.body._id }, req.body, { new:true }, (err, user) => {
 if (err) {
 res.status(500).send(err);
 }
