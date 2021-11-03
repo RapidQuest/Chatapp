@@ -191,7 +191,7 @@ const UsersList = ({ fetchUsers, setSelectedUser, selectedUser }) => {
               <div className={isSmall ? "col-1" : "col-2"}>
                 <ProfileImage user={user} />
               </div>
-              <div className={isSmall ? "col-11 leftPadInMob" : "col-10 leftPadInMob"}>
+              <div className={isSmall ? "col-11 pd-l" : "col-10 pd-l"}>
                 <div className="row paddingTop">
                   <h6 className="col-8 item_name">{user.name}</h6>
                   <p className="col-4 item_role">{user.role}</p>
