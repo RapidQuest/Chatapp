@@ -91,7 +91,7 @@ export default function FullChat({ user, setSelectedUser }) {
 
     setMessages((messages) => [
       ...messages,
-      { value: message, time: current.toLocaleString(), sentBy: currentUser.id },
+      { value: message, time: current.toLocaleString(), sentBy: currentUser._id },
     ]);
     setMessage("");
     if (existingMessages == null) {
@@ -106,7 +106,6 @@ export default function FullChat({ user, setSelectedUser }) {
     });
 
     localStorage.setItem(user._id, JSON.stringify(existingMessages));
-    console.log(existingMessages);
 
     if (message) {
       socket.emit("sendMessage", message, () => setMessage(""));
@@ -116,8 +115,6 @@ export default function FullChat({ user, setSelectedUser }) {
   user.messages = JSON.parse(localStorage.getItem(user._id));
   // console.log(user.messages);
   let allMessages = user.messages == null ? messages : user.messages;
-  
-
   return (
       <div className="outerContainer">
         <div className="containerC" id={user._id}>

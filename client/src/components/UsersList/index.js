@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 // import onlineIcon from '../../icons/onlineIcon.png';
 import "./tags.css";
@@ -11,6 +11,10 @@ const UsersList = ({ fetchUsers, setSelectedUser, selectedUser }) => {
   const isSmall = useMediaQuery("(max-width: 760px)", false);
   const { currentUser, logout, storeProfileInfo } = useAuth();
   const currentUserParsed = JSON.parse(currentUser)
+  let existingMessages = [];
+  if(selectedUser != null){
+    let existingMessages = JSON.parse(localStorage.getItem(selectedUser._id));
+  }
   // const id = uuidv4();
   // console.log(id);
 
@@ -154,8 +158,20 @@ const UsersList = ({ fetchUsers, setSelectedUser, selectedUser }) => {
   }
 
   useEffect(() => {
-    if(selectedUser !== null ) createChatId(currentUserParsed, selectedUser)
+    if(selectedUser !== null ) {
+      createChatId(currentUserParsed, selectedUser)
+    }
   }, [selectedUser])
+
+  function setLastMessage(id){
+    const getMessages = JSON.parse(localStorage.getItem(id));
+    console.log(getMessages);
+    if(getMessages === undefined || getMessages === null){
+      return 'Start a new conversation';
+    }else{
+      return getMessages[getMessages.length - 1].value;
+    }
+  }
 
   return fetchUsers ? (
     <div className="block_item_container" id="items">
@@ -180,7 +196,7 @@ const UsersList = ({ fetchUsers, setSelectedUser, selectedUser }) => {
                   <h6 className="col-8 item_name">{user.name}</h6>
                   <p className="col-4 item_role">{user.role}</p>
                 </div>
-                <p className="lastMessage">{user._id}</p>
+                <p className="lastMessage">{setLastMessage(user._id)}</p>
               </div>
             </div>
           </div>
