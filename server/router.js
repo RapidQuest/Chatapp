@@ -21,10 +21,18 @@ module.exports = function(app) {
   app
   .route("/chats/getChat")
   .get(userFunctions.getChat)
+  
+  app
+  .route("/chats/getUser")
+  .get(userFunctions.getUser)
 
   app
   .route("/users/updateUser")
   .put(userFunctions.updateUser)
+  
+  app
+  .route("/users/updateChat")
+  .put(userFunctions.updateChat)
 
   app
   .route("/users/deleteUser")

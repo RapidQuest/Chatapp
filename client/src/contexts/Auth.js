@@ -55,37 +55,37 @@ const loginUser = async (email, password) => {
 		.then(function (data) {
       console.log(data);
       localStorage.setItem('token', data.loggedUser._id);
-      getAllUsers(data.loggedUser);
+      // getAllUsers(data.loggedUser);
+			storeProfileInfo('./homepage', data.loggedUser, true);
 		})
 		.catch(function (json) {
 		});
 }
 
-function getAllUsers(loggedUser){
-	fetch(  apiUrl + 'users/getUsers', {
-		method: 'get',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	})
-		.then((response) => {
-			if (response.status == 200) {
-				return response.json();
-			} else {
-				return response.json().then((json) => {
-					throw new Error(json.message);
-				});
-			}
-		})
-		.then(function (data) {
-      console.log(data);
-      localStorage.setItem('allUsers', JSON.stringify(data));
-			storeProfileInfo('./homepage', loggedUser, true);
-		})
-		.catch(function (json) {
-		});
+// function getAllUsers(loggedUser){
+// 	fetch(  apiUrl + 'users/getUsers', {
+// 		method: 'get',
+// 		headers: {
+// 			'Content-Type': 'application/json',
+// 		},
+// 	})
+// 		.then((response) => {
+// 			if (response.status == 200) {
+// 				return response.json();
+// 			} else {
+// 				return response.json().then((json) => {
+// 					throw new Error(json.message);
+// 				});
+// 			}
+// 		})
+// 		.then(function (data) {
+//       console.log(data);
+//       localStorage.setItem('allUsers', JSON.stringify(data));
+// 		})
+// 		.catch(function (json) {
+// 		});
 
-}
+// }
 
 function storeProfileInfo(url, user ,redirect) {
   localStorage.setItem("currentUser", JSON.stringify(user))
@@ -139,7 +139,7 @@ function storeProfileInfo(url, user ,redirect) {
       setCurrentUser(
         localStorage.getItem('currentUser'));
       setLoading(false);
-  },[]);
+  }, [ localStorage.getItem('currentUser')]);
 
   const value = {
     currentUser,

@@ -73,8 +73,6 @@ button:focus {
 }
 
 .searchInput {
-  height: 100%;
-  width: 100%;
   /* padding: 0.5rem; */
   color: rgba(0, 0, 0, 0.48);
   border-radius: 0;
@@ -85,6 +83,9 @@ button:focus {
 @media (min-width: 761px) and (max-width: 1290px) {
   .sideBar {
     width: 35vw;
+  }
+  .chatBox{
+    width: 65vw;
   }
 }
 
@@ -98,6 +99,9 @@ button:focus {
   .sideBar {
     width: 25vw;
   }
+  .chatBox{
+    width: 75vw;
+  }
 }
 .sideBar {
   justify-content: center;
@@ -109,7 +113,6 @@ button:focus {
 }
 
 .chatBox{
-  width: 100%;
   height: auto;
 }
 
@@ -153,7 +156,7 @@ button:focus {
   border-left: none;
 }
 
-.form-control:focus {
+.search:focus {
   outline: none;
   border: 1px solid #ced4da;
   border-left: none;

@@ -10,7 +10,7 @@ import "./style.css";
 
 let socket;
 
-export default function FullChat({ user, setSelectedUser }) {
+export default function FullChat({ user, setSelectedUser, chats }) {
   const { currentUser ,logout, storeProfileInfo } = useAuth();
   const [error, setError] = useState("");
   const history = useHistory();
@@ -19,10 +19,41 @@ export default function FullChat({ user, setSelectedUser }) {
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [allMessages, setAllMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const currentUserParsed = JSON.parse(currentUser);
   const endPoint = "localhost:5000";
-  let existingMessages = JSON.parse(localStorage.getItem(user._id));
+  const apiUrl = 'http://localhost:5000/';
+  // let existingMessages = JSON.parse(localStorage.getItem(user._id));
   var current = new Date();
-  console.log(JSON.parse(currentUser));
+  console.log(chats);
+
+  const saveMessage = async (message) => {
+    const data = {
+      "id" : chats.chatid,
+      "message" : message
+    }
+    await fetch(apiUrl + 'users/updateChat', {
+      method: 'put',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then((res) => res.json())
+    .then((json) => {
+      console.log(json);
+    })
+      .catch(function (json) {
+      });
+  }
+
+  useEffect(() => {
+    setLoading(true);
+
+    setAllMessages(chats.messages);
+    setLoading(false);
+  }, [chats])
 
   async function handleLogout() {
     setError("");
@@ -35,8 +66,9 @@ export default function FullChat({ user, setSelectedUser }) {
     }
   }
 
+  console.log(chats.messages);
   useEffect(() => {
-    const { name, room } = { name: JSON.parse(currentUser).name, room: user._id };
+    const { name, room } = { name: currentUserParsed.name, room: user._id };
     socket = io(endPoint, { transports: ["websocket"] });
     setRoom(room);
     setName(name);
@@ -60,13 +92,13 @@ export default function FullChat({ user, setSelectedUser }) {
     setMessages("");
     const message = [
       {
-        sentBy: currentUser.name,
+        sentBy: currentUserParsed.name,
         time: current.toLocaleString(),
         value: user.name + ", Welcome " + user._id,
       },
     ];
     setMessages((messages) => [...messages, message]);
-    if (existingMessages == null) localStorage.setItem(user._id, JSON.stringify(message));
+    // if (existingMessages == null) localStorage.setItem(user._id, JSON.stringify(message));
   }, [user]);
 
   const sendMessage = (event) => {
@@ -74,7 +106,6 @@ export default function FullChat({ user, setSelectedUser }) {
 
     // if(message) {
     //   socket.emit('sendMessage', message, () => {
-
     //     setMessages(messages => [...messages, {value: message, time: current.toLocaleString(), sentBy: JSON.parse(currentUser).id}]);
     //     setMessage("")
     //     if(existingMessages == null){
@@ -83,7 +114,6 @@ export default function FullChat({ user, setSelectedUser }) {
     //     }
     //     console.log(messages);
     //     existingMessages.push({value: message, time: current.toLocaleString(), sentBy: JSON.parse(currentUser).id})
-
     //     localStorage.setItem(user._id, JSON.stringify(existingMessages))
 
     //   });
@@ -91,35 +121,37 @@ export default function FullChat({ user, setSelectedUser }) {
 
     setMessages((messages) => [
       ...messages,
-      { value: message, time: current.toLocaleString(), sentBy: currentUser._id },
+      { value: message, time: current.toLocaleString(), sentBy: currentUserParsed._id },
     ]);
+    
+    saveMessage({ value: message, time: current.toLocaleString(), sentBy: currentUserParsed._id });
     setMessage("");
-    if (existingMessages == null) {
-      existingMessages = [];
-      localStorage.setItem(user._id, JSON.stringify(messages));
-    }
+    // if (existingMessages == null) {
+    //   existingMessages = [];
+    //   localStorage.setItem(user._id, JSON.stringify(messages));
+    // }
 
-    existingMessages.push({
-      value: message,
-      time: current.toLocaleString(),
-      sentBy: currentUser.id,
-    });
+    // existingMessages.push({
+    //   value: message,
+    //   time: current.toLocaleString(),
+    //   sentBy: currentUserParsed.id,
+    // });
 
-    localStorage.setItem(user._id, JSON.stringify(existingMessages));
+    // localStorage.setItem(user._id, JSON.stringify(existingMessages));
 
     if (message) {
       socket.emit("sendMessage", message, () => setMessage(""));
     }
   };
+  console.log(chats);
 
-  user.messages = JSON.parse(localStorage.getItem(user._id));
-  // console.log(user.messages);
-  let allMessages = user.messages == null ? messages : user.messages;
   return (
       <div className="outerContainer">
         <div className="containerC" id={user._id}>
           <InfoBar user={user} room={room} setSelectedUser={setSelectedUser} />
-          <Messages messages={allMessages} id={JSON.parse(currentUser).id} />
+          {loading? <div class="loader"></div>
+        :
+        <Messages messages={allMessages} id={currentUserParsed._id} /> }
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
         </div>
         {/* <div className="text-center mt-2">

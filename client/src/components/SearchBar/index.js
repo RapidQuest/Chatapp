@@ -11,7 +11,7 @@ export default function index() {
       </div>
       <input
         type="text"
-        className="form-control rounded-0 border_left_0 shadow-none"
+        className="form-control search rounded-0 border_left_0 shadow-none"
         placeholder="Search here..."
         aria-label="Search"
         aria-describedby="basic-addon1"
