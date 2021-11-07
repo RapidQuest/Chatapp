@@ -23,19 +23,65 @@ const HomePage = () => {
   const currentUserParsed = JSON.parse(currentUser)
 
   const getAllUsers = async () =>{
-    fetch( apiUrl + 'users/getUsers')
+    await fetch( apiUrl + 'users/getUsers')
       .then((res) => res.json())
       .then((json) => {
+        console.log(json);
+        json.forEach(element => {
+          loadLastMessage(stringToHash(element.name + currentUserParsed.name), stringToHash(currentUserParsed.name + element.name  ), element)
+        });
         setAllUsers(json);
         setDataIsLoaded(false);
       })
   }
-
+console.log(allUsers);
   useEffect(() => {
     getAllUsers()
   }, [])
 
-  // console.log(allUsers);
+  function stringToHash(string) {
+    var hash = 0;
+    if (string.length == 0) return hash;
+    for (let i = 0; i < string.length; i++) {
+         var char = string.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return hash;
+}
+
+  const loadLastMessage = async (id1, id2 , user) => {
+    fetch(apiUrl + 'chats/lastMessage', {
+      method: 'get',
+      headers: {
+        'id': id1,
+      }, 
+    })
+    .then(response => response.json())
+    .then((data) => {
+      if(data === null){
+        fetch(apiUrl + 'chats/lastMessage', {
+          method: 'get',
+          headers: {
+            'id': id2,
+          },
+        })
+        .then(response => response.json())
+        .then((data) => {
+          if(data === null) return;
+          else{
+            console.log('got message from id2');
+            console.log(data);
+            user.lastMessage = data.messages[0] === undefined ? "start new conversation" :data.messages[0].value;
+          }
+        });
+      }else{
+        console.log('got message from id1');
+        console.log(data);
+        user.lastMessage = data.messages[0] === undefined ? "start new conversation" :data.messages[0].value;
+      }
+    });
+  };
 
   const loadChat = async (id1, id2 , user) => {
     fetch(apiUrl + 'chats/getChat', {
@@ -192,7 +238,7 @@ const HomePage = () => {
         )
       ) : (
         <>
-          <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} user={selectedUser} loadChat={loadChat} />
+          <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} user={selectedUser} loadChat={loadChat}/>
           <div className="chatBox">
             {selectedUser ? chatLoad ? ( <div class="loader"></div>
             ):<FullChat setSelectedUser={setSelectedUser} user={selectedUser} chats={chat} /> : (

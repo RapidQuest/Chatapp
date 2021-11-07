@@ -92,6 +92,16 @@ exports.getChat = (req, res) => {
   });
 }
 
+exports.lastMessage = (req, res) => {
+	console.log(req.headers.id);
+  Chat.findOne({ chatid : req.headers.id }, { messages: { $slice: -1 } }, (err, chat) => {
+  if (err) {
+  res.status(500).send(err);
+  }
+  res.status(200).json(chat);
+  });
+}
+
 exports.getUser = (req, res) => {
 	console.log(req.headers.id);
   User.findOne({ _id : req.headers.id }, (err, user) => {

@@ -5,13 +5,13 @@ import "./style.css";
 import ProfileImage from "../ProfileImage";
 import { useAuth } from "../../contexts/Auth";
 import useMediaQuery from "../../hooks/useMediaQuery";
-const apiUrl = 'http://localhost:5000/';
 
 const UsersList = ({ fetchUsers, setSelectedUser, selectedUser, loadChat }) => {
   const isSmall = useMediaQuery("(max-width: 760px)", false);
   const centerContent = useMediaQuery("(min-width: 1500px)", false);
   const { currentUser, logout, getAllUsers } = useAuth();
   const currentUserParsed = JSON.parse(currentUser)
+  const apiUrl = 'http://localhost:5000/';
 
   function Onselect() {
     let elements = document.getElementsByClassName("block_item btn activeClass");
@@ -25,15 +25,7 @@ const UsersList = ({ fetchUsers, setSelectedUser, selectedUser, loadChat }) => {
     return user._id === parsedCurrentUser._id
   }
 
-  function setLastMessage(id){
-    const getMessages = JSON.parse(localStorage.getItem(id));
-    // console.log(getMessages);
-    if(getMessages === undefined || getMessages === null){
-      return 'Start a new conversation';
-    }else{
-      return getMessages[getMessages.length - 1].value;
-    }
-  }
+
   
   function stringToHash(string) {
     var hash = 0;
@@ -46,11 +38,18 @@ const UsersList = ({ fetchUsers, setSelectedUser, selectedUser, loadChat }) => {
     return hash;
 }
 
+// useEffect(() => {
+//   fetchUsers.forEach(user => {
+//     loadLastMessage(stringToHash(user.name + currentUserParsed.name), stringToHash(currentUserParsed.name + user.name  ), user);
+//     console.log(user);
+//   });
+//   setLoading(false);
+// }, [])
+
   return fetchUsers ? (
     <div className="allUsers">
       <div className="block_item_container text-center" id="items">
           {fetchUsers.map((user, i) => (
-            
               <div
               className={checkUser(user, currentUserParsed) ?"block_item hover btn hide": "block_item hover btn"}
               id={user._id}
@@ -71,12 +70,11 @@ const UsersList = ({ fetchUsers, setSelectedUser, selectedUser, loadChat }) => {
                     <h6 className="col-8 item_name">{user.name}</h6>
                     <p className="col-4 item_role">{user.role}</p>
                   </div>
-                  <p className="lastMessage">{setLastMessage(user._id)}</p>
+                  
+                  <p className="lastMessage">{user.lastMessage}</p>
                 </div>
               </div>
             </div>
-            
-            
           ))}
       </div>
     </div>

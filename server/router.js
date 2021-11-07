@@ -25,6 +25,10 @@ module.exports = function(app) {
   app
   .route("/chats/getUser")
   .get(userFunctions.getUser)
+  
+  app
+  .route("/chats/lastMessage")
+  .get(userFunctions.lastMessage)
 
   app
   .route("/users/updateUser")
