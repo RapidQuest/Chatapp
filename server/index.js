@@ -2,6 +2,7 @@ const express = require("express");
 const socketio = require("socket.io");
 const http = require("http");
 const cors = require("cors");
+const  jwt  =  require('jsonwebtoken');
 
 var current = new Date();
 
@@ -14,7 +15,6 @@ require("./db");
 var routes = require('./router'); //importing route
 
 const PORT = process.env.PORT || 5000;
-const { addUser,createChat, login, joinUser, removeUser, getUser, getUsersInRoom } = require('./users')
 // const router = require("./router");
 
 const bodyParser = require("body-parser");
@@ -26,11 +26,22 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 app.use(cors());
-app.get('/', (req, res) => {
-res.send("Hello World");
+
+app.use((req, res, next) => {
+  if (req.headers && req.headers.authorization) {
+  jwt.verify(req.headers.authorization, 'RESTfulAPIs', (err, decode) => {
+  if (err) req.user = undefined;
+  req.user = decode;
+  next();
+      });
+  } else {
+req.user = undefined;
+next();
+  }
 });
 
 routes(app);
+
 app.listen(port, () => {
 
 console.log(`Server running at http://localhost:${port}`);

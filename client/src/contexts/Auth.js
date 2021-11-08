@@ -54,7 +54,7 @@ const loginUser = async (email, password) => {
 		})
 		.then(function (data) {
       console.log(data);
-      localStorage.setItem('token', data.loggedUser._id);
+      localStorage.setItem('token', data.token);
       // getAllUsers(data.loggedUser);
 			storeProfileInfo('./homepage', data.loggedUser, true);
 		})
@@ -118,6 +118,24 @@ function storeProfileInfo(url, user ,redirect) {
 	// 		}
 	// 	});
 }
+
+function checkLogin(redirect) {
+	if (localStorage.getItem('token') != null) {
+		return true;
+	} else {
+		if (redirect) {
+			window.location.href = './login';
+		}
+		return false;
+	}
+}
+
+function checkLoggedIn() {
+	if (checkLogin(false)) {
+		window.location.href = './homepage';
+	}
+}
+
 
   function logout() {
     return localStorage.clear()

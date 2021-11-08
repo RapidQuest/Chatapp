@@ -1,36 +1,8 @@
-const  User = require("./models/User");
-const  Chat = require("./models/Chats");
+const  User = require("../models/User");
+const  Chat = require("../models/Chats");
 
 // DEFINE CONTROLLER FUNCTIONS
 
-exports.loginUser = async (req, res) => {
-  console.log(req.body);
-  // const { email, password } = req.body;
-  try {
-		let user = await User.findOne({
-			email: req.body.email,
-		});
-		if (!user)
-			return res.status(400).json({
-				message: 'User Not Exist',
-			});
-
-
-		const isMatch = await req.body.password == "123";
-		if (!isMatch)
-			return res.status(400).json({
-				message: 'Incorrect Password !',
-			});
-      // console.log(user);
-      res.status(200).json({loggedUser: user})
-      
-	} catch (e) {
-		console.error(e);
-		res.status(500).json({
-			message: 'Server Error',
-		});
-	}
-};
 
 exports.listAllUsers = (req, res) => {
   User.find({}, (err, user) => {

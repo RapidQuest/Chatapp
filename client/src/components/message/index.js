@@ -10,7 +10,7 @@ const Message = ({ message, id }) => {
     }
   }, [message, id]);
 
-  return isSentByCurrentUser ? (
+  return message === undefined ?<div>Start A new Conversation</div>:isSentByCurrentUser ? (
     <div className="messageContainer justifyEnd">
       <p className="sentText pr-10">{message.time}</p>
       <div className="messageBox backgroundLight2">

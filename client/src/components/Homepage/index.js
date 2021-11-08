@@ -7,6 +7,7 @@ import SideBar from "../SideBar";
 import "./style.css";
 import "./loader.css";
 import FullChat from "../FullChat";
+import { check } from "express-validator";
 
 const HomePage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -54,7 +55,7 @@ console.log(allUsers);
     fetch(apiUrl + 'chats/lastMessage', {
       method: 'get',
       headers: {
-        'id': id1,
+        'id': id1
       }, 
     })
     .then(response => response.json())
@@ -225,7 +226,7 @@ console.log(allUsers);
   }, [selectedUser])
 
   return (
-    <>{dataIsLoaded? <div class="loader"></div>
+    <>{dataIsLoaded? <div className="loader"></div>
       : <div className="joinOuterContainer ">
       {isSmall ? (
         selectedUser ? (
@@ -240,7 +241,7 @@ console.log(allUsers);
         <>
           <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} user={selectedUser} loadChat={loadChat}/>
           <div className="chatBox">
-            {selectedUser ? chatLoad ? ( <div class="loader"></div>
+            {selectedUser ? chatLoad ? ( <div className="loader"></div>
             ):<FullChat setSelectedUser={setSelectedUser} user={selectedUser} chats={chat} /> : (
               <div className="chatArea">
                 <div className="description">

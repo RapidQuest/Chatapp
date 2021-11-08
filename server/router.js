@@ -1,26 +1,27 @@
 
 module.exports = function(app) {
-  var userFunctions = require('./controllerFunctions');
+  var userFunctions = require('./controller/controllerFunctions');
+  var userHandlers = require('./controller/authController');
 
   app
   .route("/users/register")
-  .post(userFunctions.createNewUser);
+  .post(userHandlers.register);
 
   app
   .route("/chats/createChat")
-  .post(userFunctions.createNewChat);
+  .post( userFunctions.createNewChat);
 
   app
   .route("/users/login")
-  .post(userFunctions.loginUser)
+  .post(userHandlers.login)
 
   app
   .route("/users/getUsers")
-  .get(userFunctions.listAllUsers)
+  .get( userFunctions.listAllUsers)
 
   app
   .route("/chats/getChat")
-  .get(userFunctions.getChat)
+  .get( userFunctions.getChat)
   
   app
   .route("/chats/getUser")
@@ -28,11 +29,11 @@ module.exports = function(app) {
   
   app
   .route("/chats/lastMessage")
-  .get(userFunctions.lastMessage)
+  .get( userFunctions.lastMessage)
 
   app
   .route("/users/updateUser")
-  .put(userFunctions.updateUser)
+  .put( userFunctions.updateUser)
   
   app
   .route("/users/updateChat")
