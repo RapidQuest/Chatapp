@@ -11,7 +11,7 @@ import "./style.css";
 let socket;
 
 export default function FullChat({ user, setSelectedUser, chats }) {
-  const { currentUser ,logout, storeProfileInfo } = useAuth();
+  const { currentUser, logout, storeProfileInfo } = useAuth();
   const [error, setError] = useState("");
   const history = useHistory();
   const [name, setName] = useState("");
@@ -23,37 +23,40 @@ export default function FullChat({ user, setSelectedUser, chats }) {
   const [loading, setLoading] = useState(true);
   const currentUserParsed = JSON.parse(currentUser);
   const endPoint = "localhost:5000";
-  const apiUrl = 'http://localhost:5000/';
+  const apiUrl = "http://localhost:5000/";
   // let existingMessages = JSON.parse(localStorage.getItem(user._id));
   var current = new Date();
   console.log(chats);
 
   const saveMessage = async (message) => {
     const data = {
-      "id" : chats.chatid,
-      "message" : message
-    }
-    await fetch(apiUrl + 'users/updateChat', {
-      method: 'put',
+      id: chats.chatid,
+      message: message,
+    };
+    await fetch(apiUrl + "users/updateChat", {
+      method: "put",
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
-    .then((res) => res.json())
-    .then((json) => {
-      console.log(json);
-    })
-      .catch(function (json) {
-      });
-  }
+      .then((res) => res.json())
+      .then((json) => {
+        console.log(json);
+      })
+      .catch(function (json) {});
+  };
 
   useEffect(() => {
     setLoading(true);
 
-    setAllMessages(chats.messages);
+    setMessages(chats.messages);
     setLoading(false);
-  }, [chats])
+  }, [chats]);
+
+  // useEffect(() => {
+  //   setAllMessages((messages) => [...messages, messages]);
+  // }, [message]);
 
   async function handleLogout() {
     setError("");
@@ -73,20 +76,26 @@ export default function FullChat({ user, setSelectedUser, chats }) {
     setRoom(room);
     setName(name);
     console.log(name, room);
-    socket.emit("join", { name , room }, (error) => {
+    socket.emit("join", { name, room }, (error) => {
       if (error) {
         // alert(error);
       }
     });
   }, [endPoint, user._id]);
 
-  //   useEffect(() => {
-  //     socket.on('message', message => {
-  //       setMessages(messages => [...messages,  {value: message, time: current.toLocaleString(), sentBy: JSON.parse(currentUser).id}]);
-  //       if(existingMessages == null) localStorage.setItem(user._id, JSON.stringify(message));
-        
-  //     });
-  // }, [user]);
+  useEffect(() => {
+    socket.on("gotMessage", (message, userId, timeStamp) => {
+      console.log({ message, userId, timeStamp });
+      setMessages((messages) => [
+        ...messages,
+        {
+          value: message,
+          time: Date(timeStamp).toLocaleString(),
+          sentBy: userId,
+        },
+      ]);
+    });
+  }, [user]);
 
   useEffect(() => {
     setMessages("");
@@ -123,7 +132,7 @@ export default function FullChat({ user, setSelectedUser, chats }) {
       ...messages,
       { value: message, time: current.toLocaleString(), sentBy: currentUserParsed._id },
     ]);
-    
+
     saveMessage({ value: message, time: current.toLocaleString(), sentBy: currentUserParsed._id });
     setMessage("");
     // if (existingMessages == null) {
@@ -140,25 +149,26 @@ export default function FullChat({ user, setSelectedUser, chats }) {
     // localStorage.setItem(user._id, JSON.stringify(existingMessages));
 
     if (message) {
-      socket.emit("sendMessage", message, () => setMessage(""));
+      socket.emit("sendMessage", message, user._id, currentUserParsed._id);
     }
   };
-  console.log(chats);
 
   return (
-      <div className="outerContainer">
-        <div className="containerC" id={user._id}>
-          <InfoBar user={user} room={room} setSelectedUser={setSelectedUser} />
-          {loading? <div class="loader"></div>
-        :
-        <Messages messages={allMessages} id={currentUserParsed._id} /> }
-          <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
-        </div>
-        {/* <div className="text-center mt-2">
+    <div className="outerContainer">
+      <div className="containerC" id={user._id}>
+        <InfoBar user={user} room={room} setSelectedUser={setSelectedUser} />
+        {loading ? (
+          <div class="loader"></div>
+        ) : (
+          <Messages messages={messages} id={currentUserParsed._id} />
+        )}
+        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
+      </div>
+      {/* <div className="text-center mt-2">
           <div className="btn" variant="link" onClick={handleLogout}>
           Log Out
         </div>
         </div> */}
-      </div>
+    </div>
   );
 }
