@@ -42,7 +42,7 @@ next();
 
 routes(app);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
 
 console.log(`Server running at http://localhost:${port}`);
 });
@@ -50,7 +50,7 @@ console.log(`Server running at http://localhost:${port}`);
 
 // const app = express();
 // const server = http.createServer(app);
-// const io = socketio(server);
+const io = socketio(server);
  
 // app.use(cors());
 // app.use(router);
@@ -58,28 +58,20 @@ console.log(`Server running at http://localhost:${port}`);
 
 // app.use(bodyParser.urlencoded({ extended: true }));
 
-// io.on("connect", (socket) => {
-//   socket.on("join", ({ name,room  }, callback) => {
-//     const { error, user } = joinUser({ id: socket.id, name, room });
+io.on("connect", (socket) => {
+  socket.on("join", chatId => {
+    socket.join(chatId);
+  });
 
-//     if(error) return callback(error);
-//     socket.join(user.room);
+  socket.on("sendMessage", (message, senderUserId, chatId) => {
+    console.log({message, senderUserId, chatId});
+    
+    socket.to(chatId).emit("messageRecived", message, senderUserId, Date.now())
+    // io.to(user.room).emit("message", { value: message, time: current.toLocaleString(), sentBy: user.name });
+    // io.to(user.room).emit("roomData", { room: user.room, users: getUsersInRoom(user.room) });
 
-//     // socket.emit('message', { sentBy: 'admin', time: current.toLocaleString(), value: `${user.name}, welcome to room ${user.room}.`});
-//     // socket.broadcast.to(user.room).emit('message', {value: message, time: current.toLocaleString(), sentBy: currentUser.id});
-
-//     io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
-
-//     callback();
-//   });
-
-//   socket.on("sendMessage", (message, callback) => {
-//     const user = getUser(socket.id);
-//     io.to(user.room).emit("message", { value: message, time: current.toLocaleString(), sentBy: user.name });
-//     // io.to(user.room).emit("roomData", { room: user.room, users: getUsersInRoom(user.room) });
-
-//     callback();
-//   });
+    // callback();
+  });
 
 //   socket.on("disconnect", (socket) => {
 //     const user = removeUser(socket.id);
@@ -89,6 +81,6 @@ console.log(`Server running at http://localhost:${port}`);
 //       io.to(user?.room).emit("roomData", { room: user.room, users: getUsersInRoom(user.room) });
 //     }
 //   });
-// });
+});
 
 // server.listen(PORT, () => console.log(`Server has started on ${PORT}`));

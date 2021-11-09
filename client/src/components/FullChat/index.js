@@ -71,21 +71,12 @@ export default function FullChat({ user, setSelectedUser, chats }) {
 
   console.log(chats.messages);
   useEffect(() => {
-    const { name, room } = { name: currentUserParsed.name, room: user._id };
-    socket = io(endPoint, { transports: ["websocket"] });
-    setRoom(room);
-    setName(name);
-    console.log(name, room);
-    socket.emit("join", { name, room }, (error) => {
-      if (error) {
-        // alert(error);
-      }
-    });
-  }, [endPoint, user._id]);
+    socket = io(apiUrl, { transports: ["websocket"] });
 
-  useEffect(() => {
-    socket.on("gotMessage", (message, userId, timeStamp) => {
+    socket.emit("join", chats.chatid);
+    socket.on("messageRecived", (message, userId, timeStamp) => {
       console.log({ message, userId, timeStamp });
+      console.log(messages);
       setMessages((messages) => [
         ...messages,
         {
@@ -94,8 +85,17 @@ export default function FullChat({ user, setSelectedUser, chats }) {
           sentBy: userId,
         },
       ]);
+      console.log(messages);
+      
+      // return () => {
+      //   socket.off("messageRecived")
+      // }
     });
-  }, [user]);
+  }, [user._id]);
+
+  useEffect(() => {
+    console.log("messgaes got updates");
+  }, [messages]);
 
   useEffect(() => {
     setMessages("");
@@ -112,21 +112,9 @@ export default function FullChat({ user, setSelectedUser, chats }) {
 
   const sendMessage = (event) => {
     event.preventDefault();
+    // if(message) return;
 
-    // if(message) {
-    //   socket.emit('sendMessage', message, () => {
-    //     setMessages(messages => [...messages, {value: message, time: current.toLocaleString(), sentBy: JSON.parse(currentUser).id}]);
-    //     setMessage("")
-    //     if(existingMessages == null){
-    //       existingMessages = [];
-    //       localStorage.setItem(user._id, JSON.stringify(messages));
-    //     }
-    //     console.log(messages);
-    //     existingMessages.push({value: message, time: current.toLocaleString(), sentBy: JSON.parse(currentUser).id})
-    //     localStorage.setItem(user._id, JSON.stringify(existingMessages))
-
-    //   });
-    // }
+    socket.emit('sendMessage', message, user._id, chats.chatid);
 
     setMessages((messages) => [
       ...messages,
@@ -147,10 +135,6 @@ export default function FullChat({ user, setSelectedUser, chats }) {
     // });
 
     // localStorage.setItem(user._id, JSON.stringify(existingMessages));
-
-    if (message) {
-      socket.emit("sendMessage", message, user._id, currentUserParsed._id);
-    }
   };
 
   return (

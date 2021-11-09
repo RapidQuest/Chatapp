@@ -7,7 +7,6 @@ import SideBar from "../SideBar";
 import "./style.css";
 import "./loader.css";
 import FullChat from "../FullChat";
-import { check } from "express-validator";
 
 const HomePage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
