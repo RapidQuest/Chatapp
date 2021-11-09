@@ -27,6 +27,12 @@ export default function FullChat({ user, setSelectedUser, chats }) {
   // let existingMessages = JSON.parse(localStorage.getItem(user._id));
   var current = new Date();
   console.log(chats);
+  useEffect(() => {
+    setLoading(true);
+
+    setMessages(chats.messages);
+    setLoading(false);
+  }, [chats]);
 
   const saveMessage = async (message) => {
     const data = {
@@ -47,12 +53,6 @@ export default function FullChat({ user, setSelectedUser, chats }) {
       .catch(function (json) {});
   };
 
-  useEffect(() => {
-    setLoading(true);
-
-    setMessages(chats.messages);
-    setLoading(false);
-  }, [chats]);
 
   // useEffect(() => {
   //   setAllMessages((messages) => [...messages, messages]);
@@ -91,30 +91,18 @@ export default function FullChat({ user, setSelectedUser, chats }) {
       //   socket.off("messageRecived")
       // }
     });
-  }, [user._id]);
+  }, [user]);
 
   useEffect(() => {
     console.log("messgaes got updates");
   }, [messages]);
 
-  useEffect(() => {
-    setMessages("");
-    const message = [
-      {
-        sentBy: currentUserParsed.name,
-        time: current.toLocaleString(),
-        value: user.name + ", Welcome " + user._id,
-      },
-    ];
-    setMessages((messages) => [...messages, message]);
-    // if (existingMessages == null) localStorage.setItem(user._id, JSON.stringify(message));
-  }, [user]);
 
   const sendMessage = (event) => {
     event.preventDefault();
     // if(message) return;
 
-    socket.emit('sendMessage', message, user._id, chats.chatid);
+    socket.emit('sendMessage', message, currentUserParsed._id, chats.chatid);
 
     setMessages((messages) => [
       ...messages,
