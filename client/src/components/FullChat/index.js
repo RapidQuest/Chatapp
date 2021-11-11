@@ -24,8 +24,8 @@ export default function FullChat({ user, setSelectedUser, chats }) {
   const currentUserParsed = JSON.parse(currentUser);
   const apiUrl = "http://localhost:5000/";
   // let existingMessages = JSON.parse(localStorage.getItem(user._id));
-  var current = new Date();
-  console.log(chats);
+  const current = new Date();
+
   useEffect(() => {
     setLoading(true);
 

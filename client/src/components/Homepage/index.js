@@ -243,6 +243,24 @@ const HomePage = () => {
       .catch((err) => console.error(err));
   };
 
+  const getChatForSelectedUser = () => {
+    if (!allChats || !selectedUser) return null;
+
+    //chatsId is the chatids for the selectedUser
+    const chatId1 = stringToHash(selectedUser.name + currentUserParsed.name);
+    const chatId2 = stringToHash(currentUserParsed.name + selectedUser.name);
+
+    const chatsForSelectedUser = allChats.filter((chat) => {
+      return chat.chatid == chatId1 || chat.chatid == chatId2;
+    });
+
+    if (chatsForSelectedUser.length > 1) {
+      chatsForSelectedUser = [...chatsForSelectedUser[0], ...chatsForSelectedUser[1]];
+    }
+
+    return chatsForSelectedUser[0];
+  };
+
   useEffect(() => {
     getAllChats(currentUserParsed.chatId);
 
@@ -275,7 +293,11 @@ const HomePage = () => {
                 <div>Loading Chat</div>
               ) : (
                 <div className="chatBox" id="chatBox">
-                  <FullChat setSelectedUser={setSelectedUser} user={selectedUser} chats={chat} />
+                  <FullChat
+                    setSelectedUser={setSelectedUser}
+                    user={selectedUser}
+                    chats={getChatForSelectedUser()}
+                  />
                 </div>
               )
             ) : (
@@ -299,7 +321,11 @@ const HomePage = () => {
                   chatLoad ? (
                     <div className="loader"></div>
                   ) : (
-                    <FullChat setSelectedUser={setSelectedUser} user={selectedUser} chats={chat} />
+                    <FullChat
+                      setSelectedUser={setSelectedUser}
+                      user={selectedUser}
+                      chats={getChatForSelectedUser()}
+                    />
                   )
                 ) : (
                   <div className="chatArea">
