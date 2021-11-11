@@ -5,6 +5,27 @@ body {
   margin: 0;
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #cacccc;
+  border-radius: 5px;
+}
+
+* {
+  /* for mozilla */
+  scrollbar-color: #cacccc #f0f0f0;
+  scrollbar-width: thin;
+}
+
 #root {
   height: 100vh;
 }
@@ -84,7 +105,7 @@ button:focus {
   .sideBar {
     width: 35vw;
   }
-  .chatBox{
+  .chatBox {
     width: 65vw;
   }
 }
@@ -99,7 +120,7 @@ button:focus {
   .sideBar {
     width: 25vw;
   }
-  .chatBox{
+  .chatBox {
     width: 75vw;
   }
 }
@@ -112,11 +133,11 @@ button:focus {
   background-color: rgba(243, 244, 247, 1);
 }
 
-.chatBox{
+.chatBox {
   height: auto;
 }
 
-.fa-user-md{
+.fa-user-md {
   display: flex;
   justify-content: center;
 }

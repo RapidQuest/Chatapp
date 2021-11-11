@@ -22,15 +22,14 @@ export default function FullChat({ user, setSelectedUser, chats }) {
   const [allMessages, setAllMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentUserParsed = JSON.parse(currentUser);
-  const endPoint = "localhost:5000";
   const apiUrl = "http://localhost:5000/";
   // let existingMessages = JSON.parse(localStorage.getItem(user._id));
-  var current = new Date();
-  console.log(chats);
+  const current = new Date();
+
   useEffect(() => {
     setLoading(true);
 
-    setMessages(chats.messages);
+    setMessages(chats ? chats.messages : null);
     setLoading(false);
   }, [chats]);
 
@@ -53,7 +52,6 @@ export default function FullChat({ user, setSelectedUser, chats }) {
       .catch(function (json) {});
   };
 
-
   // useEffect(() => {
   //   setAllMessages((messages) => [...messages, messages]);
   // }, [message]);
@@ -69,40 +67,32 @@ export default function FullChat({ user, setSelectedUser, chats }) {
     }
   }
 
-  console.log(chats.messages);
   useEffect(() => {
     socket = io(apiUrl, { transports: ["websocket"] });
+    chats && socket.emit("join", chats.chatid);
+    socket.on("messageRecived", (message, userId, timeStamp, messageId) => {
+      console.log("%cmessage recived", "color:red");
 
-    socket.emit("join", chats.chatid);
-    socket.on("messageRecived", (message, userId, timeStamp) => {
-      console.log({ message, userId, timeStamp });
-      console.log(messages);
       setMessages((messages) => [
         ...messages,
         {
           value: message,
           time: Date(timeStamp).toLocaleString(),
           sentBy: userId,
+          messageId,
         },
       ]);
-      console.log(messages);
-      
+
       // return () => {
       //   socket.off("messageRecived")
       // }
     });
   }, [user]);
 
-  useEffect(() => {
-    console.log("messgaes got updates");
-  }, [messages]);
-
-
   const sendMessage = (event) => {
     event.preventDefault();
-    // if(message) return;
 
-    socket.emit('sendMessage', message, currentUserParsed._id, chats.chatid);
+    socket.emit("sendMessage", message, currentUserParsed._id, chats.chatid);
 
     setMessages((messages) => [
       ...messages,
@@ -130,7 +120,7 @@ export default function FullChat({ user, setSelectedUser, chats }) {
       <div className="containerC" id={user._id}>
         <InfoBar user={user} room={room} setSelectedUser={setSelectedUser} />
         {loading ? (
-          <div class="loader"></div>
+          <div className="loader"></div>
         ) : (
           <Messages messages={messages} id={currentUserParsed._id} />
         )}

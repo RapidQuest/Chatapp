@@ -1,183 +1,33 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/Auth";
-import { useHistory } from "react-router-dom";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import SideBar from "../SideBar";
+import FullChat from "../FullChat";
+import io from "socket.io-client";
 
 import "./style.css";
 import "./loader.css";
-import FullChat from "../FullChat";
 
 const HomePage = () => {
-  const [selectedUser, setSelectedUser] = useState(null);
   const { currentUser, logout } = useAuth();
-  const history = useHistory();
   const isSmall = useMediaQuery("(max-width: 760px)", false);
-  // console.log(JSON.parse(currentUser).name);
+
   const [allUsers, setAllUsers] = useState([]);
+  const [allChats, setAllChats] = useState([]);
+
   const [chat, setChat] = useState([]);
-  const [user, setUser] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+
   const [dataIsLoaded, setDataIsLoaded] = useState(true);
   const [chatLoad, setChatLoad] = useState(true);
-  const apiUrl = 'http://localhost:5000/';
-  const currentUserParsed = JSON.parse(currentUser)
 
-  const getAllUsers = async () =>{
-    await fetch( apiUrl + 'users/getUsers')
-      .then((res) => res.json())
-      .then((json) => {
-        console.log(json);
-        json.forEach(element => {
-          loadLastMessage(stringToHash(element.name + currentUserParsed.name), stringToHash(currentUserParsed.name + element.name  ), element)
-        });
-        setAllUsers(json);
-        setDataIsLoaded(false);
-      })
-  }
-console.log(allUsers);
-  useEffect(() => {
-    getAllUsers()
-  }, [])
+  const apiUrl = "http://localhost:5000/";
+  const currentUserParsed = JSON.parse(currentUser);
 
-  function stringToHash(string) {
-    var hash = 0;
-    if (string.length == 0) return hash;
-    for (let i = 0; i < string.length; i++) {
-         var char = string.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
-    }
-    return hash;
-}
+  let tagCount = 0;
+  let tagClasses = {};
 
-  const loadLastMessage = async (id1, id2 , user) => {
-    fetch(apiUrl + 'chats/lastMessage', {
-      method: 'get',
-      headers: {
-        'id': id1
-      }, 
-    })
-    .then(response => response.json())
-    .then((data) => {
-      if(data === null){
-        fetch(apiUrl + 'chats/lastMessage', {
-          method: 'get',
-          headers: {
-            'id': id2,
-          },
-        })
-        .then(response => response.json())
-        .then((data) => {
-          if(data === null) return;
-          else{
-            console.log('got message from id2');
-            console.log(data);
-            user.lastMessage = data.messages[0] === undefined ? "start new conversation" :data.messages[0].value;
-          }
-        });
-      }else{
-        console.log('got message from id1');
-        console.log(data);
-        user.lastMessage = data.messages[0] === undefined ? "start new conversation" :data.messages[0].value;
-      }
-    });
-  };
-
-  const loadChat = async (id1, id2 , user) => {
-    fetch(apiUrl + 'chats/getChat', {
-      method: 'get',
-      headers: {
-        'id': id1,
-      }, 
-    })
-    .then(response => response.json())
-    .then((data) => {
-      if(data === null){
-        fetch(apiUrl + 'chats/getChat', {
-          method: 'get',
-          headers: {
-            'id': id2,
-          },
-        })
-        .then(response => response.json())
-        .then((data) => {
-          if(data === null) createChat(id2, user)
-          else{
-            console.log('got data from id2');
-            console.log(data);
-            setChat(data);
-          }
-        });
-      }else{
-        console.log('got data from id1');
-        console.log(data);
-        setChat(data);
-      }
-      setChatLoad(false);
-    });
-  };
-
-  const pushChatIdToUsers = async (user,id) => {
-    await fetch(apiUrl + 'chats/getUser', {
-      method: 'get',
-      headers: {
-        'id': user._id,
-      },
-    })
-    .then(response => response.json())
-    .then((data) => {
-      if(data === null) console.log('no user found');
-      else{
-        user.chatId.forEach(element => {
-          if(element === id) return console.log("Id Already present");
-        });
-        data.chatId.push(id);
-        fetch(apiUrl + 'users/updateUser', {
-          method: 'put',
-          body: JSON.stringify(data),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-          .then(function (response) {
-            if (response.status == 200) {
-              console.log("pushed");
-            } else {
-              return response.json().then((json) => {
-                throw new Error(json.msg);
-              });
-            }
-          })
-          .catch(function (json) {
-          });
-      }
-    });
-  }
-
-  const createChat = async (id, user) => {
-    const chat = {
-      "chatid" : id
-    }
-    await fetch(apiUrl + 'chats/createChat', {
-      method: 'POST',
-      body: JSON.stringify(chat),
-      headers: {
-          'Content-Type': 'application/json'
-      },
-    })
-    .then(response => response.json())
-    .then((json) => {
-      console.log(json);
-    });
-    console.log("chat created");
-    await pushChatIdToUsers(currentUserParsed, id);
-    await pushChatIdToUsers(user, id);
-  }
-
-  var tagCount = 0;
-  var tagClasses = {};
-
-  function profileColor(tagName) {
+  const profileColor = (tagName) => {
     const tagColors = [
       "lightpink",
       "mustdo",
@@ -213,48 +63,246 @@ console.log(allUsers);
       tagCount = 0;
     }
     return tagClasses[tagName];
-  }
+  };
 
-  allUsers.forEach((user, index) => {
-    user.color = profileColor(user._id);
-  });
-  console.log(chat);
+  const getAllUsers = () => {
+    setDataIsLoaded(true);
+    fetch(apiUrl + "users/getUsers")
+      .then((res) => res.json())
+      .then((users) => {
+        users.forEach((user) => {
+          user.color = profileColor(user._id);
+
+          loadLastMessage(
+            stringToHash(user.name + currentUserParsed.name),
+            stringToHash(currentUserParsed.name + user.name),
+            user
+          );
+        });
+
+        setAllUsers(users);
+        setDataIsLoaded(false);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const stringToHash = (string) => {
+    let hash = 0;
+    if (string.length == 0) return hash;
+    for (let i = 0; i < string.length; i++) {
+      var char = string.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash;
+    }
+    return hash;
+  };
+
+  const loadLastMessage = (id1, id2, user) => {
+    fetch(apiUrl + "chats/lastMessage", {
+      method: "get",
+      headers: {
+        id: id1,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data === null) {
+          fetch(apiUrl + "chats/lastMessage", {
+            method: "get",
+            headers: {
+              id: id2,
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data === null) return;
+              else {
+                user.lastMessage =
+                  data.messages[0] === undefined
+                    ? "start new conversation"
+                    : data.messages[0].value;
+              }
+            });
+        } else {
+          user.lastMessage =
+            data.messages[0] === undefined ? "start new conversation" : data.messages[0].value;
+        }
+      });
+  };
+  const updateUser = (data) => {
+    fetch(apiUrl + "users/updateUser", {
+      method: "put",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(function (response) {
+      if (response.status == 200) {
+      } else {
+        return response.json().then((json) => {
+          throw new Error(json.msg);
+        });
+      }
+    });
+  };
+
+  const pushChatIdToUsers = (user, id) => {
+    fetch(apiUrl + "chats/getUser", {
+      method: "get",
+      headers: {
+        id: user._id,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data) {
+          console.error("no user found");
+        } else {
+          user.chatId.forEach((element) => {
+            if (element === id) return;
+          });
+          data.chatId.push(id);
+          updateUser(data);
+        }
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
+  const createChat = (id, user) => {
+    const chat = {
+      chatid: id,
+    };
+
+    fetch(apiUrl + "chats/createChat", {
+      method: "POST",
+      body: JSON.stringify(chat),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {});
+
+    pushChatIdToUsers(currentUserParsed, id);
+    pushChatIdToUsers(user, id);
+  };
+
+  const getAllChats = (chatsId) => {
+    if (!chatsId) return;
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: JSON.stringify({
+        chatId: currentUserParsed.chatId,
+      }),
+    };
+
+    fetch(apiUrl + "chats/getAllChats", requestOptions)
+      .then((response) => response.json())
+      .then((allChats) => {
+        setAllChats(allChats);
+        setChatLoad(false);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const getChatForSelectedUser = () => {
+    if (!allChats || !selectedUser) return null;
+
+    //chatsId is the chatids for the selectedUser
+    const chatId1 = stringToHash(selectedUser.name + currentUserParsed.name);
+    const chatId2 = stringToHash(currentUserParsed.name + selectedUser.name);
+
+    const chatsForSelectedUser = allChats.filter((chat) => {
+      return chat.chatid == chatId1 || chat.chatid == chatId2;
+    });
+
+    if (chatsForSelectedUser.length > 1) {
+      chatsForSelectedUser = [...chatsForSelectedUser[0], ...chatsForSelectedUser[1]];
+    }
+
+    return chatsForSelectedUser[0];
+  };
 
   useEffect(() => {
-    setChatLoad(true)
-  }, [selectedUser])
+    getAllChats(currentUserParsed.chatId);
+
+    const socket = io(apiUrl, { transports: ["websocket"] });
+    currentUserParsed.chatId.forEach((id) => {
+      socket.emit("join", id);
+
+      socket.on("messageRecived", (message, userId, timeStamp, messageId) => {
+        setAllChats((chats) => [
+          ...chats,
+          { chatId: id, message: { message, userId, timeStamp, messageId } },
+        ]);
+      });
+    });
+  }, [currentUser]);
+
+  useEffect(() => {
+    getAllUsers();
+  }, []);
 
   return (
-    <>{dataIsLoaded? <div className="loader"></div>
-      : <div className="joinOuterContainer ">
-      {isSmall ? (
-        selectedUser ? (
-          chatLoad? <div>Loading Chat</div>
-          :<div className="chatBox" id="chatBox">
-          <FullChat setSelectedUser={setSelectedUser} user={selectedUser} chats={chat} />
-        </div>
-        ) : (
-          <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} user={selectedUser} loadChat={loadChat}  />
-        )
+    <>
+      {dataIsLoaded ? (
+        <div className="loader"></div>
       ) : (
-        <>
-          <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} user={selectedUser} loadChat={loadChat}/>
-          <div className="chatBox">
-            {selectedUser ? chatLoad ? ( <div className="loader"></div>
-            ):<FullChat setSelectedUser={setSelectedUser} user={selectedUser} chats={chat} /> : (
-              <div className="chatArea">
-                <div className="description">
-                  <h1 className="docLogo">
-                    <i className="fas fa-user-md"></i>
-                  </h1>
-                  <h1>Keep Yourself connected</h1>
+        <div className="joinOuterContainer ">
+          {isSmall ? (
+            selectedUser ? (
+              chatLoad ? (
+                <div>Loading Chat</div>
+              ) : (
+                <div className="chatBox" id="chatBox">
+                  <FullChat
+                    setSelectedUser={setSelectedUser}
+                    user={selectedUser}
+                    chats={getChatForSelectedUser()}
+                  />
                 </div>
+              )
+            ) : (
+              <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} user={selectedUser} />
+            )
+          ) : (
+            <>
+              <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} user={selectedUser} />
+              <div className="chatBox">
+                {selectedUser ? (
+                  chatLoad ? (
+                    <div className="loader"></div>
+                  ) : (
+                    <FullChat
+                      setSelectedUser={setSelectedUser}
+                      user={selectedUser}
+                      chats={getChatForSelectedUser()}
+                    />
+                  )
+                ) : (
+                  <div className="chatArea">
+                    <div className="description">
+                      <h1 className="docLogo">
+                        <i className="fas fa-user-md"></i>
+                      </h1>
+                      <h1>Keep Yourself connected</h1>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </>
+            </>
+          )}
+        </div>
       )}
-    </div>}
     </>
   );
 };
