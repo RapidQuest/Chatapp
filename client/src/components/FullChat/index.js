@@ -9,7 +9,7 @@ import Messages from "../Messages";
 import "./style.css";
 let socket;
 
-export default function FullChat({ user, setSelectedUser, chats }) {
+export default function FullChat({ user, setSelectedUser, chats, setLastMessages }) {
   const { currentUser, logout } = useAuth();
   const history = useHistory();
   const [message, setMessage] = useState("");
@@ -70,6 +70,17 @@ export default function FullChat({ user, setSelectedUser, chats }) {
           messageId,
         },
       ]);
+
+      setLastMessages((lastMessages) => {
+        lastMessages.forEach((lastMessage) => {
+          if (lastMessage.userId == userId) {
+            lastMessage.lastMessage = message;
+          }
+        });
+
+        console.log({ lastMessages, currentUserParsed: userId });
+        return lastMessages;
+      });
     });
   }, [user]);
 
@@ -77,6 +88,15 @@ export default function FullChat({ user, setSelectedUser, chats }) {
     event.preventDefault();
 
     socket.emit("sendMessage", message, currentUserParsed._id, chats.chatid);
+    setLastMessages((lastMessages) => {
+      lastMessages.forEach((lastMessage) => {
+        if (lastMessage.userId == user._id) {
+          lastMessage.lastMessage = message;
+        }
+      });
+
+      return lastMessages;
+    });
 
     setMessages((messages) => [
       ...messages,

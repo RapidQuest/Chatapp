@@ -136,6 +136,8 @@ const HomePage = () => {
       });
   };
 
+  console.log({ lastMessages });
+
   const updateUser = (data) => {
     fetch(apiUrl + "users/updateUser", {
       method: "put",
@@ -270,6 +272,7 @@ const HomePage = () => {
               ) : (
                 <div className="chatBox" id="chatBox">
                   <FullChat
+                    setLastMessages={setLastMessages}
                     setSelectedUser={setSelectedUser}
                     user={selectedUser}
                     chats={getChatForUser(selectedUser.name)}
@@ -298,6 +301,7 @@ const HomePage = () => {
                     <div className="loader"></div>
                   ) : (
                     <FullChat
+                      setLastMessages={setLastMessages}
                       setSelectedUser={setSelectedUser}
                       user={selectedUser}
                       chats={getChatForUser ? getChatForUser(selectedUser.name) : null}
