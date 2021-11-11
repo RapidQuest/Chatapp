@@ -4,66 +4,66 @@ const data = {
       id: "12345",
       name: "admin",
       role: "admin",
-      chatId: []
+      chatId: [],
     },
     {
       id: "12346",
       name: "provider",
       role: "provider",
-      chatId: []
+      chatId: [],
     },
     {
       id: "12347",
       name: "patient",
       role: "patient",
-      chatId: []
+      chatId: [],
     },
   ],
-  chats:[
+  chats: [
     {
-      chatId:"432432",
+      chatId: "432432",
       messages: [
         {
           sentBy: "xyz",
           value: "Hello",
-          time: "12/12/2021 12:00am"
+          time: "12/12/2021 12:00am",
         },
         {
           sentBy: "xyz",
           value: "Hello",
-          time: "12/12/2021 12:00am"
-        }
-      ]
+          time: "12/12/2021 12:00am",
+        },
+      ],
     },
     {
-      chatId:"432432",
+      chatId: "432432",
       messages: [
         {
           sentBy: "xyz",
           value: "Hello",
-          time: "12/12/2021 12:00am"
+          time: "12/12/2021 12:00am",
         },
         {
           sentBy: "xyz",
           value: "Hello",
-          time: "12/12/2021 12:00am"
+          time: "12/12/2021 12:00am",
         },
-      ]
+      ],
     },
     {
-      chatId:"432432",
+      chatId: "432432",
       messages: [
         {
           sentBy: "xyz",
           value: "Hello",
-          time: "12/12/2021 12:00am"
+          time: "12/12/2021 12:00am",
         },
         {
           sentBy: "xyz",
           value: "Hello",
-          time: "12/12/2021 12:00am"
+          time: "12/12/2021 12:00am",
         },
-      ]
-    }
-  ]
-}
+      ],
+    },
+  ],
+};
