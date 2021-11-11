@@ -9,7 +9,6 @@ import Messages from "../Messages";
 import "./style.css";
 let socket;
 
-let socket;
 export default function FullChat({ user, setSelectedUser, chats }) {
   const { currentUser, logout } = useAuth();
   const history = useHistory();
