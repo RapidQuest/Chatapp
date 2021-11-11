@@ -1,9 +1,9 @@
-.fullContainer {
-  width: 75vw;
+.outerContainer {
+  width: 100%;
 }
 
 @media (max-width: 760px) {
-  .fullContainer {
+  .outerContainer {
     width: 100vw;
   }
 }

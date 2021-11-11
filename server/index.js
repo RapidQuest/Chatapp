@@ -1,60 +1,86 @@
 const express = require("express");
 const socketio = require("socket.io");
-const initiateMongoServer = require("./config/dev.js");
 const http = require("http");
 const cors = require("cors");
-const { addUser, removeUser, getUser, getUsersInRoom } = require("./users");
+const  jwt  =  require('jsonwebtoken');
+
+var current = new Date();
+
+// create express app
+const  app = express();
+
+require("./db");
+
+// Import API route
+var routes = require('./router'); //importing route
 
 const PORT = process.env.PORT || 5000;
+// const router = require("./router");
 
-const router = require("./router");
+const bodyParser = require("body-parser");
 
-const app = express();
-const server = http.createServer(app);
-const io = socketio(server);
+const port = process.env.PORT || 5000;
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
 
-initiateMongoServer(); // Connects to mongo db
-
+// parse application/json
+app.use(bodyParser.json())
 app.use(cors());
-app.use(router);
 
-io.on("connect", (socket) => {
-  socket.on("join", ({ userToChat, currentUser }, callback) => {
-    const { error, user } = joinUsers({ id: socket.id, userToChat, currentUser });
-
-    if (error) return callback(error);
-
-    socket.join(user.room);
-
-    socket.emit("message", {
-      sentBy: currentUser.name,
-      time: current.toLocaleString(),
-      value: user.name + ", Welcome " + user._id,
-    });
-    // socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} has joined!` });
-
-    io.to(user?.room).emit("roomData", { room: user.room, users: getUsersInRoom(user.room) });
-
-    callback();
-  });
-
-  socket.on("sendMessage", (message, callback) => {
-    const user = getUser(socket.id);
-
-    io.to(user.room).emit("message", { user: user.name, text: message });
-    io.to(user.room).emit("roomData", { room: user.room, users: getUsersInRoom(user.room) });
-
-    callback();
-  });
-
-  socket.on("disconnect", (socket) => {
-    const user = removeUser(socket.id);
-
-    if (user) {
-      io.to(user?.room).emit("message", { user: "Admin", text: `${user.name} has left.` });
-      io.to(user?.room).emit("roomData", { room: user.room, users: getUsersInRoom(user.room) });
-    }
-  });
+app.use((req, res, next) => {
+  if (req.headers && req.headers.authorization) {
+  jwt.verify(req.headers.authorization, 'RESTfulAPIs', (err, decode) => {
+  if (err) req.user = undefined;
+  req.user = decode;
+  next();
+      });
+  } else {
+req.user = undefined;
+next();
+  }
 });
 
-server.listen(PORT, () => console.log(`Server has started on ${PORT}`));
+routes(app);
+
+const server = app.listen(port, () => {
+
+console.log(`Server running at http://localhost:${port}`);
+});
+
+
+// const app = express();
+// const server = http.createServer(app);
+const io = socketio(server);
+ 
+// app.use(cors());
+// app.use(router);
+// app.use(bodyParser.json());
+
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+io.on("connect", (socket) => {
+  socket.on("join", chatId => {
+    socket.join(chatId);
+  });
+
+  socket.on("sendMessage", (message, senderUserId, chatId) => {
+    console.log({message, senderUserId, chatId});
+    
+    socket.to(chatId).emit("messageRecived", message, senderUserId, Date.now())
+    // io.to(user.room).emit("message", { value: message, time: current.toLocaleString(), sentBy: user.name });
+    // io.to(user.room).emit("roomData", { room: user.room, users: getUsersInRoom(user.room) });
+
+    // callback();
+  });
+
+//   socket.on("disconnect", (socket) => {
+//     const user = removeUser(socket.id);
+
+//     if (user) {
+//       io.to(user?.room).emit("message", { user: "Admin", text: `${user.name} has left.` });
+//       io.to(user?.room).emit("roomData", { room: user.room, users: getUsersInRoom(user.room) });
+//     }
+//   });
+});
+
+// server.listen(PORT, () => console.log(`Server has started on ${PORT}`));

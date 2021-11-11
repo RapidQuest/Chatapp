@@ -10,9 +10,31 @@ const Message = ({ message, id }) => {
     }
   }, [message, id]);
 
-  return isSentByCurrentUser ? (
+  function getTimeZone() {
+    let timezone = localStorage.getItem("timezone");
+    if (timezone == null) {
+      timezone = "America/New_York";
+    }
+    return timezone;
+  }
+
+  function getFormatedTime(timeString) {
+    const timeStanmp = new Date(timeString).getTime();
+    if (isNaN(timeStanmp)) return;
+
+    const options = {
+      dateStyle: "short",
+      timeStyle: "short",
+      timeZone: getTimeZone(),
+    };
+    return new Date(timeStanmp * 1000).toLocaleString("en-US", options);
+  }
+
+  return message === undefined ? (
+    <div>Start A new Conversation</div>
+  ) : isSentByCurrentUser ? (
     <div className="messageContainer justifyEnd">
-      <p className="sentText pr-10">{message.time}</p>
+      <p className="sentText pr-10">{getFormatedTime(message.time)}</p>
       <div className="messageBox backgroundLight2">
         <p className="messageText colorDark">{message.value}</p>
       </div>
