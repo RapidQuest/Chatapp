@@ -2,7 +2,7 @@ import React from "react";
 import UsersList from "../UsersList";
 import Search from "../SearchBar";
 
-export default function index({ allUsers, setSelectedUser, user, loadChat }) {
+const SideBar = ({ allUsers, setSelectedUser, user }) => {
   return (
     <>
       <div className="sideBar" id="sideBar">
@@ -11,4 +11,6 @@ export default function index({ allUsers, setSelectedUser, user, loadChat }) {
       </div>
     </>
   );
-}
+};
+
+export default SideBar;

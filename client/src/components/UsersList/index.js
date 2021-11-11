@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-// import onlineIcon from '../../icons/onlineIcon.png';
-import "./tags.css";
-import "./style.css";
+import React from "react";
 import ProfileImage from "../ProfileImage";
 import { useAuth } from "../../contexts/Auth";
 import useMediaQuery from "../../hooks/useMediaQuery";
+import "./tags.css";
+import "./style.css";
+// import onlineIcon from '../../icons/onlineIcon.png';
 
-const UsersList = ({ users, setSelectedUser, selectedUser, loadChat }) => {
+const UsersList = ({ users, setSelectedUser, selectedUser }) => {
   const isSmall = useMediaQuery("(max-width: 760px)", false);
   const centerContent = useMediaQuery("(min-width: 1500px)", false);
   const { currentUser, logout, getAllUsers } = useAuth();

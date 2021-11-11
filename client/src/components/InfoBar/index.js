@@ -5,7 +5,7 @@ import useMediaQuery from "../../hooks/useMediaQuery";
 
 import "./style.css";
 
-const InfoBar = ({ user, room, setSelectedUser }) => {
+const InfoBar = ({ user, setSelectedUser }) => {
   const isSmall = useMediaQuery("(max-width: 760px)", false);
 
   return (
