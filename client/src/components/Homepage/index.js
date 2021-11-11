@@ -115,6 +115,23 @@ const HomePage = () => {
       });
   };
 
+  function updateUser(data) {
+    fetch(apiUrl + "users/updateUser", {
+      method: "put",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(function (response) {
+      if (response.status == 200) {
+      } else {
+        return response.json().then((json) => {
+          throw new Error(json.msg);
+        });
+      }
+    });
+  }
+
   const pushChatIdToUsers = (user, id) => {
     fetch(apiUrl + "chats/getUser", {
       method: "get",
@@ -124,29 +141,18 @@ const HomePage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data === null) console.error("no user found");
-        else {
+        if (!data) {
+          console.error("no user found");
+        } else {
           user.chatId.forEach((element) => {
             if (element === id) return;
           });
           data.chatId.push(id);
-          fetch(apiUrl + "users/updateUser", {
-            method: "put",
-            body: JSON.stringify(data),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-            .then(function (response) {
-              if (response.status == 200) {
-              } else {
-                return response.json().then((json) => {
-                  throw new Error(json.msg);
-                });
-              }
-            })
-            .catch(function (json) {});
+          updateUser(data);
         }
+      })
+      .catch(function (error) {
+        console.error(error);
       });
   };
 
