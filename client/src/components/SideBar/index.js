@@ -2,12 +2,17 @@ import React from "react";
 import UsersList from "../UsersList";
 import Search from "../SearchBar";
 
-const SideBar = ({ allUsers, setSelectedUser, user }) => {
+const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId }) => {
   return (
     <>
       <div className="sideBar" id="sideBar">
         <Search />
-        <UsersList users={allUsers} setSelectedUser={setSelectedUser} selectedUser={user} />
+        <UsersList
+          lastMessages={lastMessages}
+          users={allUsers}
+          setSelectedUser={setSelectedUser}
+          selectedUserId={selectedUserId}
+        />
       </div>
     </>
   );

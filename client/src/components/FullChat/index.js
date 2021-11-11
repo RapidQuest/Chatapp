@@ -7,10 +7,11 @@ import InfoBar from "../InfoBar";
 import Input from "../Input";
 import Messages from "../Messages";
 import "./style.css";
+let socket;
 
 let socket;
 export default function FullChat({ user, setSelectedUser, chats }) {
-  const { currentUser, logout, storeProfileInfo } = useAuth();
+  const { currentUser, logout } = useAuth();
   const history = useHistory();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);

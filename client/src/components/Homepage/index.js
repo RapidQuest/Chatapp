@@ -16,6 +16,7 @@ const HomePage = () => {
   const [allChats, setAllChats] = useState([]);
 
   const [selectedUser, setSelectedUser] = useState(null);
+  const [lastMessages, setLastMessages] = useState([]);
 
   const [dataIsLoaded, setDataIsLoaded] = useState(true);
   const [chatLoad, setChatLoad] = useState(true);
@@ -72,7 +73,7 @@ const HomePage = () => {
         users.forEach((user) => {
           user.color = profileColor(user._id);
 
-          loadLastMessage(
+          setLastMessage(
             stringToHash(user.name + currentUserParsed.name),
             stringToHash(currentUserParsed.name + user.name),
             user
@@ -98,7 +99,8 @@ const HomePage = () => {
     return hash;
   };
 
-  const loadLastMessage = (id1, id2, user) => {
+  const setLastMessage = (id1, id2, user) => {
+    setLastMessages([]);
     fetch(apiUrl + "chats/lastMessage", {
       method: "get",
       headers: {
@@ -107,6 +109,7 @@ const HomePage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        let lastMessage = null;
         if (data === null) {
           fetch(apiUrl + "chats/lastMessage", {
             method: "get",
@@ -118,16 +121,18 @@ const HomePage = () => {
             .then((data) => {
               if (data === null) return;
               else {
-                user.lastMessage =
+                lastMessage =
                   data.messages[0] === undefined
                     ? "start new conversation"
                     : data.messages[0].value;
               }
             });
         } else {
-          user.lastMessage =
+          lastMessage =
             data.messages[0] === undefined ? "start new conversation" : data.messages[0].value;
         }
+
+        setLastMessages((lastMessages) => [...lastMessages, { userId: user._id, lastMessage }]);
       });
   };
 
@@ -214,12 +219,12 @@ const HomePage = () => {
       .catch((err) => console.error(err));
   };
 
-  const getChatForSelectedUser = () => {
-    if (!allChats || !selectedUser) return null;
+  const getChatForUser = (userName) => {
+    if (!allChats || !userName) return null;
 
     //chatsId is the chatids for the selectedUser
-    const chatId1 = stringToHash(selectedUser.name + currentUserParsed.name);
-    const chatId2 = stringToHash(currentUserParsed.name + selectedUser.name);
+    const chatId1 = stringToHash(userName + currentUserParsed.name);
+    const chatId2 = stringToHash(currentUserParsed.name + userName);
 
     const chatsForSelectedUser = allChats.filter((chat) => {
       return chat.chatid == chatId1 || chat.chatid == chatId2;
@@ -267,16 +272,26 @@ const HomePage = () => {
                   <FullChat
                     setSelectedUser={setSelectedUser}
                     user={selectedUser}
-                    chats={getChatForSelectedUser()}
+                    chats={getChatForUser(selectedUser.name)}
                   />
                 </div>
               )
             ) : (
-              <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} user={selectedUser} />
+              <SideBar
+                lastMessages={lastMessages}
+                allUsers={allUsers}
+                setSelectedUser={setSelectedUser}
+                selectedUserId={selectedUser && selectedUser._id}
+              />
             )
           ) : (
             <>
-              <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} user={selectedUser} />
+              <SideBar
+                lastMessages={lastMessages}
+                allUsers={allUsers}
+                setSelectedUser={setSelectedUser}
+                selectedUserId={selectedUser && selectedUser._id}
+              />
               <div className="chatBox">
                 {selectedUser ? (
                   chatLoad ? (
@@ -285,7 +300,7 @@ const HomePage = () => {
                     <FullChat
                       setSelectedUser={setSelectedUser}
                       user={selectedUser}
-                      chats={getChatForSelectedUser()}
+                      chats={getChatForUser ? getChatForUser(selectedUser.name) : null}
                     />
                   )
                 ) : (
