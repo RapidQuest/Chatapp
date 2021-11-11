@@ -23,26 +23,28 @@ const HomePage = () => {
   const currentUserParsed = JSON.parse(currentUser);
 
   const getAllUsers = () => {
+    setDataIsLoaded(true);
     fetch(apiUrl + "users/getUsers")
       .then((res) => res.json())
-      .then((json) => {
-        json.forEach((element) => {
+      .then((users) => {
+        users.forEach((user) => {
           loadLastMessage(
-            stringToHash(element.name + currentUserParsed.name),
-            stringToHash(currentUserParsed.name + element.name),
-            element
+            stringToHash(user.name + currentUserParsed.name),
+            stringToHash(currentUserParsed.name + user.name),
+            user
           );
         });
-        setAllUsers(json);
+        setAllUsers(users);
         setDataIsLoaded(false);
       });
   };
+
   useEffect(() => {
     getAllUsers();
   }, []);
 
   function stringToHash(string) {
-    var hash = 0;
+    let hash = 0;
     if (string.length == 0) return hash;
     for (let i = 0; i < string.length; i++) {
       var char = string.charCodeAt(i);
@@ -86,6 +88,7 @@ const HomePage = () => {
   };
 
   const loadChat = (id1, id2, user) => {
+    setChatLoad(true);
     fetch(apiUrl + "chats/getChat", {
       method: "get",
       headers: {
@@ -219,10 +222,6 @@ const HomePage = () => {
   allUsers.forEach((user, index) => {
     user.color = profileColor(user._id);
   });
-
-  useEffect(() => {
-    setChatLoad(true);
-  }, [selectedUser]);
 
   return (
     <>
