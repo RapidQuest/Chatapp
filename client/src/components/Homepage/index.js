@@ -69,12 +69,15 @@ const HomePage = () => {
       .then((res) => res.json())
       .then((users) => {
         users.forEach((user) => {
+          user.color = profileColor(user._id);
+
           loadLastMessage(
             stringToHash(user.name + currentUserParsed.name),
             stringToHash(currentUserParsed.name + user.name),
             user
           );
         });
+
         setAllUsers(users);
         setDataIsLoaded(false);
       });
@@ -217,14 +220,8 @@ const HomePage = () => {
 
   useEffect(() => {
     getAllUsers();
-    setAllUsers((users) => {
-      users.forEach((user, index) => {
-        user.color = profileColor(user._id);
-      });
-
-      return users;
-    });
   }, []);
+
   return (
     <>
       {dataIsLoaded ? (

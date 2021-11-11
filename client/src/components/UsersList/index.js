@@ -64,7 +64,7 @@ const UsersList = ({ users, setSelectedUser, selectedUser, loadChat }) => {
               Onselect();
               document.getElementById(user._id).classList.add("activeClass");
             }}
-            key={i}
+            key={user._id}
           >
             <div className="row">
               <div
