@@ -7,12 +7,7 @@ export default function index({ allUsers, setSelectedUser, user, loadChat }) {
     <>
       <div className="sideBar" id="sideBar">
         <Search />
-        <UsersList
-          users={allUsers}
-          setSelectedUser={setSelectedUser}
-          selectedUser={user}
-          loadChat={loadChat}
-        />
+        <UsersList users={allUsers} setSelectedUser={setSelectedUser} selectedUser={user} />
       </div>
     </>
   );

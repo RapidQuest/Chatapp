@@ -29,7 +29,7 @@ export default function FullChat({ user, setSelectedUser, chats }) {
   useEffect(() => {
     setLoading(true);
 
-    setMessages(chats.messages);
+    setMessages(chats ? chats.messages : null);
     setLoading(false);
   }, [chats]);
 
@@ -69,7 +69,7 @@ export default function FullChat({ user, setSelectedUser, chats }) {
 
   useEffect(() => {
     socket = io(apiUrl, { transports: ["websocket"] });
-    socket.emit("join", chats.chatid);
+    chats && socket.emit("join", chats.chatid);
     socket.on("messageRecived", (message, userId, timeStamp, messageId) => {
       console.log("%cmessage recived", "color:red");
 

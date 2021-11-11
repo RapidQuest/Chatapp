@@ -131,38 +131,6 @@ const HomePage = () => {
         }
       });
   };
-
-  const loadChat = (id1, id2, user) => {
-    setChatLoad(true);
-    fetch(apiUrl + "chats/getChat", {
-      method: "get",
-      headers: {
-        id: id1,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data === null) {
-          fetch(apiUrl + "chats/getChat", {
-            method: "get",
-            headers: {
-              id: id2,
-            },
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              if (data === null) createChat(id2, user);
-              else {
-                setChat(data);
-              }
-            });
-        } else {
-          setChat(data);
-        }
-        setChatLoad(false);
-      });
-  };
-
   const updateUser = (data) => {
     fetch(apiUrl + "users/updateUser", {
       method: "put",
@@ -239,7 +207,10 @@ const HomePage = () => {
 
     fetch(apiUrl + "chats/getAllChats", requestOptions)
       .then((response) => response.json())
-      .then((allChats) => setAllChats(allChats))
+      .then((allChats) => {
+        setAllChats(allChats);
+        setChatLoad(false);
+      })
       .catch((err) => console.error(err));
   };
 
@@ -301,21 +272,11 @@ const HomePage = () => {
                 </div>
               )
             ) : (
-              <SideBar
-                allUsers={allUsers}
-                setSelectedUser={setSelectedUser}
-                user={selectedUser}
-                loadChat={loadChat}
-              />
+              <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} user={selectedUser} />
             )
           ) : (
             <>
-              <SideBar
-                allUsers={allUsers}
-                setSelectedUser={setSelectedUser}
-                user={selectedUser}
-                loadChat={loadChat}
-              />
+              <SideBar allUsers={allUsers} setSelectedUser={setSelectedUser} user={selectedUser} />
               <div className="chatBox">
                 {selectedUser ? (
                   chatLoad ? (

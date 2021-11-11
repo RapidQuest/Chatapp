@@ -48,11 +48,6 @@ const UsersList = ({ users, setSelectedUser, selectedUser, loadChat }) => {
             id={user._id}
             onClick={() => {
               setSelectedUser(user);
-              loadChat(
-                stringToHash(user.name + currentUserParsed.name),
-                stringToHash(currentUserParsed.name + user.name),
-                user
-              );
               Onselect();
               document.getElementById(user._id).classList.add("activeClass");
             }}
