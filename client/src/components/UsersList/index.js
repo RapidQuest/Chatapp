@@ -59,8 +59,8 @@ const UsersList = ({ users, setSelectedUser, selectedUser }) => {
                   isSmall
                     ? "col-1"
                     : centerContent
-                    ? "col-2"
-                    : "col-2 d-flex justify-content-center"
+                    ? "col-2 d-flex justify-content-center"
+                    : "col-2"
                 }
               >
                 <ProfileImage user={user} />
