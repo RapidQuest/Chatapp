@@ -13,7 +13,6 @@ exports.listAllUsers = (req, res) => {
 };
 
 exports.createNewUser = (req, res) => {
-  // console.log(req.body);
   let newUser = new User(req.body);
   newUser.save((err, user) => {
     if (err) {
@@ -24,7 +23,6 @@ exports.createNewUser = (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
-  console.log(req.body);
   await User.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true }, (err, user) => {
     if (err) {
       res.status(500).send(err);
@@ -43,7 +41,6 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.createNewChat = (req, res) => {
-  console.log(req.body);
   let newChat = new Chat(req.body);
   newChat.save((err, chat) => {
     if (err) {
@@ -53,8 +50,22 @@ exports.createNewChat = (req, res) => {
   });
 };
 
+exports.getAllChats = (req, res) => {
+  const chatsId = req.body.chatId;
+  if (!chatsId) {
+    res.status(400).send({ message: "Please provide chatId", status: "failed" });
+    return;
+  }
+
+  Chat.find({ chatid: chatsId }, (err, chats) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    res.status(200).json(chats);
+  });
+};
+
 exports.getChat = (req, res) => {
-  console.log(req.headers.id);
   Chat.findOne({ chatid: req.headers.id }, (err, chat) => {
     if (err) {
       res.status(500).send(err);
@@ -64,7 +75,6 @@ exports.getChat = (req, res) => {
 };
 
 exports.lastMessage = (req, res) => {
-  console.log(req.headers.id);
   Chat.findOne({ chatid: req.headers.id }, { messages: { $slice: -1 } }, (err, chat) => {
     if (err) {
       res.status(500).send(err);
@@ -74,7 +84,6 @@ exports.lastMessage = (req, res) => {
 };
 
 exports.getUser = (req, res) => {
-  console.log(req.headers.id);
   User.findOne({ _id: req.headers.id }, (err, user) => {
     if (err) {
       res.status(500).send(err);
@@ -84,7 +93,6 @@ exports.getUser = (req, res) => {
 };
 
 exports.updateChat = async (req, res) => {
-  console.log(req.body.id);
   await Chat.findOneAndUpdate(
     { chatid: req.body.id },
     { $push: { messages: req.body.message } },
