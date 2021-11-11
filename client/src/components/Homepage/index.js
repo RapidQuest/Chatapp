@@ -80,17 +80,6 @@ const HomePage = () => {
       });
   };
 
-  useEffect(() => {
-    getAllUsers();
-    setAllUsers((users) => {
-      users.forEach((user, index) => {
-        user.color = profileColor(user._id);
-      });
-
-      return users;
-    });
-  }, []);
-
   const stringToHash = (string) => {
     let hash = 0;
     if (string.length == 0) return hash;
@@ -226,6 +215,16 @@ const HomePage = () => {
     pushChatIdToUsers(user, id);
   };
 
+  useEffect(() => {
+    getAllUsers();
+    setAllUsers((users) => {
+      users.forEach((user, index) => {
+        user.color = profileColor(user._id);
+      });
+
+      return users;
+    });
+  }, []);
   return (
     <>
       {dataIsLoaded ? (
