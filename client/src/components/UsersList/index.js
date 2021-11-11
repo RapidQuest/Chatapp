@@ -13,18 +13,18 @@ const UsersList = ({ users, setSelectedUser, selectedUser, loadChat }) => {
   const currentUserParsed = JSON.parse(currentUser);
   const apiUrl = "http://localhost:5000/";
 
-  function Onselect() {
+  const Onselect = () => {
     let elements = document.getElementsByClassName("block_item btn activeClass");
     for (let i = 0; i < elements.length; i++) {
       elements[i].classList.remove("activeClass");
     }
-  }
+  };
 
-  function checkUser(user, parsedCurrentUser) {
+  const checkUser = (user, parsedCurrentUser) => {
     return user._id === parsedCurrentUser._id;
-  }
+  };
 
-  function stringToHash(string) {
+  const stringToHash = (string) => {
     var hash = 0;
     if (string.length == 0) return hash;
     for (let i = 0; i < string.length; i++) {
@@ -33,15 +33,7 @@ const UsersList = ({ users, setSelectedUser, selectedUser, loadChat }) => {
       hash = hash & hash;
     }
     return hash;
-  }
-
-  // useEffect(() => {
-  //   users.forEach(user => {
-  //     loadLastMessage(stringToHash(user.name + currentUserParsed.name), stringToHash(currentUserParsed.name + user.name  ), user);
-  //     console.log(user);
-  //   });
-  //   setLoading(false);
-  // }, [])
+  };
 
   return users ? (
     <div className="allUsers">
