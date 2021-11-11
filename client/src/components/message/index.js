@@ -44,7 +44,7 @@ const Message = ({ message, id }) => {
       <div className="messageBox backgroundLight">
         <p className="messageText colorDark">{message.value}</p>
       </div>
-      <p className="sentText pl-10 ">{message.time}</p>
+      <p className="sentText pl-10 ">{getFormatedTime(message.time)}</p>
     </div>
   );
 };
