@@ -13,7 +13,7 @@ const HomePage = () => {
   const { currentUser, logout } = useAuth();
   const history = useHistory();
   const isSmall = useMediaQuery("(max-width: 760px)", false);
-  // console.log(JSON.parse(currentUser).name);
+
   const [allUsers, setAllUsers] = useState([]);
   const [chat, setChat] = useState([]);
   const [user, setUser] = useState([]);
@@ -22,11 +22,10 @@ const HomePage = () => {
   const apiUrl = "http://localhost:5000/";
   const currentUserParsed = JSON.parse(currentUser);
 
-  const getAllUsers = async () => {
-    await fetch(apiUrl + "users/getUsers")
+  const getAllUsers = () => {
+    fetch(apiUrl + "users/getUsers")
       .then((res) => res.json())
       .then((json) => {
-        console.log(json);
         json.forEach((element) => {
           loadLastMessage(
             stringToHash(element.name + currentUserParsed.name),
@@ -38,7 +37,6 @@ const HomePage = () => {
         setDataIsLoaded(false);
       });
   };
-  console.log(allUsers);
   useEffect(() => {
     getAllUsers();
   }, []);
@@ -54,7 +52,7 @@ const HomePage = () => {
     return hash;
   }
 
-  const loadLastMessage = async (id1, id2, user) => {
+  const loadLastMessage = (id1, id2, user) => {
     fetch(apiUrl + "chats/lastMessage", {
       method: "get",
       headers: {
@@ -74,8 +72,6 @@ const HomePage = () => {
             .then((data) => {
               if (data === null) return;
               else {
-                console.log("got message from id2");
-                console.log(data);
                 user.lastMessage =
                   data.messages[0] === undefined
                     ? "start new conversation"
@@ -83,15 +79,13 @@ const HomePage = () => {
               }
             });
         } else {
-          console.log("got message from id1");
-          console.log(data);
           user.lastMessage =
             data.messages[0] === undefined ? "start new conversation" : data.messages[0].value;
         }
       });
   };
 
-  const loadChat = async (id1, id2, user) => {
+  const loadChat = (id1, id2, user) => {
     fetch(apiUrl + "chats/getChat", {
       method: "get",
       headers: {
@@ -111,22 +105,18 @@ const HomePage = () => {
             .then((data) => {
               if (data === null) createChat(id2, user);
               else {
-                console.log("got data from id2");
-                console.log(data);
                 setChat(data);
               }
             });
         } else {
-          console.log("got data from id1");
-          console.log(data);
           setChat(data);
         }
         setChatLoad(false);
       });
   };
 
-  const pushChatIdToUsers = async (user, id) => {
-    await fetch(apiUrl + "chats/getUser", {
+  const pushChatIdToUsers = (user, id) => {
+    fetch(apiUrl + "chats/getUser", {
       method: "get",
       headers: {
         id: user._id,
@@ -134,10 +124,10 @@ const HomePage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data === null) console.log("no user found");
+        if (data === null) console.error("no user found");
         else {
           user.chatId.forEach((element) => {
-            if (element === id) return console.log("Id Already present");
+            if (element === id) return;
           });
           data.chatId.push(id);
           fetch(apiUrl + "users/updateUser", {
@@ -149,7 +139,6 @@ const HomePage = () => {
           })
             .then(function (response) {
               if (response.status == 200) {
-                console.log("pushed");
               } else {
                 return response.json().then((json) => {
                   throw new Error(json.msg);
@@ -161,11 +150,12 @@ const HomePage = () => {
       });
   };
 
-  const createChat = async (id, user) => {
+  const createChat = (id, user) => {
     const chat = {
       chatid: id,
     };
-    await fetch(apiUrl + "chats/createChat", {
+
+    fetch(apiUrl + "chats/createChat", {
       method: "POST",
       body: JSON.stringify(chat),
       headers: {
@@ -173,12 +163,10 @@ const HomePage = () => {
       },
     })
       .then((response) => response.json())
-      .then((json) => {
-        console.log(json);
-      });
-    console.log("chat created");
-    await pushChatIdToUsers(currentUserParsed, id);
-    await pushChatIdToUsers(user, id);
+      .then((json) => {});
+
+    pushChatIdToUsers(currentUserParsed, id);
+    pushChatIdToUsers(user, id);
   };
 
   var tagCount = 0;
@@ -225,7 +213,6 @@ const HomePage = () => {
   allUsers.forEach((user, index) => {
     user.color = profileColor(user._id);
   });
-  console.log(chat);
 
   useEffect(() => {
     setChatLoad(true);
