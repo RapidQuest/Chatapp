@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/Auth";
-import { useHistory } from "react-router-dom";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import SideBar from "../SideBar";
 import FullChat from "../FullChat";
@@ -83,6 +82,9 @@ const HomePage = () => {
 
         setAllUsers(users);
         setDataIsLoaded(false);
+      })
+      .catch((err) => {
+        console.error(err);
       });
   };
 
@@ -221,20 +223,28 @@ const HomePage = () => {
     pushChatIdToUsers(user, id);
   };
 
-  const getAllChats = (userId) => {
-    fetch(apiUrl + "chats/getChat", {
-      method: "get",
-      headers: {
-        userId: userId,
-      },
-    })
+  const getAllChats = (chatsId) => {
+    if (!chatsId) return;
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: JSON.stringify({
+        chatId: currentUserParsed.chatId,
+      }),
+    };
+
+    fetch(apiUrl + "chats/getAllChats", requestOptions)
       .then((response) => response.json())
       .then((allChats) => setAllChats(allChats))
       .catch((err) => console.error(err));
   };
 
   useEffect(() => {
-    getAllChats();
+    getAllChats(currentUserParsed.chatId);
 
     const socket = io(apiUrl, { transports: ["websocket"] });
     currentUserParsed.chatId.forEach((id) => {

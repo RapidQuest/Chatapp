@@ -1,3 +1,5 @@
+const bodyParser = require("body-parser");
+
 module.exports = function (app) {
   const userFunctions = require("./controller/controllerFunctions");
   const userHandlers = require("./controller/authController");
@@ -10,9 +12,9 @@ module.exports = function (app) {
 
   app.route("/users/getUsers").get(userFunctions.listAllUsers);
 
-  app.route("/chats/getAllChats").get(userFunctions.getAllChats);
-
   app.route("/chats/getChat").get(userFunctions.getChat);
+
+  app.route("/chats/getAllChats").post(userFunctions.getAllChats);
 
   app.route("/chats/getUser").get(userFunctions.getUser);
 
