@@ -8,23 +8,17 @@ import Input from "../Input";
 import Messages from "../Messages";
 import "./style.css";
 
-let socket;
-
 export default function FullChat({ user, setSelectedUser, chats }) {
   const { currentUser, logout, storeProfileInfo } = useAuth();
-  const [error, setError] = useState("");
   const history = useHistory();
-  const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
-  const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [allMessages, setAllMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentUserParsed = JSON.parse(currentUser);
   const apiUrl = "http://localhost:5000/";
-  // let existingMessages = JSON.parse(localStorage.getItem(user._id));
   const current = new Date();
+  // let existingMessages = JSON.parse(localStorage.getItem(user._id));
+  let socket;
 
   useEffect(() => {
     setLoading(true);
@@ -52,18 +46,12 @@ export default function FullChat({ user, setSelectedUser, chats }) {
       .catch(function (json) {});
   };
 
-  // useEffect(() => {
-  //   setAllMessages((messages) => [...messages, messages]);
-  // }, [message]);
-
   async function handleLogout() {
-    setError("");
-
     try {
       await logout();
       history.push("/login");
     } catch {
-      setError("Failed to log out");
+      console.error("Failed to log out");
     }
   }
 
@@ -82,10 +70,6 @@ export default function FullChat({ user, setSelectedUser, chats }) {
           messageId,
         },
       ]);
-
-      // return () => {
-      //   socket.off("messageRecived")
-      // }
     });
   }, [user]);
 
@@ -101,16 +85,6 @@ export default function FullChat({ user, setSelectedUser, chats }) {
 
     saveMessage({ value: message, time: current.toLocaleString(), sentBy: currentUserParsed._id });
     setMessage("");
-    // if (existingMessages == null) {
-    //   existingMessages = [];
-    //   localStorage.setItem(user._id, JSON.stringify(messages));
-    // }
-
-    // existingMessages.push({
-    //   value: message,
-    //   time: current.toLocaleString(),
-    //   sentBy: currentUserParsed.id,
-    // });
 
     // localStorage.setItem(user._id, JSON.stringify(existingMessages));
   };
@@ -118,7 +92,7 @@ export default function FullChat({ user, setSelectedUser, chats }) {
   return (
     <div className="outerContainer">
       <div className="containerC" id={user._id}>
-        <InfoBar user={user} room={room} setSelectedUser={setSelectedUser} />
+        <InfoBar user={user} setSelectedUser={setSelectedUser} />
         {loading ? (
           <div className="loader"></div>
         ) : (

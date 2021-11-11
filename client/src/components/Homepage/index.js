@@ -15,7 +15,6 @@ const HomePage = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [allChats, setAllChats] = useState([]);
 
-  const [chat, setChat] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
 
   const [dataIsLoaded, setDataIsLoaded] = useState(true);
@@ -131,6 +130,7 @@ const HomePage = () => {
         }
       });
   };
+
   const updateUser = (data) => {
     fetch(apiUrl + "users/updateUser", {
       method: "put",
