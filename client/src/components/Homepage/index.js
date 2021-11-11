@@ -3,10 +3,11 @@ import { useAuth } from "../../contexts/Auth";
 import { useHistory } from "react-router-dom";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import SideBar from "../SideBar";
+import FullChat from "../FullChat";
+import io from "socket.io-client";
 
 import "./style.css";
 import "./loader.css";
-import FullChat from "../FullChat";
 
 const HomePage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -174,6 +175,14 @@ const HomePage = () => {
       }
     });
   };
+
+  useEffect(() => {
+    console.log({ currentUserParsed });
+    const socket = io(apiUrl, { transports: ["websocket"] });
+    currentUserParsed.chatId.forEach((id) => {
+      socket.emit("join", id);
+    });
+  }, [currentUser]);
 
   const pushChatIdToUsers = (user, id) => {
     fetch(apiUrl + "chats/getUser", {

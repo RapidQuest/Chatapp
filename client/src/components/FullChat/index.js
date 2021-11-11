@@ -53,7 +53,6 @@ export default function FullChat({ user, setSelectedUser, chats }) {
       .catch(function (json) {});
   };
 
-
   // useEffect(() => {
   //   setAllMessages((messages) => [...messages, messages]);
   // }, [message]);
@@ -73,7 +72,6 @@ export default function FullChat({ user, setSelectedUser, chats }) {
   useEffect(() => {
     socket = io(apiUrl, { transports: ["websocket"] });
 
-    socket.emit("join", chats.chatid);
     socket.on("messageRecived", (message, userId, timeStamp) => {
       console.log({ message, userId, timeStamp });
       console.log(messages);
@@ -86,7 +84,7 @@ export default function FullChat({ user, setSelectedUser, chats }) {
         },
       ]);
       console.log(messages);
-      
+
       // return () => {
       //   socket.off("messageRecived")
       // }
@@ -97,12 +95,11 @@ export default function FullChat({ user, setSelectedUser, chats }) {
     console.log("messgaes got updates");
   }, [messages]);
 
-
   const sendMessage = (event) => {
     event.preventDefault();
     // if(message) return;
 
-    socket.emit('sendMessage', message, currentUserParsed._id, chats.chatid);
+    socket.emit("sendMessage", message, currentUserParsed._id, chats.chatid);
 
     setMessages((messages) => [
       ...messages,
