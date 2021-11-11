@@ -22,6 +22,47 @@ const HomePage = () => {
   const apiUrl = "http://localhost:5000/";
   const currentUserParsed = JSON.parse(currentUser);
 
+  let tagCount = 0;
+  let tagClasses = {};
+
+  const profileColor = (tagName) => {
+    const tagColors = [
+      "lightpink",
+      "mustdo",
+      "agenda",
+      "someday",
+      "purple",
+      "bronze",
+      "aqua",
+      "grey",
+      "silver",
+      "brown",
+      "cranberry",
+      "orange",
+      "brightorange",
+      "peach",
+      "maringold",
+      "lightgreen",
+      "darkgreen",
+      "teal",
+      "lightblue",
+      "darkblue",
+      "lavender",
+      "plum",
+      "lightgray",
+      "darkgray",
+    ];
+    if (tagClasses[tagName]) {
+      return tagClasses[tagName];
+    }
+    tagClasses[tagName] = tagColors[tagCount];
+    tagCount++;
+    if (tagCount > tagColors.length) {
+      tagCount = 0;
+    }
+    return tagClasses[tagName];
+  };
+
   const getAllUsers = () => {
     setDataIsLoaded(true);
     fetch(apiUrl + "users/getUsers")
@@ -41,9 +82,16 @@ const HomePage = () => {
 
   useEffect(() => {
     getAllUsers();
+    setAllUsers((users) => {
+      users.forEach((user, index) => {
+        user.color = profileColor(user._id);
+      });
+
+      return users;
+    });
   }, []);
 
-  function stringToHash(string) {
+  const stringToHash = (string) => {
     let hash = 0;
     if (string.length == 0) return hash;
     for (let i = 0; i < string.length; i++) {
@@ -52,7 +100,7 @@ const HomePage = () => {
       hash = hash & hash;
     }
     return hash;
-  }
+  };
 
   const loadLastMessage = (id1, id2, user) => {
     fetch(apiUrl + "chats/lastMessage", {
@@ -118,7 +166,7 @@ const HomePage = () => {
       });
   };
 
-  function updateUser(data) {
+  const updateUser = (data) => {
     fetch(apiUrl + "users/updateUser", {
       method: "put",
       body: JSON.stringify(data),
@@ -133,7 +181,7 @@ const HomePage = () => {
         });
       }
     });
-  }
+  };
 
   const pushChatIdToUsers = (user, id) => {
     fetch(apiUrl + "chats/getUser", {
@@ -177,51 +225,6 @@ const HomePage = () => {
     pushChatIdToUsers(currentUserParsed, id);
     pushChatIdToUsers(user, id);
   };
-
-  var tagCount = 0;
-  var tagClasses = {};
-
-  function profileColor(tagName) {
-    const tagColors = [
-      "lightpink",
-      "mustdo",
-      "agenda",
-      "someday",
-      "purple",
-      "bronze",
-      "aqua",
-      "grey",
-      "silver",
-      "brown",
-      "cranberry",
-      "orange",
-      "brightorange",
-      "peach",
-      "maringold",
-      "lightgreen",
-      "darkgreen",
-      "teal",
-      "lightblue",
-      "darkblue",
-      "lavender",
-      "plum",
-      "lightgray",
-      "darkgray",
-    ];
-    if (tagClasses[tagName]) {
-      return tagClasses[tagName];
-    }
-    tagClasses[tagName] = tagColors[tagCount];
-    tagCount++;
-    if (tagCount > tagColors.length) {
-      tagCount = 0;
-    }
-    return tagClasses[tagName];
-  }
-
-  allUsers.forEach((user, index) => {
-    user.color = profileColor(user._id);
-  });
 
   return (
     <>
