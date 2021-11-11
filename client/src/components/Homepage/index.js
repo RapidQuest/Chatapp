@@ -74,8 +74,8 @@ const HomePage = () => {
           user.color = profileColor(user._id);
 
           setLastMessage(
-            stringToHash(user.name + currentUserParsed.name),
-            stringToHash(currentUserParsed.name + user.name),
+            stringToHash(user._id + currentUserParsed._id),
+            stringToHash(currentUserParsed._id + user._id),
             user
           );
         });
@@ -221,13 +221,13 @@ const HomePage = () => {
       .catch((err) => console.error(err));
   };
 
-  const getChatForUser = (userName) => {
-    if (!allChats || !userName) return null;
+  const getChatForUser = (user) => {
+    if (!allChats || !user) return null;
 
     //chatsId is the chatids for the selectedUser
-    const chatId1 = stringToHash(userName + currentUserParsed.name);
-    const chatId2 = stringToHash(currentUserParsed.name + userName);
-
+    const chatId1 = stringToHash(user._id + currentUserParsed._id);
+    const chatId2 = stringToHash(currentUserParsed._id + user._id);
+    loadChat(chatId1,chatId2,user);
     const chatsForSelectedUser = allChats.filter((chat) => {
       return chat.chatid == chatId1 || chat.chatid == chatId2;
     });
@@ -255,6 +255,40 @@ const HomePage = () => {
     });
   }, [currentUser]);
 
+  const loadChat = async (id1, id2 , user) => {
+    fetch(apiUrl + 'chats/getChat', {
+      method: 'get',
+      headers: {
+        'id': id1,
+      }, 
+    })
+    .then(response => response.json())
+    .then((data) => {
+      if(data === null){
+        fetch(apiUrl + 'chats/getChat', {
+          method: 'get',
+          headers: {
+            'id': id2,
+          },
+        })
+        .then(response => response.json())
+        .then((data) => {
+          if(data === null) createChat(id2, user)
+          else{
+            console.log('got data from id2');
+            console.log(data);
+            setChat(data);
+          }
+        });
+      }else{
+        console.log('got data from id1');
+        console.log(data);
+        setChat(data);
+      }
+      setChatLoad(false);
+    });
+  };
+
   useEffect(() => {
     getAllUsers();
   }, []);
@@ -275,7 +309,7 @@ const HomePage = () => {
                     setLastMessages={setLastMessages}
                     setSelectedUser={setSelectedUser}
                     user={selectedUser}
-                    chats={getChatForUser(selectedUser.name)}
+                    chats={getChatForUser(selectedUser)}
                   />
                 </div>
               )
@@ -304,7 +338,7 @@ const HomePage = () => {
                       setLastMessages={setLastMessages}
                       setSelectedUser={setSelectedUser}
                       user={selectedUser}
-                      chats={getChatForUser ? getChatForUser(selectedUser.name) : null}
+                      chats={getChatForUser ? getChatForUser(selectedUser) : null}
                     />
                   )
                 ) : (

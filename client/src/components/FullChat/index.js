@@ -60,7 +60,6 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
     chats && socket.emit("join", chats.chatid);
     socket.on("messageRecived", (message, userId, timeStamp, messageId) => {
       console.log("%cmessage recived", "color:red");
-
       setMessages((messages) => [
         ...messages,
         {
