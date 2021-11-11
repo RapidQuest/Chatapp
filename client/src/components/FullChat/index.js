@@ -69,9 +69,7 @@ export default function FullChat({ user, setSelectedUser, chats }) {
 
   useEffect(() => {
     socket = io(apiUrl, { transports: ["websocket"] });
-    console.log("%cjoining chatID " + chats.chatid, "color: gold");
     socket.emit("join", chats.chatid);
-    console.log("adding eventlistiner messageRecived to " + user.name);
     socket.on("messageRecived", (message, userId, timeStamp, messageId) => {
       console.log("%cmessage recived", "color:red");
 

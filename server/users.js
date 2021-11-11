@@ -118,6 +118,5 @@ module.exports = {
   login,
   joinUser,
   removeUser,
-  getUser,
   getUsersInRoom,
 };

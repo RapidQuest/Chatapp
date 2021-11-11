@@ -1,6 +1,6 @@
 module.exports = function (app) {
-  var userFunctions = require("./controller/controllerFunctions");
-  var userHandlers = require("./controller/authController");
+  const userFunctions = require("./controller/controllerFunctions");
+  const userHandlers = require("./controller/authController");
 
   app.route("/users/register").post(userHandlers.register);
 
@@ -9,6 +9,8 @@ module.exports = function (app) {
   app.route("/users/login").post(userHandlers.login);
 
   app.route("/users/getUsers").get(userFunctions.listAllUsers);
+
+  app.route("/chats/getAllChats").get(userFunctions.getAllChats);
 
   app.route("/chats/getChat").get(userFunctions.getChat);
 

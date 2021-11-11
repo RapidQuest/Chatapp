@@ -14,6 +14,7 @@ const HomePage = () => {
   const isSmall = useMediaQuery("(max-width: 760px)", false);
 
   const [allUsers, setAllUsers] = useState([]);
+  const [allChats, setAllChats] = useState([]);
 
   const [chat, setChat] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -177,13 +178,6 @@ const HomePage = () => {
     });
   };
 
-  useEffect(() => {
-    const socket = io(apiUrl, { transports: ["websocket"] });
-    currentUserParsed.chatId.forEach((id) => {
-      socket.emit("join", id);
-    });
-  }, [currentUser]);
-
   const pushChatIdToUsers = (user, id) => {
     fetch(apiUrl + "chats/getUser", {
       method: "get",
@@ -226,6 +220,34 @@ const HomePage = () => {
     pushChatIdToUsers(currentUserParsed, id);
     pushChatIdToUsers(user, id);
   };
+
+  const getAllChats = (userId) => {
+    fetch(apiUrl + "chats/getChat", {
+      method: "get",
+      headers: {
+        userId: userId,
+      },
+    })
+      .then((response) => response.json())
+      .then((allChats) => setAllChats(allChats))
+      .catch((err) => console.error(err));
+  };
+
+  useEffect(() => {
+    getAllChats();
+
+    const socket = io(apiUrl, { transports: ["websocket"] });
+    currentUserParsed.chatId.forEach((id) => {
+      socket.emit("join", id);
+
+      socket.on("messageRecived", (message, userId, timeStamp, messageId) => {
+        setAllChats((chats) => [
+          ...chats,
+          { chatId: id, message: { message, userId, timeStamp, messageId } },
+        ]);
+      });
+    });
+  }, [currentUser]);
 
   useEffect(() => {
     getAllUsers();
