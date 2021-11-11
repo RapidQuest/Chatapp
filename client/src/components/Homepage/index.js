@@ -228,38 +228,38 @@ const HomePage = () => {
   //   //   .catch((err) => console.error(err));
   // };
 
-  const getChatForUser = (user) => {
-    if (!allChats || !user) return null;
+  // const getChatForUser = (user) => {
+  //   if (!allChats || !user) return null;
 
-    //chatsId is the chatids for the selectedUser
-    const chatId1 = stringToHash(user._id + currentUserParsed._id);
-    const chatId2 = stringToHash(currentUserParsed._id + user._id);
-    // loadChat(chatId1,chatId2,user);
-    const chatsForSelectedUser = allChats.filter((chat) => {
-      return chat.chatid == chatId1 || chat.chatid == chatId2;
-    });
+  //   //chatsId is the chatids for the selectedUser
+  //   const chatId1 = stringToHash(user._id + currentUserParsed._id);
+  //   const chatId2 = stringToHash(currentUserParsed._id + user._id);
+  //   loadChat(chatId1,chatId2,user);
+  //   const chatsForSelectedUser = allChats.filter((chat) => {
+  //     return chat.chatid == chatId1 || chat.chatid == chatId2;
+  //   });
 
-    if (chatsForSelectedUser.length > 1) {
-      chatsForSelectedUser = [...chatsForSelectedUser[0], ...chatsForSelectedUser[1]];
-    }
+  //   if (chatsForSelectedUser.length > 1) {
+  //     chatsForSelectedUser = [...chatsForSelectedUser[0], ...chatsForSelectedUser[1]];
+  //   }
 
-    return chatsForSelectedUser[0];
-  };
+  //   return chatsForSelectedUser[0];
+  // };
 
   useEffect(() => {
     // getAllChats(currentUserParsed.chatId);
 
-    const socket = io(apiUrl, { transports: ["websocket"] });
-    currentUserParsed.chatId.forEach((id) => {
-      socket.emit("join", id);
+    // const socket = io(apiUrl, { transports: ["websocket"] });
+    // currentUserParsed.chatId.forEach((id) => {
+    //   socket.emit("join", id);
 
-      socket.on("messageRecived", (message, userId, timeStamp, messageId) => {
-        setAllChats((chats) => [
-          ...chats,
-          { chatId: id, message: { message, userId, timeStamp, messageId } },
-        ]);
-      });
-    });
+    //   socket.on("messageRecived", (message, userId, timeStamp, messageId) => {
+    //     setAllChats((chats) => [
+    //       ...chats,
+    //       { chatId: id, message: { message, userId, timeStamp, messageId } },
+    //     ]);
+    //   });
+    // });
   }, [currentUser]);
 
   const loadChat = async (id1, id2 , user) => {
@@ -284,15 +284,13 @@ const HomePage = () => {
           else{
             console.log('got data from id2');
             console.log(data);
-            setAllChats((allChats) => [...allChats, data]);
-            // setChat(data);
+            setChat(data);
           }
         });
       }else{
         console.log('got data from id1');
         console.log(data);
-        setAllChats((allChats) => [...allChats, data]);
-        // setChat(data);
+        setChat(data);
       }
       setChatLoad(false);
     });
@@ -308,7 +306,7 @@ const HomePage = () => {
       loadChat(chatId1,chatId2,selectedUser);
     }
   }, [selectedUser]);
-// console.log(allChats);
+console.log(chat);
   return (
     <>
       {dataIsLoaded ? (
