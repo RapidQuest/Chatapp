@@ -10,16 +10,17 @@ import "./style.css";
 import "./loader.css";
 
 const HomePage = () => {
-  const [selectedUser, setSelectedUser] = useState(null);
   const { currentUser, logout } = useAuth();
-  const history = useHistory();
   const isSmall = useMediaQuery("(max-width: 760px)", false);
 
   const [allUsers, setAllUsers] = useState([]);
+
   const [chat, setChat] = useState([]);
-  const [user, setUser] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+
   const [dataIsLoaded, setDataIsLoaded] = useState(true);
   const [chatLoad, setChatLoad] = useState(true);
+
   const apiUrl = "http://localhost:5000/";
   const currentUserParsed = JSON.parse(currentUser);
 
@@ -177,7 +178,6 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    console.log({ currentUserParsed });
     const socket = io(apiUrl, { transports: ["websocket"] });
     currentUserParsed.chatId.forEach((id) => {
       socket.emit("join", id);

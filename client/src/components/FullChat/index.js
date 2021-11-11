@@ -22,7 +22,6 @@ export default function FullChat({ user, setSelectedUser, chats }) {
   const [allMessages, setAllMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentUserParsed = JSON.parse(currentUser);
-  const endPoint = "localhost:5000";
   const apiUrl = "http://localhost:5000/";
   // let existingMessages = JSON.parse(localStorage.getItem(user._id));
   var current = new Date();
@@ -68,22 +67,23 @@ export default function FullChat({ user, setSelectedUser, chats }) {
     }
   }
 
-  console.log(chats.messages);
   useEffect(() => {
     socket = io(apiUrl, { transports: ["websocket"] });
+    console.log("%cjoining chatID " + chats.chatid, "color: gold");
+    socket.emit("join", chats.chatid);
+    console.log("adding eventlistiner messageRecived to " + user.name);
+    socket.on("messageRecived", (message, userId, timeStamp, messageId) => {
+      console.log("%cmessage recived", "color:red");
 
-    socket.on("messageRecived", (message, userId, timeStamp) => {
-      console.log({ message, userId, timeStamp });
-      console.log(messages);
       setMessages((messages) => [
         ...messages,
         {
           value: message,
           time: Date(timeStamp).toLocaleString(),
           sentBy: userId,
+          messageId,
         },
       ]);
-      console.log(messages);
 
       // return () => {
       //   socket.off("messageRecived")
@@ -91,13 +91,8 @@ export default function FullChat({ user, setSelectedUser, chats }) {
     });
   }, [user]);
 
-  useEffect(() => {
-    console.log("messgaes got updates");
-  }, [messages]);
-
   const sendMessage = (event) => {
     event.preventDefault();
-    // if(message) return;
 
     socket.emit("sendMessage", message, currentUserParsed._id, chats.chatid);
 
@@ -127,7 +122,7 @@ export default function FullChat({ user, setSelectedUser, chats }) {
       <div className="containerC" id={user._id}>
         <InfoBar user={user} room={room} setSelectedUser={setSelectedUser} />
         {loading ? (
-          <div class="loader"></div>
+          <div className="loader"></div>
         ) : (
           <Messages messages={messages} id={currentUserParsed._id} />
         )}
