@@ -7,9 +7,10 @@ import InfoBar from "../InfoBar";
 import Input from "../Input";
 import Messages from "../Messages";
 import "./style.css";
+let socket;
 
 export default function FullChat({ user, setSelectedUser, chats }) {
-  const { currentUser, logout, storeProfileInfo } = useAuth();
+  const { currentUser, logout } = useAuth();
   const history = useHistory();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -18,7 +19,6 @@ export default function FullChat({ user, setSelectedUser, chats }) {
   const apiUrl = "http://localhost:5000/";
   const current = new Date();
   // let existingMessages = JSON.parse(localStorage.getItem(user._id));
-  let socket;
 
   useEffect(() => {
     setLoading(true);

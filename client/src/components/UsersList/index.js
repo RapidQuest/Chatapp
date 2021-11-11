@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ProfileImage from "../ProfileImage";
 import { useAuth } from "../../contexts/Auth";
 import useMediaQuery from "../../hooks/useMediaQuery";
@@ -6,10 +6,11 @@ import "./tags.css";
 import "./style.css";
 // import onlineIcon from '../../icons/onlineIcon.png';
 
-const UsersList = ({ users, setSelectedUser, selectedUser }) => {
+const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => {
+  const [lastMessage, setLastMessage] = useState("");
   const isSmall = useMediaQuery("(max-width: 760px)", false);
   const centerContent = useMediaQuery("(min-width: 1500px)", false);
-  const { currentUser, logout, getAllUsers } = useAuth();
+  const { currentUser } = useAuth();
   const currentUserParsed = JSON.parse(currentUser);
   const apiUrl = "http://localhost:5000/";
 
@@ -20,19 +21,9 @@ const UsersList = ({ users, setSelectedUser, selectedUser }) => {
     }
   };
 
-  const checkUser = (user, parsedCurrentUser) => {
-    return user._id === parsedCurrentUser._id;
-  };
-
-  const stringToHash = (string) => {
-    let hash = 0;
-    if (string.length == 0) return hash;
-    for (let i = 0; i < string.length; i++) {
-      const char = string.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash = hash & hash;
-    }
-    return hash;
+  const getLastMessage = (userId) => {
+    const lastMessage = lastMessages.filter((lastMessage) => lastMessage.userId == userId)[0];
+    return lastMessage?.lastMessage;
   };
 
   return users ? (
@@ -41,9 +32,9 @@ const UsersList = ({ users, setSelectedUser, selectedUser }) => {
         {users.map((user, i) => (
           <div
             className={
-              checkUser(user, currentUserParsed)
-                ? "block_item hover btn hide"
-                : "block_item hover btn"
+              "block_item hover btn " +
+              (user._id === currentUserParsed._id ? "hide " : "") +
+              (user._id === selectedUserId ? "active" : "")
             }
             id={user._id}
             onClick={() => {
@@ -70,8 +61,7 @@ const UsersList = ({ users, setSelectedUser, selectedUser }) => {
                   <h6 className="col-8 item_name">{user.name}</h6>
                   <p className="col-4 item_role">{user.role}</p>
                 </div>
-
-                <p className="lastMessage">{user.lastMessage}</p>
+                <p className="lastMessage">{getLastMessage(user._id)}</p>
               </div>
             </div>
           </div>
