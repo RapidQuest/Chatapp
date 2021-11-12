@@ -14,7 +14,6 @@ const Messages = ({ messages, id }) => {
 
   useEffect(() => {
     scrollToBottom(messagesContainerRef.current);
-    console.log({ messages });
   }, [messages]);
 
   return (

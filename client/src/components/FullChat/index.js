@@ -7,17 +7,17 @@ import InfoBar from "../InfoBar";
 import Input from "../Input";
 import Messages from "../Messages";
 import "./style.css";
-let socket;
 
-export default function FullChat({ user, setSelectedUser, chats, setLastMessages }) {
+const apiUrl = "http://localhost:5000/";
+const socket = io(apiUrl, { transports: ["websocket"] });
+
+export default function FullChat({ user, setSelectedUser, chats, setLastMessages, setAllChats }) {
   const { currentUser, logout } = useAuth();
   const history = useHistory();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentUserParsed = JSON.parse(currentUser);
-  const apiUrl = "http://localhost:5000/";
-  const current = new Date();
   // let existingMessages = JSON.parse(localStorage.getItem(user._id));
 
   useEffect(() => {
@@ -55,43 +55,10 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
     }
   }
 
-  useEffect(() => {
-    socket = io(apiUrl, { transports: ["websocket"] });
-    chats && socket.emit("join", chats.chatid);
-    
-  }, [user]);
-
-  useEffect(() => {
-    socket.on("messageRecived", (message, userId, timeStamp, messageId) => {
-      console.log("%cmessage recived", "color:red");
-      setMessages((messages) => [
-        ...messages,
-        {
-          value: message,
-          time: Date(timeStamp).toLocaleString(),
-          sentBy: userId,
-          messageId,
-        },
-      ]);
-
-      setLastMessages((lastMessages) => {
-        lastMessages.forEach((lastMessage) => {
-          if (lastMessage.userId == userId) {
-            lastMessage.lastMessage = message;
-          }
-        });
-
-        console.log({ lastMessages, currentUserParsed: userId });
-        return lastMessages;
-      });
-    });
-  }, [])
-
   const sendMessage = (event) => {
     event.preventDefault();
 
     socket.emit("sendMessage", message, currentUserParsed._id, chats.chatid);
-    console.log("%cmessage sent", "color:green");
     setLastMessages((lastMessages) => {
       lastMessages.forEach((lastMessage) => {
         if (lastMessage.userId == user._id) {
@@ -102,12 +69,27 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
       return lastMessages;
     });
 
-    setMessages((messages) => [
-      ...messages,
-      { value: message, time: current.toLocaleString(), sentBy: currentUserParsed._id },
-    ]);
+    setAllChats((chat) => {
+      //Cloning chat obj
+      const newChat = JSON.parse(JSON.stringify(chat));
+      newChat &&
+        newChat.forEach((c, i) => {
+          if (c && c.chatid == chats.chatid) {
+            c.messages.push({
+              value: message,
+              sentBy: currentUserParsed._id,
+              time: Date.now(),
+            });
+          }
+        });
 
-    saveMessage({ value: message, time: current.toLocaleString(), sentBy: currentUserParsed._id });
+      return newChat;
+    });
+    saveMessage({
+      value: message,
+      time: Date.now(),
+      sentBy: currentUserParsed._id,
+    });
     setMessage("");
 
     // localStorage.setItem(user._id, JSON.stringify(existingMessages));
