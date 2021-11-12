@@ -58,7 +58,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
                   <h6 className="col-8 item_name">{user.name}</h6>
                   <p className="col-4 item_role">{user.role}</p>
                 </div>
-                <p className="lastMessage">{user._id + " " + getLastMessage(user._id)}</p>
+                <p className="lastMessage">{getLastMessage(user._id)}</p>
               </div>
             </div>
           </div>
