@@ -9,7 +9,7 @@ import "./style.css";
 import "./loader.css";
 
 const HomePage = () => {
-  const { currentUser, logout } = useAuth();
+  const unParseCurrentUser = useAuth().currentUser;
   const isSmall = useMediaQuery("(max-width: 760px)", false);
 
   const [allUsers, setAllUsers] = useState([]);
@@ -22,8 +22,9 @@ const HomePage = () => {
   const [dataIsLoaded, setDataIsLoaded] = useState(true);
   const [chatLoad, setChatLoad] = useState(true);
 
+  const [currentUser, setCurrentUser] = useState(JSON.parse(unParseCurrentUser));
+
   const apiUrl = "http://localhost:5000/";
-  const currentUserParsed = JSON.parse(currentUser);
 
   let tagCount = 0;
   let tagClasses = {};
@@ -150,7 +151,7 @@ const HomePage = () => {
       .then((response) => response.json())
       .then((json) => {});
 
-    pushChatIdToUsers(currentUserParsed, id);
+    pushChatIdToUsers(currentUser, id);
     pushChatIdToUsers(user, id);
   };
 
@@ -160,13 +161,13 @@ const HomePage = () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     console.log({
-      chatId: currentUserParsed.chatId,
+      chatId: currentUser.chatId,
     });
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: JSON.stringify({
-        chatId: currentUserParsed.chatId,
+        chatId: currentUser.chatId,
       }),
     };
 
@@ -185,20 +186,25 @@ const HomePage = () => {
     if (!allChats || !userId) return null;
 
     //chatsId is the chatids for the selectedUser
-    const chatId1 = stringToHash(userId + currentUserParsed._id);
-    const chatId2 = stringToHash(currentUserParsed._id + userId);
+    const chatId1 = stringToHash(userId + currentUser._id);
+    const chatId2 = stringToHash(currentUser._id + userId);
 
-    const chatsForSelectedUser = allChats.filter((chat) => {
+    let chatsForSelectedUser = allChats.filter((chat) => {
       return chat.chatid == chatId1 || chat.chatid == chatId2;
     });
 
     if (chatsForSelectedUser.length > 1) {
-      chatsForSelectedUser = [...chatsForSelectedUser[0], ...chatsForSelectedUser[1]];
+      const messages = [...chatsForSelectedUser[0].messages, ...chatsForSelectedUser[1].messages];
+      chatsForSelectedUser = chatsForSelectedUser[0];
+      chatsForSelectedUser.messages = messages;
     }
-    return chatsForSelectedUser[0];
+    console.log("getChatForUser called");
+    console.log({ chatsForSelectedUser });
+    return chatsForSelectedUser;
   };
 
   const reloadLastMessage = () => {
+    if (!allChats) return;
     const messages = [];
 
     allChats.forEach((chat) => {
@@ -220,41 +226,53 @@ const HomePage = () => {
     if (!allUsers || allUsers.length < 1) return;
 
     const users = allUsers;
+    const cUser = currentUser;
 
     users.forEach((user) => {
-      const chatId1 = stringToHash(user._id + currentUserParsed._id);
-      const chatId2 = stringToHash(currentUserParsed._id + user._id);
+      const chatId1 = stringToHash(user._id + currentUser._id);
+      const chatId2 = stringToHash(currentUser._id + user._id);
 
       if (!(chatId1 in user.chatId || chatId2 in user.chatId)) {
         createChat(chatId1, user);
         user.chatId.push(chatId1);
-        currentUserParsed.chatId.push(chatId1);
+        cUser.chatId.push(chatId1);
       }
     });
 
-    localStorage.setItem("currentUser", JSON.stringify(currentUserParsed));
+    const socket = io(apiUrl, { transports: ["websocket"] });
+    currentUser.chatId.forEach((id) => {
+      socket.emit("join", id);
+    });
+    socket.on("messageRecived", (message, userId, timeStamp, messageId, chatId) => {
+      console.log("%cMessage Recived '" + message + "'", "color:gold;font-side:1rem");
+      setAllChats((chat) => {
+        //Cloning chat obj
+        const newChat = JSON.parse(JSON.stringify(chat));
+        newChat &&
+          newChat.forEach((c) => {
+            if (c && c.chatid == chatId) {
+              c.messages.push({
+                value: message,
+                sentBy: userId,
+                time: timeStamp,
+                id: messageId,
+              });
+            }
+          });
+
+        return newChat;
+      });
+    });
+
+    localStorage.setItem("currentUser", JSON.stringify(cUser));
     getAllChats();
     setAllUsers(users);
+    setCurrentUser(cUser);
   };
 
   useEffect(() => {
-    getAllChats(currentUserParsed.chatId);
-
-    const socket = io(apiUrl, { transports: ["websocket"] });
-    currentUserParsed.chatId.forEach((id) => {
-      socket.emit("join", id);
-
-      socket.on("messageRecived", (message, userId, timeStamp, messageId) => {
-        setAllChats((chats) => [
-          ...chats,
-          { chatId: id, message: { message, userId, timeStamp, messageId } },
-        ]);
-      });
-    });
-  }, [currentUser]);
-
-  useEffect(() => {
     getAllUsers();
+    getAllChats(currentUser.chatId);
   }, []);
 
   useEffect(() => {
@@ -262,10 +280,11 @@ const HomePage = () => {
   }, [allUsers]);
 
   useEffect(() => {
-    reloadLastMessage();
-  }, [allChats]);
+    loadChatIds();
+  }, [allUsers]);
 
   useEffect(() => {
+    console.log("allChats chaged");
     selectedUser && setSelectedUserChats(getChatForUser(selectedUser._id));
   }, [selectedUser, allChats]);
 
@@ -282,6 +301,7 @@ const HomePage = () => {
               ) : (
                 <div className="chatBox" id="chatBox">
                   <FullChat
+                    setAllChats={setAllChats}
                     setLastMessages={setLastMessages}
                     setSelectedUser={setSelectedUser}
                     user={selectedUser}
@@ -311,6 +331,7 @@ const HomePage = () => {
                     <div className="loader"></div>
                   ) : (
                     <FullChat
+                      setAllChats={setAllChats}
                       setLastMessages={setLastMessages}
                       setSelectedUser={setSelectedUser}
                       user={selectedUser}

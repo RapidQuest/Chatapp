@@ -9,7 +9,7 @@ import Messages from "../Messages";
 import "./style.css";
 let socket;
 
-export default function FullChat({ user, setSelectedUser, chats, setLastMessages }) {
+export default function FullChat({ user, setSelectedUser, chats, setLastMessages, setAllChats }) {
   const { currentUser, logout } = useAuth();
   const history = useHistory();
   const [message, setMessage] = useState("");
@@ -17,7 +17,6 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
   const [loading, setLoading] = useState(true);
   const currentUserParsed = JSON.parse(currentUser);
   const apiUrl = "http://localhost:5000/";
-  const current = new Date();
   // let existingMessages = JSON.parse(localStorage.getItem(user._id));
 
   useEffect(() => {
@@ -57,31 +56,6 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
 
   useEffect(() => {
     socket = io(apiUrl, { transports: ["websocket"] });
-    chats && socket.emit("join", chats.chatid);
-    socket.on("messageRecived", (message, userId, timeStamp, messageId) => {
-      console.log("%cmessage recived", "color:red");
-
-      setMessages((messages) => [
-        ...messages,
-        {
-          value: message,
-          time: Date(timeStamp).toLocaleString(),
-          sentBy: userId,
-          messageId,
-        },
-      ]);
-
-      setLastMessages((lastMessages) => {
-        lastMessages.forEach((lastMessage) => {
-          if (lastMessage.userId == userId) {
-            lastMessage.lastMessage = message;
-          }
-        });
-
-        console.log({ lastMessages, currentUserParsed: userId });
-        return lastMessages;
-      });
-    });
   }, [user]);
 
   const sendMessage = (event) => {
@@ -98,12 +72,24 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
       return lastMessages;
     });
 
-    setMessages((messages) => [
-      ...messages,
-      { value: message, time: current.toLocaleString(), sentBy: currentUserParsed._id },
-    ]);
+    setAllChats((chat) => {
+      //Cloning chat obj
+      const newChat = JSON.parse(JSON.stringify(chat));
+      newChat &&
+        newChat.forEach((c, i) => {
+          if (c && c.chatid == chats.chatid) {
+            console.log("MATCH FOUND");
+            c.messages.push({
+              value: message,
+              sentBy: currentUserParsed._id,
+              time: Date.now(),
+            });
+          }
+        });
 
-    saveMessage({ value: message, time: current.toLocaleString(), sentBy: currentUserParsed._id });
+      return newChat;
+    });
+    // saveMessage({ value: message, time: current.toLocaleString(), sentBy: currentUserParsed._id });
     setMessage("");
 
     // localStorage.setItem(user._id, JSON.stringify(existingMessages));

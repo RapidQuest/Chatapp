@@ -65,7 +65,7 @@ io.on("connect", (socket) => {
 
   socket.on("sendMessage", (message, senderUserId, chatId) => {
     const messageId = uuidv4();
-    socket.to(chatId).emit("messageRecived", message, senderUserId, Date.now(), messageId);
+    socket.to(chatId).emit("messageRecived", message, senderUserId, Date.now(), messageId, chatId);
     // io.to(user.room).emit("message", { value: message, time: current.toLocaleString(), sentBy: user.name });
     // io.to(user.room).emit("roomData", { room: user.room, users: getUsersInRoom(user.room) });
 
