@@ -137,6 +137,8 @@ const HomePage = () => {
       });
   };
 
+  console.log({ lastMessages });
+
   const updateUser = (data) => {
     fetch(apiUrl + "users/updateUser", {
       method: "put",
@@ -182,6 +184,7 @@ const HomePage = () => {
     const chat = {
       chatid: id,
     };
+    console.log('creating chat');
     fetch(apiUrl + "chats/createChat", {
       method: "POST",
       body: JSON.stringify(chat),
@@ -245,9 +248,11 @@ const HomePage = () => {
 
   useEffect(() => {
     // getAllChats(currentUserParsed.chatId);
+
     // const socket = io(apiUrl, { transports: ["websocket"] });
     // currentUserParsed.chatId.forEach((id) => {
     //   socket.emit("join", id);
+
     //   socket.on("messageRecived", (message, userId, timeStamp, messageId) => {
     //     setAllChats((chats) => [
     //       ...chats,
@@ -257,46 +262,51 @@ const HomePage = () => {
     // });
   }, [currentUser]);
 
-  const loadChat = async (id1, id2, user) => {
-    fetch(apiUrl + "chats/getChat", {
-      method: "get",
+  const loadChat = async (id1, id2 , user) => {
+    fetch(apiUrl + 'chats/getChat', {
+      method: 'get',
       headers: {
-        id: id1,
-      },
+        'id': id1,
+      }, 
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data === null) {
-          fetch(apiUrl + "chats/getChat", {
-            method: "get",
-            headers: {
-              id: id2,
-            },
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              if (data === null) createChat(id2, user);
-              else {
-                setChat(data);
-              }
-            });
-        } else {
-          setChat(data);
-        }
-        setChatLoad(false);
-      });
+    .then(response => response.json())
+    .then((data) => {
+      if(data === null){
+        fetch(apiUrl + 'chats/getChat', {
+          method: 'get',
+          headers: {
+            'id': id2,
+          },
+        })
+        .then(response => response.json())
+        .then((data) => {
+          if(data === null) createChat(id2, user)
+          else{
+            console.log('got data from id2');
+            console.log(data);
+            setChat(data);
+          }
+        });
+      }else{
+        console.log('got data from id1');
+        console.log(data);
+        setChat(data);
+      }
+      setChatLoad(false);
+    });
   };
 
   useEffect(() => {
     getAllUsers();
   }, []);
   useEffect(() => {
-    if (selectedUser) {
+    if(selectedUser){
       const chatId1 = stringToHash(selectedUser._id + currentUserParsed._id);
       const chatId2 = stringToHash(currentUserParsed._id + selectedUser._id);
-      loadChat(chatId1, chatId2, selectedUser);
+      loadChat(chatId1,chatId2,selectedUser);
     }
   }, [selectedUser]);
+console.log(chat);
   return (
     <>
       {dataIsLoaded ? (
