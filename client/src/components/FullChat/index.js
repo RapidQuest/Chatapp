@@ -58,7 +58,6 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
   useEffect(() => {
     socket = io(apiUrl, { transports: ["websocket"] });
     chats && socket.emit("join", chats.chatid);
-    
   }, [user]);
 
   useEffect(() => {
@@ -85,7 +84,7 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
         return lastMessages;
       });
     });
-  }, [])
+  }, []);
 
   const sendMessage = (event) => {
     event.preventDefault();
