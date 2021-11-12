@@ -72,12 +72,6 @@ const HomePage = () => {
       .then((users) => {
         users.forEach((user) => {
           user.color = profileColor(user._id);
-
-          setLastMessage(
-            stringToHash(user.name + currentUserParsed.name),
-            stringToHash(currentUserParsed.name + user.name),
-            user
-          );
         });
 
         setAllUsers(users);
@@ -98,45 +92,6 @@ const HomePage = () => {
     }
     return hash;
   };
-
-  const setLastMessage = (id1, id2, user) => {
-    setLastMessages([]);
-    fetch(apiUrl + "chats/lastMessage", {
-      method: "get",
-      headers: {
-        id: id1,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        let lastMessage = null;
-        if (data === null) {
-          fetch(apiUrl + "chats/lastMessage", {
-            method: "get",
-            headers: {
-              id: id2,
-            },
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              if (data === null) return;
-              else {
-                lastMessage =
-                  data.messages[0] === undefined
-                    ? "start new conversation"
-                    : data.messages[0].value;
-              }
-            });
-        } else {
-          lastMessage =
-            data.messages[0] === undefined ? "start new conversation" : data.messages[0].value;
-        }
-
-        setLastMessages((lastMessages) => [...lastMessages, { userId: user._id, lastMessage }]);
-      });
-  };
-
-  console.log({ lastMessages });
 
   const updateUser = (data) => {
     fetch(apiUrl + "users/updateUser", {
@@ -239,6 +194,24 @@ const HomePage = () => {
     return chatsForSelectedUser[0];
   };
 
+  const reloadLastMessage = () => {
+    const messages = [];
+
+    allChats.forEach((chat) => {
+      if (!chat) return;
+
+      const chatsMessages = chat.messages;
+      if (chatsMessages.length > 0) {
+        messages.push({
+          userId: chatsMessages[chatsMessages.length - 1].sentBy,
+          lastMessages: chatsMessages[chatsMessages.length - 1].value,
+        });
+      }
+    });
+
+    setLastMessages(messages);
+  };
+
   useEffect(() => {
     getAllChats(currentUserParsed.chatId);
 
@@ -258,6 +231,10 @@ const HomePage = () => {
   useEffect(() => {
     getAllUsers();
   }, []);
+
+  useEffect(() => {
+    reloadLastMessage();
+  }, [allChats]);
 
   return (
     <>
