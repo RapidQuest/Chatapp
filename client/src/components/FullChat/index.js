@@ -85,7 +85,11 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
 
       return newChat;
     });
-    // saveMessage({ value: message, time: current.toLocaleString(), sentBy: currentUserParsed._id });
+    saveMessage({
+      value: message,
+      time: Date.now(),
+      sentBy: currentUserParsed._id,
+    });
     setMessage("");
 
     // localStorage.setItem(user._id, JSON.stringify(existingMessages));
