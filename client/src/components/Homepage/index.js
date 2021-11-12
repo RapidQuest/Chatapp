@@ -17,6 +17,7 @@ const HomePage = () => {
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [lastMessages, setLastMessages] = useState([]);
+  const [selectedUserChats, setSelectedUserChats] = useState([]);
 
   const [dataIsLoaded, setDataIsLoaded] = useState(true);
   const [chatLoad, setChatLoad] = useState(true);
@@ -90,7 +91,7 @@ const HomePage = () => {
       hash = (hash << 5) - hash + char;
       hash = hash & hash;
     }
-    return hash;
+    return hash.toString();
   };
 
   const updateUser = (data) => {
@@ -158,7 +159,9 @@ const HomePage = () => {
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
+    console.log({
+      chatId: currentUserParsed.chatId,
+    });
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -168,7 +171,9 @@ const HomePage = () => {
     };
 
     fetch(apiUrl + "chats/getAllChats", requestOptions)
-      .then((response) => response.json())
+      .then((response) => {
+        return response.json();
+      })
       .then((allChats) => {
         setAllChats(allChats);
         setChatLoad(false);
@@ -180,8 +185,8 @@ const HomePage = () => {
     if (!allChats || !userId) return null;
 
     //chatsId is the chatids for the selectedUser
-    const chatId1 = stringToHash(userId + currentUserParsed.name);
-    const chatId2 = stringToHash(currentUserParsed.name + userId);
+    const chatId1 = stringToHash(userId + currentUserParsed._id);
+    const chatId2 = stringToHash(currentUserParsed._id + userId);
 
     const chatsForSelectedUser = allChats.filter((chat) => {
       return chat.chatid == chatId1 || chat.chatid == chatId2;
@@ -190,7 +195,6 @@ const HomePage = () => {
     if (chatsForSelectedUser.length > 1) {
       chatsForSelectedUser = [...chatsForSelectedUser[0], ...chatsForSelectedUser[1]];
     }
-
     return chatsForSelectedUser[0];
   };
 
@@ -201,7 +205,7 @@ const HomePage = () => {
       if (!chat) return;
 
       const chatsMessages = chat.messages;
-      if (chatsMessages.length > 0) {
+      if (chatsMessages && chatsMessages.length > 0) {
         messages.push({
           userId: chatsMessages[chatsMessages.length - 1].sentBy,
           lastMessages: chatsMessages[chatsMessages.length - 1].value,
@@ -228,6 +232,8 @@ const HomePage = () => {
       }
     });
 
+    localStorage.setItem("currentUser", JSON.stringify(currentUserParsed));
+    getAllChats();
     setAllUsers(users);
   };
 
@@ -259,6 +265,10 @@ const HomePage = () => {
     reloadLastMessage();
   }, [allChats]);
 
+  useEffect(() => {
+    selectedUser && setSelectedUserChats(getChatForUser(selectedUser._id));
+  }, [selectedUser, allChats]);
+
   return (
     <>
       {dataIsLoaded ? (
@@ -275,7 +285,7 @@ const HomePage = () => {
                     setLastMessages={setLastMessages}
                     setSelectedUser={setSelectedUser}
                     user={selectedUser}
-                    chats={getChatForUser(selectedUser._id)}
+                    chats={selectedUserChats}
                   />
                 </div>
               )
@@ -304,7 +314,7 @@ const HomePage = () => {
                       setLastMessages={setLastMessages}
                       setSelectedUser={setSelectedUser}
                       user={selectedUser}
-                      chats={getChatForUser ? getChatForUser(selectedUser.name) : null}
+                      chats={selectedUserChats}
                     />
                   )
                 ) : (
