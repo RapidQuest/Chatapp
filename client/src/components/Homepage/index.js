@@ -17,7 +17,6 @@ const HomePage = () => {
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [lastMessages, setLastMessages] = useState([]);
-  const [chat, setChat] = useState([]);
 
   const [dataIsLoaded, setDataIsLoaded] = useState(true);
   const [chatLoad, setChatLoad] = useState(true);
@@ -184,7 +183,7 @@ const HomePage = () => {
     const chat = {
       chatid: id,
     };
-    console.log('creating chat');
+
     fetch(apiUrl + "chats/createChat", {
       method: "POST",
       body: JSON.stringify(chat),
@@ -199,34 +198,28 @@ const HomePage = () => {
     pushChatIdToUsers(user, id);
   };
 
-  // const getAllChats = (chatsId) => {
-  //   if (!chatsId) return;
+  const getAllChats = (chatsId) => {
+    if (!chatsId) return;
 
-  //   const myHeaders = new Headers();
-  //   myHeaders.append("Content-Type", "application/json");
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-  //   const requestOptions = {
-  //     method: "POST",
-  //     headers: myHeaders,
-  //     body: JSON.stringify({
-  //       chatId: currentUserParsed.chatId,
-  //     }),
-  //   };
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: JSON.stringify({
+        chatId: currentUserParsed.chatId,
+      }),
+    };
 
-  //   allUsers.forEach(user => {
-  //     const chatId1 = stringToHash(user._id + currentUserParsed._id);
-  //     const chatId2 = stringToHash(currentUserParsed._id + user._id);
-  //     loadChat(chatId1,chatId2,user);
-  //   });
-
-  //   // fetch(apiUrl + "chats/getAllChats", requestOptions)
-  //   //   .then((response) => response.json())
-  //   //   .then((allChats) => {
-  //   //     setAllChats(allChats);
-  //   //     setChatLoad(false);
-  //   //   })
-  //   //   .catch((err) => console.error(err));
-  // };
+    fetch(apiUrl + "chats/getAllChats", requestOptions)
+      .then((response) => response.json())
+      .then((allChats) => {
+        setAllChats(allChats);
+        setChatLoad(false);
+      })
+      .catch((err) => console.error(err));
+  };
 
   const getChatForUser = (user) => {
     if (!allChats || !user) return null;
@@ -234,7 +227,7 @@ const HomePage = () => {
     //chatsId is the chatids for the selectedUser
     const chatId1 = stringToHash(user._id + currentUserParsed._id);
     const chatId2 = stringToHash(currentUserParsed._id + user._id);
-    // loadChat(chatId1,chatId2,user);
+    loadChat(chatId1,chatId2,user);
     const chatsForSelectedUser = allChats.filter((chat) => {
       return chat.chatid == chatId1 || chat.chatid == chatId2;
     });
@@ -247,7 +240,7 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    // getAllChats(currentUserParsed.chatId);
+    getAllChats(currentUserParsed.chatId);
 
     const socket = io(apiUrl, { transports: ["websocket"] });
     currentUserParsed.chatId.forEach((id) => {
@@ -284,15 +277,13 @@ const HomePage = () => {
           else{
             console.log('got data from id2');
             console.log(data);
-            setAllChats((allChats) => [...allChats, data]);
-            // setChat(data);
+            setChat(data);
           }
         });
       }else{
         console.log('got data from id1');
         console.log(data);
-        setAllChats((allChats) => [...allChats, data]);
-        // setChat(data);
+        setChat(data);
       }
       setChatLoad(false);
     });
@@ -301,14 +292,7 @@ const HomePage = () => {
   useEffect(() => {
     getAllUsers();
   }, []);
-  useEffect(() => {
-    if(selectedUser){
-      const chatId1 = stringToHash(selectedUser._id + currentUserParsed._id);
-      const chatId2 = stringToHash(currentUserParsed._id + selectedUser._id);
-      loadChat(chatId1,chatId2,selectedUser);
-    }
-  }, [selectedUser]);
-// console.log(allChats);
+
   return (
     <>
       {dataIsLoaded ? (
@@ -325,7 +309,7 @@ const HomePage = () => {
                     setLastMessages={setLastMessages}
                     setSelectedUser={setSelectedUser}
                     user={selectedUser}
-                    chats={chat}
+                    chats={getChatForUser(selectedUser)}
                   />
                 </div>
               )
@@ -354,7 +338,7 @@ const HomePage = () => {
                       setLastMessages={setLastMessages}
                       setSelectedUser={setSelectedUser}
                       user={selectedUser}
-                      chats={chat}
+                      chats={getChatForUser ? getChatForUser(selectedUser) : null}
                     />
                   )
                 ) : (
