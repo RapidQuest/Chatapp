@@ -160,9 +160,7 @@ const HomePage = () => {
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    console.log({
-      chatId: currentUser.chatId,
-    });
+
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -198,8 +196,6 @@ const HomePage = () => {
       chatsForSelectedUser = chatsForSelectedUser[0];
       chatsForSelectedUser.messages = messages;
     }
-    console.log("getChatForUser called");
-    console.log({ chatsForSelectedUser });
     return chatsForSelectedUser;
   };
 
@@ -243,6 +239,8 @@ const HomePage = () => {
     currentUser.chatId.forEach((id) => {
       socket.emit("join", id);
     });
+
+    socket.off("messageRecived");
     socket.on("messageRecived", (message, userId, timeStamp, messageId, chatId) => {
       console.log("%cMessage Recived '" + message + "'", "color:gold;font-side:1rem");
       setAllChats((chat) => {
@@ -276,15 +274,18 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    loadChatIds();
-  }, [allUsers]);
+    reloadLastMessage();
+  }, [allUsers, allChats]);
 
   useEffect(() => {
     loadChatIds();
   }, [allUsers]);
 
   useEffect(() => {
-    console.log("allChats chaged");
+    loadChatIds();
+  }, [allUsers]);
+
+  useEffect(() => {
     selectedUser && setSelectedUserChats(getChatForUser(selectedUser._id));
   }, [selectedUser, allChats]);
 
@@ -302,7 +303,6 @@ const HomePage = () => {
                 <div className="chatBox" id="chatBox">
                   <FullChat
                     setAllChats={setAllChats}
-                    setLastMessages={setLastMessages}
                     setSelectedUser={setSelectedUser}
                     user={selectedUser}
                     chats={selectedUserChats}
@@ -311,7 +311,6 @@ const HomePage = () => {
               )
             ) : (
               <SideBar
-                lastMessages={lastMessages}
                 allUsers={allUsers}
                 setSelectedUser={setSelectedUser}
                 selectedUserId={selectedUser && selectedUser._id}

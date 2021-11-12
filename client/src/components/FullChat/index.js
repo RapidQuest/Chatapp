@@ -7,7 +7,9 @@ import InfoBar from "../InfoBar";
 import Input from "../Input";
 import Messages from "../Messages";
 import "./style.css";
-let socket;
+
+const apiUrl = "http://localhost:5000/";
+const socket = io(apiUrl, { transports: ["websocket"] });
 
 export default function FullChat({ user, setSelectedUser, chats, setLastMessages, setAllChats }) {
   const { currentUser, logout } = useAuth();
@@ -16,7 +18,6 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentUserParsed = JSON.parse(currentUser);
-  const apiUrl = "http://localhost:5000/";
   // let existingMessages = JSON.parse(localStorage.getItem(user._id));
 
   useEffect(() => {
@@ -54,10 +55,6 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
     }
   }
 
-  useEffect(() => {
-    socket = io(apiUrl, { transports: ["websocket"] });
-  }, [user]);
-
   const sendMessage = (event) => {
     event.preventDefault();
 
@@ -78,7 +75,6 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
       newChat &&
         newChat.forEach((c, i) => {
           if (c && c.chatid == chats.chatid) {
-            console.log("MATCH FOUND");
             c.messages.push({
               value: message,
               sentBy: currentUserParsed._id,

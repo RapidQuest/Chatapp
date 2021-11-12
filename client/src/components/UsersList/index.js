@@ -7,11 +7,11 @@ import "./style.css";
 // import onlineIcon from '../../icons/onlineIcon.png';
 
 const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => {
-  const [lastMessage, setLastMessage] = useState("");
   const isSmall = useMediaQuery("(max-width: 760px)", false);
   const centerContent = useMediaQuery("(min-width: 1500px)", false);
   const { currentUser } = useAuth();
   const currentUserParsed = JSON.parse(currentUser);
+
   const apiUrl = "http://localhost:5000/";
 
   const Onselect = () => {
@@ -23,6 +23,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
 
   const getLastMessage = (userId) => {
     const message = lastMessages.filter((lastMessage) => lastMessage.userId == userId)[0];
+    console.log({ lastMessages, message, userId });
     return message?.lastMessages;
   };
 
@@ -37,11 +38,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
               (user._id === selectedUserId ? "active" : "")
             }
             id={user._id}
-            onClick={() => {
-              setSelectedUser(user);
-              Onselect();
-              document.getElementById(user._id).classList.add("activeClass");
-            }}
+            onClick={() => setSelectedUser(user)}
             key={user._id}
           >
             <div className="row">
@@ -61,7 +58,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
                   <h6 className="col-8 item_name">{user.name}</h6>
                   <p className="col-4 item_role">{user.role}</p>
                 </div>
-                <p className="lastMessage">{getLastMessage(user._id)}</p>
+                <p className="lastMessage">{user._id + " " + getLastMessage(user._id)}</p>
               </div>
             </div>
           </div>
