@@ -176,12 +176,12 @@ const HomePage = () => {
       .catch((err) => console.error(err));
   };
 
-  const getChatForUser = (userName) => {
-    if (!allChats || !userName) return null;
+  const getChatForUser = (userId) => {
+    if (!allChats || !userId) return null;
 
     //chatsId is the chatids for the selectedUser
-    const chatId1 = stringToHash(userName + currentUserParsed.name);
-    const chatId2 = stringToHash(currentUserParsed.name + userName);
+    const chatId1 = stringToHash(userId + currentUserParsed.name);
+    const chatId2 = stringToHash(currentUserParsed.name + userId);
 
     const chatsForSelectedUser = allChats.filter((chat) => {
       return chat.chatid == chatId1 || chat.chatid == chatId2;
@@ -212,6 +212,25 @@ const HomePage = () => {
     setLastMessages(messages);
   };
 
+  const loadChatIds = () => {
+    if (!allUsers || allUsers.length < 1) return;
+
+    const users = allUsers;
+
+    users.forEach((user) => {
+      const chatId1 = stringToHash(user._id + currentUserParsed._id);
+      const chatId2 = stringToHash(currentUserParsed._id + user._id);
+
+      if (!(chatId1 in user.chatId || chatId2 in user.chatId)) {
+        createChat(chatId1, user);
+        user.chatId.push(chatId1);
+        currentUserParsed.chatId.push(chatId1);
+      }
+    });
+
+    setAllUsers(users);
+  };
+
   useEffect(() => {
     getAllChats(currentUserParsed.chatId);
 
@@ -233,6 +252,10 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
+    loadChatIds();
+  }, [allUsers]);
+
+  useEffect(() => {
     reloadLastMessage();
   }, [allChats]);
 
@@ -252,7 +275,7 @@ const HomePage = () => {
                     setLastMessages={setLastMessages}
                     setSelectedUser={setSelectedUser}
                     user={selectedUser}
-                    chats={getChatForUser(selectedUser.name)}
+                    chats={getChatForUser(selectedUser._id)}
                   />
                 </div>
               )
