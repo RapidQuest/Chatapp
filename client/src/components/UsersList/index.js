@@ -10,6 +10,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
   const isSmall = useMediaQuery("(max-width: 760px)", false);
   const centerContent = useMediaQuery("(min-width: 1500px)", false);
   const { currentUser } = useAuth();
+  const [lastMessage, setLastMessage] = useState([]);
   const currentUserParsed = JSON.parse(currentUser);
 
   const apiUrl = "http://localhost:5000/";
@@ -21,11 +22,16 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
     }
   };
 
-  const getLastMessage = (userId) => {
-    const message = lastMessages.filter((lastMessage) => lastMessage.userId == userId)[0];
-    console.log({ lastMessages, message, userId });
-    return message?.lastMessages;
+  const getLastMessage = (chat) => {
+    console.log(chat);
+    if(chat === undefined){
+      return  {chatId: chat.chatid, lastMessages:{value: "New", time: "0000000000"}};
+    }else{
+      const message = lastMessages.filter((lastMessage) => lastMessage.chatId == chat.chatid)[0];
+      return message ? message: {chatId: chat.chatid, lastMessages:{value: "New", time: "0000000000"}};
+    }
   };
+  // getLastMessage(user.chat)
 
   return users ? (
     <div className="allUsers">
@@ -58,7 +64,9 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
                   <h6 className="col-8 item_name">{user.name}</h6>
                   <p className="col-4 item_role">{user.role}</p>
                 </div>
-                <p className="lastMessage">{user._id + " " + getLastMessage(user._id)}</p>
+                <p className="lastMessage">{getLastMessage(user.chat).lastMessages.value}
+                </p> 
+                
               </div>
             </div>
           </div>

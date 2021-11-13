@@ -18,12 +18,12 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentUserParsed = JSON.parse(currentUser);
-  // let existingMessages = JSON.parse(localStorage.getItem(user._id));
 
   useEffect(() => {
     setLoading(true);
 
     setMessages(chats ? chats.messages : null);
+    // console.log( chats);
     setLoading(false);
   }, [chats]);
 
@@ -41,7 +41,7 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log(json);
+        // console.log(json);
       })
       .catch(function (json) {});
   };
@@ -68,23 +68,26 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
 
       return lastMessages;
     });
-
+    
+    //here is the problem for displaying multiple messages
     setAllChats((chat) => {
       //Cloning chat obj
-      const newChat = JSON.parse(JSON.stringify(chat));
+      const newChat = chat;
       newChat &&
         newChat.forEach((c, i) => {
-          if (c && c.chatid == chats.chatid) {
+          if (c && c.chatid === chats.chatid) {
             c.messages.push({
               value: message,
               sentBy: currentUserParsed._id,
               time: Date.now(),
             });
+            console.log(c);
           }
         });
 
       return newChat;
     });
+
     saveMessage({
       value: message,
       time: Date.now(),
@@ -92,7 +95,6 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
     });
     setMessage("");
 
-    // localStorage.setItem(user._id, JSON.stringify(existingMessages));
   };
 
   return (

@@ -20,7 +20,6 @@ const HomePage = () => {
   const [selectedUserChats, setSelectedUserChats] = useState([]);
 
   const [dataIsLoaded, setDataIsLoaded] = useState(true);
-  const [chatLoad, setChatLoad] = useState(true);
 
   const [currentUser, setCurrentUser] = useState(JSON.parse(unParseCurrentUser));
 
@@ -68,22 +67,19 @@ const HomePage = () => {
   };
 
   const getAllUsers = () => {
-    setDataIsLoaded(true);
     fetch(apiUrl + "users/getUsers")
       .then((res) => res.json())
       .then((users) => {
         users.forEach((user) => {
           user.color = profileColor(user._id);
         });
-
         setAllUsers(users);
-        setDataIsLoaded(false);
       })
       .catch((err) => {
         console.error(err);
       });
   };
-
+// console.log(allUsers);
   const stringToHash = (string) => {
     let hash = 0;
     if (string.length == 0) return hash;
@@ -165,7 +161,7 @@ const HomePage = () => {
       method: "POST",
       headers: myHeaders,
       body: JSON.stringify({
-        chatId: currentUser.chatId,
+        chatId: chatsId,
       }),
     };
 
@@ -175,7 +171,6 @@ const HomePage = () => {
       })
       .then((allChats) => {
         setAllChats(allChats);
-        setChatLoad(false);
       })
       .catch((err) => console.error(err));
   };
@@ -201,7 +196,7 @@ const HomePage = () => {
 
   const reloadLastMessage = () => {
     if (!allChats) return;
-    const messages = [];
+    let messages = [];
 
     allChats.forEach((chat) => {
       if (!chat) return;
@@ -209,30 +204,26 @@ const HomePage = () => {
       const chatsMessages = chat.messages;
       if (chatsMessages && chatsMessages.length > 0) {
         messages.push({
-          userId: chatsMessages[chatsMessages.length - 1].sentBy,
-          lastMessages: chatsMessages[chatsMessages.length - 1].value,
+          chatId: chat.chatid,
+          lastMessages: chatsMessages[chatsMessages.length - 1],
         });
       }
+      // console.log(messages);
     });
 
     setLastMessages(messages);
   };
 
-  const loadChatIds = () => {
+  const loadChatIds = async () => {
     if (!allUsers || allUsers.length < 1) return;
 
     const users = allUsers;
     const cUser = currentUser;
 
-    users.forEach((user) => {
+    await users.forEach((user) => {
       const chatId1 = stringToHash(user._id + currentUser._id);
       const chatId2 = stringToHash(currentUser._id + user._id);
-
-      if (!(chatId1 in user.chatId || chatId2 in user.chatId)) {
-        createChat(chatId1, user);
-        user.chatId.push(chatId1);
-        cUser.chatId.push(chatId1);
-      }
+      loadChat(chatId1, chatId2 ,user)
     });
 
     const socket = io(apiUrl, { transports: ["websocket"] });
@@ -240,9 +231,9 @@ const HomePage = () => {
       socket.emit("join", id);
     });
 
-    socket.off("messageRecived");
+    // socket.off("messageRecived");
     socket.on("messageRecived", (message, userId, timeStamp, messageId, chatId) => {
-      console.log("%cMessage Recived '" + message + "'", "color:gold;font-side:1rem");
+      // console.log("%cMessage Recived '" + message + "'", "color:gold;font-side:1rem");
       setAllChats((chat) => {
         //Cloning chat obj
         const newChat = JSON.parse(JSON.stringify(chat));
@@ -263,11 +254,54 @@ const HomePage = () => {
     });
 
     localStorage.setItem("currentUser", JSON.stringify(cUser));
-    getAllChats();
+    getAllChats(cUser.chatId);
     setAllUsers(users);
     setCurrentUser(cUser);
+    
   };
 
+  const loadChat = async (id1, id2 , user) => {
+    fetch(apiUrl + 'chats/getChat', {
+      method: 'get',
+      headers: {
+        'id': id1,
+      }, 
+    })
+    .then(response => response.json())
+    .then((data) => {
+      if(data === null){
+        fetch(apiUrl + 'chats/getChat', {
+          method: 'get',
+          headers: {
+            'id': id2,
+          },
+        })
+        .then(response => response.json())
+        .then((data) => {
+          if(data === null) createChat(id2, user)
+          else{
+            user.chat = data;
+            setAllChats((allChats) => [...allChats, data ]);
+          }
+        });
+      }else{
+        user.chat = data;
+        setAllChats((allChats) => [...allChats, data ]);
+        
+      }
+      // console.log(user);
+    });
+  };
+
+  useEffect(() => {
+    let count = 0;
+    allUsers.forEach(user => {
+      if(user.chat !== undefined){
+        count++;
+      }
+      if(count === allUsers.length) setDataIsLoaded(false);
+    });
+  }, [allUsers, allChats])
   useEffect(() => {
     getAllUsers();
     getAllChats(currentUser.chatId);
@@ -275,11 +309,7 @@ const HomePage = () => {
 
   useEffect(() => {
     reloadLastMessage();
-  }, [allUsers, allChats]);
-
-  useEffect(() => {
-    loadChatIds();
-  }, [allUsers]);
+  }, [allChats]);
 
   useEffect(() => {
     loadChatIds();
@@ -296,10 +326,8 @@ const HomePage = () => {
       ) : (
         <div className="joinOuterContainer ">
           {isSmall ? (
-            selectedUser ? (
-              chatLoad ? (
-                <div>Loading Chat</div>
-              ) : (
+            selectedUser ? 
+               (
                 <div className="chatBox" id="chatBox">
                   <FullChat
                     setAllChats={setAllChats}
@@ -308,7 +336,6 @@ const HomePage = () => {
                     chats={selectedUserChats}
                   />
                 </div>
-              )
             ) : (
               <SideBar
                 allUsers={allUsers}
@@ -325,10 +352,8 @@ const HomePage = () => {
                 selectedUserId={selectedUser && selectedUser._id}
               />
               <div className="chatBox">
-                {selectedUser ? (
-                  chatLoad ? (
-                    <div className="loader"></div>
-                  ) : (
+                {selectedUser ? 
+                   (
                     <FullChat
                       setAllChats={setAllChats}
                       setLastMessages={setLastMessages}
@@ -336,7 +361,6 @@ const HomePage = () => {
                       user={selectedUser}
                       chats={selectedUserChats}
                     />
-                  )
                 ) : (
                   <div className="chatArea">
                     <div className="description">
