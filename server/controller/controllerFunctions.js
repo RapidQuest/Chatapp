@@ -93,15 +93,25 @@ exports.getUser = (req, res) => {
 };
 
 exports.updateChat = async (req, res) => {
-  await Chat.findOneAndUpdate(
-    { chatid: req.body.id },
-    { $push: { messages: req.body.message } },
-    { new: true },
-    (err, chat) => {
-      if (err) {
-        res.status(500).send(err);
+  const { chatId, userId, messages } = req.body;
+
+  try {
+    await Chat.findOneAndUpdate(
+      { chatid: chatId },
+      {
+        $push: { messages: messages },
+        $inc: { [`unseen.${userId}`]: 1 },
+      },
+      { new: true },
+      (err, chat) => {
+        if (err) {
+          res.status(500).send(err);
+        }
+        res.status(200).json(chat);
       }
-      res.status(200).json(chat);
-    }
-  );
+    );
+  } catch (e) {
+    console.log("Somthing went wrrong will adding new message to db");
+    console.log(e);
+  }
 };

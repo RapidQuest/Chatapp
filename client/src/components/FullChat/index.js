@@ -104,6 +104,7 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
     <div className="outerContainer">
       <div className="containerC" id={user._id}>
         <InfoBar user={user} setSelectedUser={setSelectedUser} />
+        {chats && chats.chatid}
         {loading ? (
           <div className="loader"></div>
         ) : (

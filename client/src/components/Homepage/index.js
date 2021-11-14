@@ -124,9 +124,6 @@ const HomePage = () => {
         if (!data) {
           console.error("no user found");
         } else {
-          user.chatId.forEach((element) => {
-            if (element === id) return;
-          });
           data.chatId.push(id);
           updateUser(data);
         }
@@ -193,10 +190,10 @@ const HomePage = () => {
 
     if (chatsForSelectedUser.length > 1) {
       const messages = [...chatsForSelectedUser[0].messages, ...chatsForSelectedUser[1].messages];
-      chatsForSelectedUser = chatsForSelectedUser[0];
       chatsForSelectedUser.messages = messages;
     }
-    return chatsForSelectedUser;
+
+    return chatsForSelectedUser[0];
   };
 
   const reloadLastMessage = () => {
@@ -253,10 +250,13 @@ const HomePage = () => {
       const chatId1 = stringToHash(user._id + currentUser._id);
       const chatId2 = stringToHash(currentUser._id + user._id);
 
-      if (!(chatId1 in user.chatId || chatId2 in user.chatId)) {
-        createChat(chatId1, user);
-        user.chatId.push(chatId1);
-        cUser.chatId.push(chatId1);
+      const check1 = user.chatId.find((element) => element === chatId1);
+      const check2 = user.chatId.find((element) => element === chatId2);
+
+      if (check1 === undefined && check2 === undefined) {
+        createChat(chatId2, user);
+        user.chatId.push(chatId2);
+        cUser.chatId.push(chatId2);
       }
     });
 
