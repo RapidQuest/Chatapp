@@ -1,18 +1,20 @@
 #profileImage {
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
-  /* background: #512DA8; */
   color: #fff;
-  text-align: center;
   margin-top: 6px;
+
+  /* centering */
+  display: grid;
+  place-content: center;
 }
 
 @media (min-width: 1001px) {
   #profileImage {
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
     line-height: 52px;
   }
 }
