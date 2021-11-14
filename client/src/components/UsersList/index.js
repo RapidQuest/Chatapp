@@ -23,7 +23,6 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
 
   const getLastMessage = (userId) => {
     const message = lastMessages.filter((lastMessage) => lastMessage.userId == userId)[0];
-    console.log({ lastMessages, message, userId });
     return message?.lastMessages;
   };
 

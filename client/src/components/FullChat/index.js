@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/Auth";
 import io from "socket.io-client";
 import { useHistory } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
 import InfoBar from "../InfoBar";
 import Input from "../Input";
@@ -58,11 +59,13 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
   const sendMessage = (event) => {
     event.preventDefault();
 
-    socket.emit("sendMessage", message, currentUserParsed._id, chats.chatid);
+    const messageId = uuidv4();
+    socket.emit("sendMessage", message, currentUserParsed._id, chats.chatid, messageId);
     setLastMessages((lastMessages) => {
       lastMessages.forEach((lastMessage) => {
         if (lastMessage.userId == user._id) {
           lastMessage.lastMessage = message;
+          lastMessage.id = messageId;
         }
       });
 
@@ -79,6 +82,7 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
               value: message,
               sentBy: currentUserParsed._id,
               time: Date.now(),
+              id: messageId,
             });
           }
         });
@@ -87,8 +91,9 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
     });
     saveMessage({
       value: message,
-      time: Date.now(),
       sentBy: currentUserParsed._id,
+      time: Date.now(),
+      id: messageId,
     });
     setMessage("");
 

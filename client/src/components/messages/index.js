@@ -21,7 +21,7 @@ const Messages = ({ messages, id }) => {
       {messages ? (
         <div ref={messagesContainerRef} className="messages">
           {messages.map((message, i) => (
-            <div key={message.id || i}>
+            <div key={i}>
               <Message message={message} id={id} />
             </div>
           ))}

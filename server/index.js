@@ -3,7 +3,6 @@ const socketio = require("socket.io");
 const http = require("http");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-const { v4: uuidv4 } = require("uuid");
 
 var current = new Date();
 
@@ -63,9 +62,8 @@ io.on("connect", (socket) => {
     socket.join(chatId);
   });
 
-  socket.on("sendMessage", (message, senderUserId, chatId) => {
-    const messageId = uuidv4();
-    socket.to(chatId).emit("messageRecived", message, senderUserId, Date.now(), messageId, chatId);
+  socket.on("sendMessage", (message, senderUserId, chatId, messageId) => {
+    socket.to(chatId).emit("messageRecived", message, senderUserId, Date.now(), chatId, messageId);
     // io.to(user.room).emit("message", { value: message, time: current.toLocaleString(), sentBy: user.name });
     // io.to(user.room).emit("roomData", { room: user.room, users: getUsersInRoom(user.room) });
 
