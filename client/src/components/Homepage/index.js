@@ -305,6 +305,7 @@ const HomePage = () => {
                 <div className="chatBox" id="chatBox">
                   <FullChat
                     setAllChats={setAllChats}
+                    setLastMessages={setLastMessages}
                     setSelectedUser={setSelectedUser}
                     user={selectedUser}
                     chats={selectedUserChats}

@@ -22,7 +22,8 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
   };
 
   const getLastMessage = (userId) => {
-    const message = lastMessages.filter((lastMessage) => lastMessage.userId == userId)[0];
+    const message =
+      lastMessages && lastMessages.filter((lastMessage) => lastMessage.userId == userId)[0];
     return message?.lastMessages;
   };
 
