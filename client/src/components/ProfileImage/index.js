@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 
-export default function ProfileImage({ user }) {
+export default function ProfileImage({ userName, color }) {
   function getFirstString(name) {
     const firstL = name[0].charAt(0).toUpperCase();
     const secondL = name[1].charAt(0).toUpperCase();
@@ -9,10 +9,12 @@ export default function ProfileImage({ user }) {
   }
 
   return (
-    <div className={"tag " + user.color} id="profileImage">
-      {user.name.split(" ").length > 1
-        ? getFirstString(user.name.split(" "))
-        : user.name.charAt(0).toUpperCase()}
+    <div className={"tag " + color} id="profileImage">
+      <span className="text">
+        {userName.split(" ").length > 1
+          ? getFirstString(userName.split(" "))
+          : userName.charAt(0).toUpperCase()}
+      </span>
     </div>
   );
 }

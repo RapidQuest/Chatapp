@@ -17,7 +17,7 @@ const InfoBar = ({ user, setSelectedUser }) => {
           </div>
         ) : null}
         <span className="profileWrapper">
-          <ProfileImage user={user} />
+          <ProfileImage userName={user.name} color={user.color} />
         </span>
         <h4 className="text-dark userName">
           {user.name}

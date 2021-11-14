@@ -27,7 +27,7 @@ const Messages = ({ messages, id }) => {
           ))}
         </div>
       ) : (
-        <div>start a new conversation</div>
+        <div className="text-center">start a new conversation</div>
       )}
     </>
   );

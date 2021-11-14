@@ -27,9 +27,11 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
     const chatId1 = stringToHash(userId + currentUserParsed._id);
     const chatId2 = stringToHash(currentUserParsed._id + userId);
 
-    const message = lastMessages.filter(
-      (lastMessage) => lastMessage.chatId == chatId1 || lastMessage.chatId == chatId2
-    )[0];
+    const message =
+      lastMessages &&
+      lastMessages.filter(
+        (lastMessage) => lastMessage.chatId == chatId1 || lastMessage.chatId == chatId2
+      )[0];
 
     return message?.value;
   };
@@ -58,7 +60,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
                     : "col-2"
                 }
               >
-                <ProfileImage user={user} />
+                <ProfileImage userName={user.name} color={user.color} />
               </div>
               <div className={isSmall ? "col-11 pd-l" : "col-10 pd-l"}>
                 <div className="row paddingTop">
