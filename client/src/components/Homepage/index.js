@@ -218,6 +218,31 @@ const HomePage = () => {
     setLastMessages(messages);
   };
 
+  const handleMessageRecived = (message, userId, timeStamp, chatId, messageId) => {
+    if (userId == currentUser._id) {
+      console.log("%cMessage Sent Succesfully '" + message + "'", "color:blue;font-side:1rem");
+    } else {
+      console.log("%cMessage Recived '" + message + "'", "color:gold;font-side:1rem");
+      setAllChats((chat) => {
+        //Cloning chat obj
+        const newChat = JSON.parse(JSON.stringify(chat));
+        newChat &&
+          newChat.forEach((c) => {
+            if (c && c.chatid == chatId) {
+              c.messages.push({
+                value: message,
+                sentBy: userId,
+                time: timeStamp,
+                id: messageId,
+              });
+            }
+          });
+
+        return newChat;
+      });
+    }
+  };
+
   const loadChatIds = () => {
     if (!allUsers || allUsers.length < 1) return;
 
@@ -240,27 +265,8 @@ const HomePage = () => {
       socket.emit("join", id);
     });
 
-    socket.off("messageRecived");
-    socket.on("messageRecived", (message, userId, timeStamp, messageId, chatId) => {
-      console.log("%cMessage Recived '" + message + "'", "color:gold;font-side:1rem");
-      setAllChats((chat) => {
-        //Cloning chat obj
-        const newChat = JSON.parse(JSON.stringify(chat));
-        newChat &&
-          newChat.forEach((c) => {
-            if (c && c.chatid == chatId) {
-              c.messages.push({
-                value: message,
-                sentBy: userId,
-                time: timeStamp,
-                id: messageId,
-              });
-            }
-          });
-
-        return newChat;
-      });
-    });
+    socket.removeListener("messageRecived", handleMessageRecived);
+    socket.on("messageRecived", handleMessageRecived);
 
     localStorage.setItem("currentUser", JSON.stringify(cUser));
     getAllChats();
@@ -276,10 +282,6 @@ const HomePage = () => {
   useEffect(() => {
     reloadLastMessage();
   }, [allUsers, allChats]);
-
-  useEffect(() => {
-    loadChatIds();
-  }, [allUsers]);
 
   useEffect(() => {
     loadChatIds();
