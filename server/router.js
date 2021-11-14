@@ -1,5 +1,3 @@
-const bodyParser = require("body-parser");
-
 module.exports = function (app) {
   const userFunctions = require("./controller/controllerFunctions");
   const userHandlers = require("./controller/authController");

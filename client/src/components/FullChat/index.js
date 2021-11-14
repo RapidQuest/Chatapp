@@ -30,8 +30,9 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
 
   const saveMessage = async (message) => {
     const data = {
-      id: chats.chatid,
+      chatId: chats.chatid,
       message: message,
+      userId: user._id,
     };
     await fetch(apiUrl + "users/updateChat", {
       method: "put",

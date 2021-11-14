@@ -136,6 +136,8 @@ const HomePage = () => {
   const createChat = (id, user) => {
     const chat = {
       chatid: id,
+      userId1: user._id,
+      userId2: currentUser._id,
     };
 
     fetch(apiUrl + "chats/createChat", {

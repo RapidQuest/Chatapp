@@ -41,7 +41,12 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.createNewChat = (req, res) => {
-  let newChat = new Chat(req.body);
+  const { chatid, userId1, userId2 } = req.body;
+  const newChat = new Chat({
+    chatid,
+    unseen: { [userId1]: 0, [userId2]: 0 },
+  });
+
   newChat.save((err, chat) => {
     if (err) {
       res.status(500).send(err);
@@ -93,14 +98,15 @@ exports.getUser = (req, res) => {
 };
 
 exports.updateChat = async (req, res) => {
-  const { chatId, userId, messages } = req.body;
+  const { chatId, userId, message } = req.body;
+  const userToInc = `unseen.${userId}`;
 
   try {
     await Chat.findOneAndUpdate(
       { chatid: chatId },
       {
-        $push: { messages: messages },
-        $inc: { [`unseen.${userId}`]: 1 },
+        $push: { messages: message },
+        $inc: { [userToInc]: 1 },
       },
       { new: true },
       (err, chat) => {
