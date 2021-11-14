@@ -209,8 +209,8 @@ const HomePage = () => {
       const chatsMessages = chat.messages;
       if (chatsMessages && chatsMessages.length > 0) {
         messages.push({
-          userId: chatsMessages[chatsMessages.length - 1].sentBy,
-          lastMessages: chatsMessages[chatsMessages.length - 1].value,
+          chatId: chat.chatid,
+          value: chatsMessages[chatsMessages.length - 1].value,
         });
       }
     });
@@ -313,6 +313,7 @@ const HomePage = () => {
               )
             ) : (
               <SideBar
+                lastMessages={lastMessages}
                 allUsers={allUsers}
                 setSelectedUser={setSelectedUser}
                 selectedUserId={selectedUser && selectedUser._id}

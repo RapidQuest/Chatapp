@@ -12,18 +12,26 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
   const { currentUser } = useAuth();
   const currentUserParsed = JSON.parse(currentUser);
 
-  const apiUrl = "http://localhost:5000/";
-
-  const Onselect = () => {
-    let elements = document.getElementsByClassName("block_item btn activeClass");
-    for (let i = 0; i < elements.length; i++) {
-      elements[i].classList.remove("activeClass");
+  const stringToHash = (string) => {
+    let hash = 0;
+    if (string.length == 0) return hash;
+    for (let i = 0; i < string.length; i++) {
+      var char = string.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash;
     }
+    return hash.toString();
   };
 
   const getLastMessage = (userId) => {
-    const message = lastMessages.filter((lastMessage) => lastMessage.userId == userId)[0];
-    return message?.lastMessages;
+    const chatId1 = stringToHash(userId + currentUserParsed._id);
+    const chatId2 = stringToHash(currentUserParsed._id + userId);
+
+    const message = lastMessages.filter(
+      (lastMessage) => lastMessage.chatId == chatId1 || lastMessage.chatId == chatId2
+    )[0];
+
+    return message?.value;
   };
 
   return users ? (
