@@ -50,7 +50,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
             onClick={() => setSelectedUser(user)}
             key={user._id}
           >
-            <div className="row">
+            <div className="row h-100">
               <div
                 className={
                   isSmall
@@ -62,12 +62,17 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
               >
                 <ProfileImage userName={user.name} color={user.color} />
               </div>
-              <div className={isSmall ? "col-11 pd-l" : "col-10 pd-l"}>
-                <div className="row paddingTop">
-                  <h6 className="col-8 item_name">{user.name}</h6>
-                  <p className="col-4 item_role">{user.role}</p>
+              <div className={isSmall ? "col-11" : "col-10"}>
+                <div className="row h-100">
+                  <p className="col-8 name-last-msg">
+                    <span className="item_name">{user.name}</span>
+                    <p className="lastMessage">{getLastMessage(user._id)}</p>
+                  </p>
+                  <p className="col-4 item_role">
+                    <span className="role">{user.role}</span>
+                    <span className="unseen-count">{1}</span>
+                  </p>
                 </div>
-                <p className="lastMessage">{getLastMessage(user._id)}</p>
               </div>
             </div>
           </div>
