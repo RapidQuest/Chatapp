@@ -64,8 +64,8 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
     setLastMessages((lastMessages) => {
       lastMessages.forEach((lastMessage) => {
         if (lastMessage.userId == user._id) {
-          lastMessage.lastMessage = message;
-          lastMessage.id = messageId;
+          lastMessage.value = message;
+          lastMessage.chatId = chats.chatid;
         }
       });
 
