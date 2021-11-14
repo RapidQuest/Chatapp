@@ -1,0 +1,69 @@
+.login-main {
+  display: grid;
+  place-items: center;
+  color: white;
+  background: #3a3a45e6;
+  min-height: 100vh;
+}
+
+.login-wrapper {
+  width: 340px;
+}
+
+.sigin-title {
+  text-align: start;
+  font-size: 1.65rem;
+  margin-bottom: 0.7rem;
+}
+
+.login-wrapper .input-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.login-wrapper .label {
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  text-transform: capitalize;
+}
+
+.login-input {
+  padding: 0.5rem 0.75rem;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  font-size: 0.9rem;
+}
+
+.login-input::placeholder {
+  color: rgba(0, 0, 0, 0.274);
+}
+
+.login-input:focus {
+  border-color: #7cb2fe;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgb(1 104 250 / 25%);
+}
+
+.login-btn {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.gradient-bg {
+  background: linear-gradient(
+    90deg,
+    #424bb2 0%,
+    rgba(52, 134, 154, 1) 53%,
+    rgba(60, 204, 175, 1) 100%
+  ) !important;
+  color: #fff;
+
+  transition: background 1s ease;
+}
