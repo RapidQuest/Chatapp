@@ -1,6 +1,7 @@
 .searchInput {
   color: rgba(0, 0, 0, 0.48);
   border-radius: 0;
+  flex-wrap: nowrap;
 }
 
 .search-wrapper {
