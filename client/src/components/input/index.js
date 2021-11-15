@@ -3,7 +3,7 @@ import React from "react";
 import "./style.css";
 
 const Input = ({ message, setMessage, sendMessage }) => (
-  <form className="form">
+  <form className="form send-message-wrapper">
     <input
       className="input form-control shadow-none"
       type="text"

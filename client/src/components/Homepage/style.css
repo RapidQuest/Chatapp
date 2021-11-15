@@ -92,14 +92,6 @@ button:focus {
   outline: 0;
 }
 
-.searchInput {
-  /* padding: 0.5rem; */
-  color: rgba(0, 0, 0, 0.48);
-  border-radius: 0;
-
-  /* padding: 0.5rem; */
-}
-
 @media (min-width: 761px) and (max-width: 1290px) {
   .sideBar {
     width: 35vw;
