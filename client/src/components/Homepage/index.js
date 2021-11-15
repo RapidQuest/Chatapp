@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../contexts/Auth";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import SideBar from "../SideBar";
@@ -23,6 +23,16 @@ const HomePage = () => {
   const [chatLoad, setChatLoad] = useState(true);
 
   const [currentUser, setCurrentUser] = useState(JSON.parse(unParseCurrentUser));
+
+  /**
+   * Make stateRef always have the current selectedvalue.
+   * Callbacks can refer to this object whenever they need the current value.
+   * Note: the callbacks will not be reactive.
+   * They will not re-run the instant state changes,
+   * But they *will* see the current value whenever they do run
+   */
+  const selectedUserRef = useRef();
+  selectedUserRef.current = selectedUser;
 
   const apiUrl = "http://localhost:5000/";
 
@@ -219,12 +229,6 @@ const HomePage = () => {
   };
 
   const handleMessageRecived = (message, userId, timeStamp, chatId, messageId) => {
-    if (selectedUser && userId == selectedUser._id) {
-      console.log("CLEAR");
-    }
-
-    console.log({ selectedUser });
-
     if (userId == currentUser._id) {
       console.log("%cMessage Sent Succesfully '" + message + "'", "color:blue;font-side:1rem");
     } else {
@@ -232,18 +236,24 @@ const HomePage = () => {
       setAllChats((chat) => {
         //Cloning chat obj
         const newChat = JSON.parse(JSON.stringify(chat));
-        newChat &&
-          newChat.forEach((c) => {
-            if (c && c.chatid == chatId) {
+        if (!newChat) return newChat;
+
+        newChat.forEach((c) => {
+          if (c && c.chatid == chatId) {
+            if (selectedUserRef.current && userId === selectedUserRef.current._id) {
+              c.unseen[userId] = 0;
+            } else {
               c.unseen[userId] += 1;
-              c.messages.push({
-                value: message,
-                sentBy: userId,
-                time: timeStamp,
-                id: messageId,
-              });
             }
-          });
+
+            c.messages.push({
+              value: message,
+              sentBy: userId,
+              time: timeStamp,
+              id: messageId,
+            });
+          }
+        });
 
         return newChat;
       });
@@ -284,27 +294,11 @@ const HomePage = () => {
     setCurrentUser(cUser);
   };
 
-  const clearUnseenCount = () => {
-    //cloning lastmessages
-    const messages = JSON.parse(JSON.stringify(lastMessages));
-    let chatId;
-
-    messages.forEach((message) => {
-      if (message.unseen[selectedUser._id] !== undefined) {
-        chatId = message.chatId;
-        message.unseen[selectedUser._id] = 0;
-      }
-    });
-
-    setLastMessages(messages);
-
+  const clearUnseenCount = (chatId, userId) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    const raw = JSON.stringify({
-      userId: selectedUser._id,
-      chatId,
-    });
+    const raw = JSON.stringify({ chatId, userId });
 
     const requestOptions = {
       method: "POST",
@@ -312,10 +306,9 @@ const HomePage = () => {
       body: raw,
     };
 
-    fetch(apiUrl + "users/clearUnseenCount", requestOptions)
-      .then((response) => response.json())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+    fetch(apiUrl + "users/clearUnseenCount", requestOptions).catch((error) =>
+      console.log("error", error)
+    );
   };
 
   useEffect(() => {
@@ -329,8 +322,21 @@ const HomePage = () => {
 
   useEffect(() => {
     if (selectedUser) {
-      setSelectedUserChats(getChatForUser(selectedUser._id));
-      clearUnseenCount();
+      const selectedUserId = selectedUser._id;
+      //cloning lastmessages
+      const messages = JSON.parse(JSON.stringify(lastMessages));
+      let chatId;
+
+      messages.forEach((message) => {
+        if (message.unseen[selectedUserId] !== undefined) {
+          chatId = message.chatId;
+          message.unseen[selectedUserId] = 0;
+        }
+      });
+
+      setLastMessages(messages);
+      clearUnseenCount(chatId, selectedUserId);
+      setSelectedUserChats(getChatForUser(selectedUserId));
     }
   }, [selectedUser, allChats]);
 
