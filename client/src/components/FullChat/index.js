@@ -32,7 +32,7 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
     const data = {
       chatId: chats.chatid,
       message: message,
-      userId: user._id,
+      userId: currentUserParsed._id,
     };
     await fetch(apiUrl + "users/updateChat", {
       method: "put",

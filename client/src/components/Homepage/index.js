@@ -209,6 +209,7 @@ const HomePage = () => {
       if (chatsMessages && chatsMessages.length > 0) {
         messages.push({
           chatId: chat.chatid,
+          unseen: chat.unseen,
           value: chatsMessages[chatsMessages.length - 1].value,
         });
       }
@@ -218,6 +219,12 @@ const HomePage = () => {
   };
 
   const handleMessageRecived = (message, userId, timeStamp, chatId, messageId) => {
+    if (selectedUser && userId == selectedUser._id) {
+      console.log("CLEAR");
+    }
+
+    console.log({ selectedUser });
+
     if (userId == currentUser._id) {
       console.log("%cMessage Sent Succesfully '" + message + "'", "color:blue;font-side:1rem");
     } else {
@@ -228,6 +235,7 @@ const HomePage = () => {
         newChat &&
           newChat.forEach((c) => {
             if (c && c.chatid == chatId) {
+              c.unseen[userId] += 1;
               c.messages.push({
                 value: message,
                 sentBy: userId,
@@ -276,22 +284,59 @@ const HomePage = () => {
     setCurrentUser(cUser);
   };
 
+  const clearUnseenCount = () => {
+    //cloning lastmessages
+    const messages = JSON.parse(JSON.stringify(lastMessages));
+    let chatId;
+
+    messages.forEach((message) => {
+      if (message.unseen[selectedUser._id] !== undefined) {
+        chatId = message.chatId;
+        message.unseen[selectedUser._id] = 0;
+      }
+    });
+
+    setLastMessages(messages);
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      userId: selectedUser._id,
+      chatId,
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+    };
+
+    fetch(apiUrl + "users/clearUnseenCount", requestOptions)
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
   useEffect(() => {
     getAllUsers();
     getAllChats(currentUser.chatId);
   }, []);
 
   useEffect(() => {
-    reloadLastMessage();
-  }, [allUsers, allChats]);
-
-  useEffect(() => {
     loadChatIds();
   }, [allUsers]);
 
   useEffect(() => {
-    selectedUser && setSelectedUserChats(getChatForUser(selectedUser._id));
+    if (selectedUser) {
+      setSelectedUserChats(getChatForUser(selectedUser._id));
+      clearUnseenCount();
+    }
   }, [selectedUser, allChats]);
+
+  useEffect(() => {
+    reloadLastMessage();
+  }, [allUsers, allChats]);
 
   return (
     <>

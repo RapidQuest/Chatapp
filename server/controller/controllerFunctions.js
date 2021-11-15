@@ -121,3 +121,23 @@ exports.updateChat = async (req, res) => {
     console.log(e);
   }
 };
+
+exports.clearUnseenCount = async (req, res) => {
+  const { chatId, userId } = req.body;
+  const userToReset = `unseen.${userId}`;
+
+  if (!(chatId && userId)) {
+    res.status(400).json({ status: "FAILED", messages: "Please provide chatId and userId" });
+    return;
+  }
+
+  try {
+    await Chat.findOneAndUpdate({ chatid: chatId }, { [userToReset]: 0 }, { new: true });
+    res
+      .status(203)
+      .json({ status: "SUCCESS", messages: "count updates successfully for user " + userId });
+  } catch (e) {
+    console.log("Somthing went wrrong will adding new message to db");
+    console.log(e);
+  }
+};

@@ -22,5 +22,7 @@ module.exports = function (app) {
 
   app.route("/users/updateChat").put(userFunctions.updateChat);
 
+  app.route("/users/clearUnseenCount").post(userFunctions.clearUnseenCount);
+
   app.route("/users/deleteUser").delete(userFunctions.deleteUser);
 };
