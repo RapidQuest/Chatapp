@@ -4,6 +4,7 @@ import useMediaQuery from "../../hooks/useMediaQuery";
 import SideBar from "../SideBar";
 import FullChat from "../FullChat";
 import io from "socket.io-client";
+import { stringToHash, moveElement } from "../../utils";
 
 import "./style.css";
 import "./loader.css";
@@ -92,17 +93,6 @@ const HomePage = () => {
       .catch((err) => {
         console.error(err);
       });
-  };
-
-  const stringToHash = (string) => {
-    let hash = 0;
-    if (string.length == 0) return hash;
-    for (let i = 0; i < string.length; i++) {
-      var char = string.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash = hash & hash;
-    }
-    return hash.toString();
   };
 
   const updateUser = (data) => {
@@ -326,7 +316,6 @@ const HomePage = () => {
       //cloning lastmessages
       const messages = JSON.parse(JSON.stringify(lastMessages));
       let chatId;
-
       messages.forEach((message) => {
         if (message.unseen[selectedUserId] !== undefined) {
           chatId = message.chatId;
@@ -335,7 +324,7 @@ const HomePage = () => {
       });
 
       setLastMessages(messages);
-      clearUnseenCount(chatId, selectedUserId);
+      chatId && clearUnseenCount(chatId, selectedUserId);
       setSelectedUserChats(getChatForUser(selectedUserId));
     }
   }, [selectedUser, allChats]);

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import ProfileImage from "../ProfileImage";
 import { useAuth } from "../../contexts/Auth";
 import useMediaQuery from "../../hooks/useMediaQuery";
+import { stringToHash } from "../../utils";
+
 import "./tags.css";
 import "./style.css";
 // import onlineIcon from '../../icons/onlineIcon.png';
@@ -11,17 +13,6 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
   const centerContent = useMediaQuery("(min-width: 1500px)", false);
   const { currentUser } = useAuth();
   const currentUserParsed = JSON.parse(currentUser);
-
-  const stringToHash = (string) => {
-    let hash = 0;
-    if (string.length == 0) return hash;
-    for (let i = 0; i < string.length; i++) {
-      var char = string.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash = hash & hash;
-    }
-    return hash.toString();
-  };
 
   const getLastMessage = (userId) => {
     const chatId1 = stringToHash(userId + currentUserParsed._id);
