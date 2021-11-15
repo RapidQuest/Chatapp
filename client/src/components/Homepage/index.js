@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../contexts/Auth";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import SideBar from "../SideBar";
@@ -23,6 +23,16 @@ const HomePage = () => {
   const [chatLoad, setChatLoad] = useState(true);
 
   const [currentUser, setCurrentUser] = useState(JSON.parse(unParseCurrentUser));
+
+  /**
+   * Make stateRef always have the current selectedvalue.
+   * Callbacks can refer to this object whenever they need the current value.
+   * Note: the callbacks will not be reactive.
+   * They will not re-run the instant state changes,
+   * But they *will* see the current value whenever they do run
+   */
+  const selectedUserRef = useRef();
+  selectedUserRef.current = selectedUser;
 
   const apiUrl = "http://localhost:5000/";
 
@@ -124,9 +134,6 @@ const HomePage = () => {
         if (!data) {
           console.error("no user found");
         } else {
-          user.chatId.forEach((element) => {
-            if (element === id) return;
-          });
           data.chatId.push(id);
           updateUser(data);
         }
@@ -139,6 +146,8 @@ const HomePage = () => {
   const createChat = (id, user) => {
     const chat = {
       chatid: id,
+      userId1: user._id,
+      userId2: currentUser._id,
     };
 
     fetch(apiUrl + "chats/createChat", {
@@ -193,10 +202,10 @@ const HomePage = () => {
 
     if (chatsForSelectedUser.length > 1) {
       const messages = [...chatsForSelectedUser[0].messages, ...chatsForSelectedUser[1].messages];
-      chatsForSelectedUser = chatsForSelectedUser[0];
       chatsForSelectedUser.messages = messages;
     }
-    return chatsForSelectedUser;
+
+    return chatsForSelectedUser[0];
   };
 
   const reloadLastMessage = () => {
@@ -210,6 +219,7 @@ const HomePage = () => {
       if (chatsMessages && chatsMessages.length > 0) {
         messages.push({
           chatId: chat.chatid,
+          unseen: chat.unseen,
           value: chatsMessages[chatsMessages.length - 1].value,
         });
       }
@@ -226,17 +236,24 @@ const HomePage = () => {
       setAllChats((chat) => {
         //Cloning chat obj
         const newChat = JSON.parse(JSON.stringify(chat));
-        newChat &&
-          newChat.forEach((c) => {
-            if (c && c.chatid == chatId) {
-              c.messages.push({
-                value: message,
-                sentBy: userId,
-                time: timeStamp,
-                id: messageId,
-              });
+        if (!newChat) return newChat;
+
+        newChat.forEach((c) => {
+          if (c && c.chatid == chatId) {
+            if (selectedUserRef.current && userId === selectedUserRef.current._id) {
+              c.unseen[userId] = 0;
+            } else {
+              c.unseen[userId] += 1;
             }
-          });
+
+            c.messages.push({
+              value: message,
+              sentBy: userId,
+              time: timeStamp,
+              id: messageId,
+            });
+          }
+        });
 
         return newChat;
       });
@@ -253,10 +270,13 @@ const HomePage = () => {
       const chatId1 = stringToHash(user._id + currentUser._id);
       const chatId2 = stringToHash(currentUser._id + user._id);
 
-      if (!(chatId1 in user.chatId || chatId2 in user.chatId)) {
-        createChat(chatId1, user);
-        user.chatId.push(chatId1);
-        cUser.chatId.push(chatId1);
+      const check1 = user.chatId.find((element) => element === chatId1);
+      const check2 = user.chatId.find((element) => element === chatId2);
+
+      if (check1 === undefined && check2 === undefined) {
+        createChat(chatId2, user);
+        user.chatId.push(chatId2);
+        cUser.chatId.push(chatId2);
       }
     });
 
@@ -274,22 +294,55 @@ const HomePage = () => {
     setCurrentUser(cUser);
   };
 
+  const clearUnseenCount = (chatId, userId) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({ chatId, userId });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+    };
+
+    fetch(apiUrl + "users/clearUnseenCount", requestOptions).catch((error) =>
+      console.log("error", error)
+    );
+  };
+
   useEffect(() => {
     getAllUsers();
     getAllChats(currentUser.chatId);
   }, []);
 
   useEffect(() => {
-    reloadLastMessage();
-  }, [allUsers, allChats]);
-
-  useEffect(() => {
     loadChatIds();
   }, [allUsers]);
 
   useEffect(() => {
-    selectedUser && setSelectedUserChats(getChatForUser(selectedUser._id));
+    if (selectedUser) {
+      const selectedUserId = selectedUser._id;
+      //cloning lastmessages
+      const messages = JSON.parse(JSON.stringify(lastMessages));
+      let chatId;
+
+      messages.forEach((message) => {
+        if (message.unseen[selectedUserId] !== undefined) {
+          chatId = message.chatId;
+          message.unseen[selectedUserId] = 0;
+        }
+      });
+
+      setLastMessages(messages);
+      clearUnseenCount(chatId, selectedUserId);
+      setSelectedUserChats(getChatForUser(selectedUserId));
+    }
   }, [selectedUser, allChats]);
+
+  useEffect(() => {
+    reloadLastMessage();
+  }, [allUsers, allChats]);
 
   return (
     <>

@@ -3,7 +3,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Auth } from "../firebase";
 
 const AuthContext = React.createContext();
-const apiUrl = 'http://localhost:5000/';
+const apiUrl = "http://localhost:5000/";
 export function useAuth() {
   return useContext(AuthContext);
 }
@@ -13,132 +13,130 @@ export function AuthProvider({ children }) {
 
   function signup(name, email, password, role) {
     let user = {
-      "name": name,
-      "email": email,
-      "password": password,
-      "role": role,
-      "chatId":[]
-  }
-  return fetch( apiUrl + 'users/register', {
-      method: 'POST',
+      name: name,
+      email: email,
+      password: password,
+      role: role,
+      chatId: [],
+    };
+    return fetch(apiUrl + "users/register", {
+      method: "POST",
       body: JSON.stringify(user),
       headers: {
-          'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-  })
-  .then(res => res.json()) 
-  .then(data => console.log(data));
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
   }
 
-// LOGIN FUNCTION
-const loginUser = async (email, password) => {
-  let user = {
-    "email": email,
-    "password": password
-}
-	fetch(  apiUrl + 'users/login', {
-		method: 'post',
-		body: JSON.stringify(user),
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	})
-		.then((response) => {
-			if (response.status == 200) {
-				return response.json();
-			} else {
-				return response.json().then((json) => {
-					throw new Error(json.message);
-				});
-			}
-		})
-		.then(function (data) {
-      console.log(data);
-      localStorage.setItem('token', data.token);
-      // getAllUsers(data.loggedUser);
-			storeProfileInfo('./homepage', data.loggedUser, true);
-		})
-		.catch(function (json) {
-		});
-}
+  // LOGIN FUNCTION
+  const loginUser = async (email, password) => {
+    let user = {
+      email: email,
+      password: password,
+    };
+    fetch(apiUrl + "users/login", {
+      method: "post",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.status == 200) {
+          return response.json();
+        } else {
+          return response.json().then((json) => {
+            throw new Error(json.message);
+          });
+        }
+      })
+      .then(function (data) {
+        console.log(data);
+        localStorage.setItem("token", data.token);
+        // getAllUsers(data.loggedUser);
+        storeProfileInfo("./homepage", data.loggedUser, true);
+      })
+      .catch(function (json) {});
+  };
 
-// function getAllUsers(loggedUser){
-// 	fetch(  apiUrl + 'users/getUsers', {
-// 		method: 'get',
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 		},
-// 	})
-// 		.then((response) => {
-// 			if (response.status == 200) {
-// 				return response.json();
-// 			} else {
-// 				return response.json().then((json) => {
-// 					throw new Error(json.message);
-// 				});
-// 			}
-// 		})
-// 		.then(function (data) {
-//       console.log(data);
-//       localStorage.setItem('allUsers', JSON.stringify(data));
-// 		})
-// 		.catch(function (json) {
-// 		});
+  // function getAllUsers(loggedUser){
+  // 	fetch(  apiUrl + 'users/getUsers', {
+  // 		method: 'get',
+  // 		headers: {
+  // 			'Content-Type': 'application/json',
+  // 		},
+  // 	})
+  // 		.then((response) => {
+  // 			if (response.status == 200) {
+  // 				return response.json();
+  // 			} else {
+  // 				return response.json().then((json) => {
+  // 					throw new Error(json.message);
+  // 				});
+  // 			}
+  // 		})
+  // 		.then(function (data) {
+  //       console.log(data);
+  //       localStorage.setItem('allUsers', JSON.stringify(data));
+  // 		})
+  // 		.catch(function (json) {
+  // 		});
 
-// }
+  // }
 
-function storeProfileInfo(url, user ,redirect) {
-  localStorage.setItem("currentUser", JSON.stringify(user))
-  console.log(localStorage.getItem("currentUser"));
-  if (redirect) {
-    window.location.href = url;
-  } else {
+  function storeProfileInfo(url, user, redirect) {
+    localStorage.setItem("currentUser", JSON.stringify(user));
+    console.log(localStorage.getItem("currentUser"));
+    if (redirect) {
+      window.location.href = url;
+    } else {
+    }
+    // fetch(apiUrl + 'users/', {
+    // 	method: 'get',
+    // 	headers: {
+    // 		token: localStorage.getItem('token'),
+    // 	},
+    // })
+    // 	.then((response) => {
+    // 		if (response.status == 200) {
+    // 			console.log('All Ok getting user data');
+    // 			return response.json();
+    // 		}
+    //     else{
+    //       console.log('error');
+    //     }
+    // 	})
+    // 	.then((json) => {
+    // 		console.log('Storing user data');
+    // 		localStorage.setItem('userInfo', JSON.stringify(json));
+    // 		if (redirect) {
+    // 			// window.location.href = url;
+    // 		} else {
+    // 		}
+    // 	});
   }
-	// fetch(apiUrl + 'users/', {
-	// 	method: 'get',
-	// 	headers: {
-	// 		token: localStorage.getItem('token'),
-	// 	},
-	// })
-	// 	.then((response) => {
-	// 		if (response.status == 200) {
-	// 			console.log('All Ok getting user data');
-	// 			return response.json();
-	// 		}
-  //     else{
-  //       console.log('error');
-  //     }
-	// 	})
-	// 	.then((json) => {
-	// 		console.log('Storing user data');
-	// 		localStorage.setItem('userInfo', JSON.stringify(json));
-	// 		if (redirect) {
-	// 			// window.location.href = url;
-	// 		} else {
-	// 		}
-	// 	});
-}
 
-function checkLogin(redirect) {
-	if (localStorage.getItem('token') != null) {
-		return true;
-	} else {
-		if (redirect) {
-			window.location.href = './login';
-		}
-		return false;
-	}
-}
+  function checkLogin(redirect) {
+    if (localStorage.getItem("token") != null) {
+      return true;
+    } else {
+      if (redirect) {
+        window.location.href = "./login";
+      }
+      return false;
+    }
+  }
 
-function checkLoggedIn() {
-	if (checkLogin(false)) {
-		window.location.href = './homepage';
-	}
-}
-
+  function checkLoggedIn() {
+    if (checkLogin(false)) {
+      window.location.href = "./homepage";
+    }
+  }
 
   function logout() {
-    return localStorage.clear()
+    return localStorage.clear();
   }
 
   function resetPassword(email) {
@@ -154,10 +152,9 @@ function checkLoggedIn() {
   }
 
   useEffect(() => {
-      setCurrentUser(
-        localStorage.getItem('currentUser'));
-      setLoading(false);
-  }, [ localStorage.getItem('currentUser')]);
+    setCurrentUser(localStorage.getItem("currentUser"));
+    setLoading(false);
+  }, [localStorage.getItem("currentUser")]);
 
   const value = {
     currentUser,
@@ -167,7 +164,8 @@ function checkLoggedIn() {
     resetPassword,
     updateEmail,
     updatePassword,
-    storeProfileInfo
+    checkLoggedIn,
+    storeProfileInfo,
   };
 
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;

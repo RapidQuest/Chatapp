@@ -36,6 +36,19 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
     return message?.value;
   };
 
+  const getUnseenNumber = (userId) => {
+    const chatId1 = stringToHash(userId + currentUserParsed._id);
+    const chatId2 = stringToHash(currentUserParsed._id + userId);
+
+    const message =
+      lastMessages &&
+      lastMessages.filter(
+        (lastMessage) => lastMessage.chatId == chatId1 || lastMessage.chatId == chatId2
+      )[0];
+
+    return message?.unseen?.[userId];
+  };
+
   return users ? (
     <div className="allUsers">
       <div className="block_item_container text-center" id="items">
@@ -50,7 +63,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
             onClick={() => setSelectedUser(user)}
             key={user._id}
           >
-            <div className="row">
+            <div className="row h-100">
               <div
                 className={
                   isSmall
@@ -62,12 +75,21 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
               >
                 <ProfileImage userName={user.name} color={user.color} />
               </div>
-              <div className={isSmall ? "col-11 pd-l" : "col-10 pd-l"}>
-                <div className="row paddingTop">
-                  <h6 className="col-8 item_name">{user.name}</h6>
-                  <p className="col-4 item_role">{user.role}</p>
+              <div className={isSmall ? "col-11" : "col-10"}>
+                <div className="row h-100">
+                  <p className="col-8 name-last-msg">
+                    <span className="item_name">{user.name}</span>
+                    <span className="lastMessage">{getLastMessage(user._id)}</span>
+                  </p>
+                  <p className="col-4 item_role">
+                    <span className="role">{user.role}</span>
+                    {getUnseenNumber(user._id) ? (
+                      <span className="unseen-count">{getUnseenNumber(user._id)}</span>
+                    ) : (
+                      ""
+                    )}
+                  </p>
                 </div>
-                <p className="lastMessage">{getLastMessage(user._id)}</p>
               </div>
             </div>
           </div>

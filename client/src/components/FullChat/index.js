@@ -30,8 +30,9 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
 
   const saveMessage = async (message) => {
     const data = {
-      id: chats.chatid,
+      chatId: chats.chatid,
       message: message,
+      userId: currentUserParsed._id,
     };
     await fetch(apiUrl + "users/updateChat", {
       method: "put",
@@ -104,6 +105,7 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
     <div className="outerContainer">
       <div className="containerC" id={user._id}>
         <InfoBar user={user} setSelectedUser={setSelectedUser} />
+        {chats && chats.chatid}
         {loading ? (
           <div className="loader"></div>
         ) : (

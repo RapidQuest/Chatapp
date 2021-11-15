@@ -7,7 +7,7 @@ export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const siginInRef = useRef();
-  const { loginUser } = useAuth();
+  const { loginUser, checkLoggedIn } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -41,6 +41,7 @@ export default function Login() {
   };
 
   useEffect(() => {
+    checkLoggedIn();
     const handleKeypress = (e) => {
       if (e.key === "Enter") {
         const activeEle = document.activeElement;

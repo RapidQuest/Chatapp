@@ -23,15 +23,18 @@ exports.register = (req, res) => {
 
 exports.login = async (req, res) => {
   try {
+    const { email, password } = req.body;
     let user = await User.findOne({
-      email: req.body.email,
+      email: email,
     });
+    console.log({ email });
+
     if (!user)
       return res.status(400).json({
         message: "User Not Exist",
       });
 
-    if (!user.comparePassword(req.body.password))
+    if (!user.comparePassword(password))
       return res.status(400).json({
         message: "Incorrect Password !",
       });

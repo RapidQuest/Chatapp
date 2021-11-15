@@ -41,7 +41,12 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.createNewChat = (req, res) => {
-  let newChat = new Chat(req.body);
+  const { chatid, userId1, userId2 } = req.body;
+  const newChat = new Chat({
+    chatid,
+    unseen: { [userId1]: 0, [userId2]: 0 },
+  });
+
   newChat.save((err, chat) => {
     if (err) {
       res.status(500).send(err);
@@ -93,15 +98,46 @@ exports.getUser = (req, res) => {
 };
 
 exports.updateChat = async (req, res) => {
-  await Chat.findOneAndUpdate(
-    { chatid: req.body.id },
-    { $push: { messages: req.body.message } },
-    { new: true },
-    (err, chat) => {
-      if (err) {
-        res.status(500).send(err);
+  const { chatId, userId, message } = req.body;
+  const userToInc = `unseen.${userId}`;
+
+  try {
+    await Chat.findOneAndUpdate(
+      { chatid: chatId },
+      {
+        $push: { messages: message },
+        $inc: { [userToInc]: 1 },
+      },
+      { new: true },
+      (err, chat) => {
+        if (err) {
+          res.status(500).send(err);
+        }
+        res.status(200).json(chat);
       }
-      res.status(200).json(chat);
-    }
-  );
+    );
+  } catch (e) {
+    console.log("Somthing went wrrong will adding new message to db");
+    console.log(e);
+  }
+};
+
+exports.clearUnseenCount = async (req, res) => {
+  const { chatId, userId } = req.body;
+  const userToReset = `unseen.${userId}`;
+
+  if (!(chatId && userId)) {
+    res.status(400).json({ status: "FAILED", messages: "Please provide chatId and userId" });
+    return;
+  }
+
+  try {
+    await Chat.findOneAndUpdate({ chatid: chatId }, { [userToReset]: 0 }, { new: true });
+    res
+      .status(203)
+      .json({ status: "SUCCESS", messages: "count updates successfully for user " + userId });
+  } catch (e) {
+    console.log("Somthing went wrrong will adding new message to db");
+    console.log(e);
+  }
 };

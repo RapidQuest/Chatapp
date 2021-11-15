@@ -9,6 +9,11 @@ const ChatSchema = mongoose.Schema({
     type: [Object],
     required: false,
   },
+  unseen: {
+    type: Map,
+    of: Number,
+    required: false,
+  },
 });
 
 // export model user with UserSchema

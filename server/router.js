@@ -1,5 +1,3 @@
-const bodyParser = require("body-parser");
-
 module.exports = function (app) {
   const userFunctions = require("./controller/controllerFunctions");
   const userHandlers = require("./controller/authController");
@@ -23,6 +21,8 @@ module.exports = function (app) {
   app.route("/users/updateUser").put(userFunctions.updateUser);
 
   app.route("/users/updateChat").put(userFunctions.updateChat);
+
+  app.route("/users/clearUnseenCount").post(userFunctions.clearUnseenCount);
 
   app.route("/users/deleteUser").delete(userFunctions.deleteUser);
 };
