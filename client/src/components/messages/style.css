@@ -1,8 +1,7 @@
 .messages {
-  padding-bottom: 2rem;
   overflow: auto;
   flex: auto;
   max-height: 100vh;
   overflow: auto;
-  margin-bottom: 4.7rem;
+  margin-bottom: 4.5rem;
 }

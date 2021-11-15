@@ -1,18 +1,18 @@
-.form {
-  padding: 3%;
+.send-message-wrapper {
   display: flex;
   justify-content: center;
+  padding: 3%;
+  padding-top: 0;
   padding-bottom: 1rem;
+  width: 100%;
   position: absolute;
   bottom: 0;
-  width: 100%;
   background: white;
 }
 
 .input {
-  height: 50px;
   border-radius: 4px;
-  font-size: 1.2em;
+  font-size: 1rem;
 }
 
 input:focus,
@@ -35,6 +35,6 @@ select:focus {
 
 @media (max-width: 760px) {
   .input {
-    height: 42px;
+    height: 36px;
   }
 }
