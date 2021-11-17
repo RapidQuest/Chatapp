@@ -66,7 +66,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
               >
                 <ProfileImage userName={user.name} color={user.color} />
               </div>
-              <div className={isSmall ? "col-11" : "col-10"}>
+              <div className={isSmall ? "col-11 pd-l" : "col-10"}>
                 <div className="row h-100">
                   <p className="col-8 name-last-msg">
                     <span className="item_name">{user.name}</span>

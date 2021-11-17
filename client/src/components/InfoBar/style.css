@@ -45,10 +45,19 @@
     font-weight: 400;
   }
 }
+@media (max-width: 430px) {
+  .userName {
+    overflow: visible;
+  }
+}
+@media (min-width: 430px) {
+  .userName {
+    overflow: hidden;
+  }
+}
 
 .userName {
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
   margin-left: 2%;
   margin-bottom: -0.5rem;
