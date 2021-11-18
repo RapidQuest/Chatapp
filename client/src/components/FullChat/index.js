@@ -12,7 +12,7 @@ import "./style.css";
 const apiUrl = "http://localhost:5000/";
 const socket = io(apiUrl, { transports: ["websocket"] });
 
-export default function FullChat({ user, setSelectedUser, chats, setLastMessages, setAllChats }) {
+export default function FullChat({ user, setSelectedUser, chats, setAllChats }) {
   const { currentUser, logout } = useAuth();
   const history = useHistory();
   const [message, setMessage] = useState("");
