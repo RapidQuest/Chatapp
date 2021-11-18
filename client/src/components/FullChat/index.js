@@ -59,19 +59,10 @@ export default function FullChat({ user, setSelectedUser, chats, setLastMessages
 
   const sendMessage = (event) => {
     event.preventDefault();
+    if (!message) return;
 
     const messageId = uuidv4();
     socket.emit("sendMessage", message, currentUserParsed._id, chats.chatid, messageId);
-    setLastMessages((lastMessages) => {
-      lastMessages.forEach((lastMessage) => {
-        if (lastMessage.userId == user._id) {
-          lastMessage.value = message;
-          lastMessage.chatId = chats.chatid;
-        }
-      });
-
-      return lastMessages;
-    });
 
     setAllChats((chat) => {
       //Cloning chat obj
