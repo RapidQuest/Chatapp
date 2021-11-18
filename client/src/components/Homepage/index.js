@@ -224,7 +224,7 @@ const HomePage = () => {
       console.log("%cMessage Recived '" + message + "'", "color:gold;font-side:1rem");
       setAllChats((chat) => {
         //Cloning chat obj
-        const newChat = JSON.parse(JSON.stringify(chat));
+        const newChat = [...chat];
         if (!newChat) return newChat;
 
         newChat.forEach((c) => {
@@ -313,7 +313,7 @@ const HomePage = () => {
     if (selectedUser) {
       const selectedUserId = selectedUser._id;
       //cloning lastmessages
-      const messages = JSON.parse(JSON.stringify(lastMessages));
+      const messages = [...lastMessages];
       let chatId;
       messages.forEach((message) => {
         if (message.unseen[selectedUserId] !== undefined) {
