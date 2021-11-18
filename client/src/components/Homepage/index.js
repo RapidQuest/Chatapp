@@ -18,7 +18,6 @@ const HomePage = () => {
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [lastMessages, setLastMessages] = useState([]);
-  const [selectedUserChats, setSelectedUserChats] = useState([]);
 
   const [dataIsLoaded, setDataIsLoaded] = useState(true);
   const [chatLoad, setChatLoad] = useState(true);
@@ -325,7 +324,6 @@ const HomePage = () => {
 
       setLastMessages(messages);
       chatId && clearUnseenCount(chatId, selectedUserId);
-      setSelectedUserChats(getChatForUser(selectedUserId));
     }
   }, [selectedUser, allChats]);
 
@@ -350,7 +348,7 @@ const HomePage = () => {
                     setLastMessages={setLastMessages}
                     setSelectedUser={setSelectedUser}
                     user={selectedUser}
-                    chats={selectedUserChats}
+                    chats={getChatForUser(selectedUser._id)}
                   />
                 </div>
               )
@@ -380,7 +378,7 @@ const HomePage = () => {
                       setLastMessages={setLastMessages}
                       setSelectedUser={setSelectedUser}
                       user={selectedUser}
-                      chats={selectedUserChats}
+                      chats={getChatForUser(selectedUser._id)}
                     />
                   )
                 ) : (
