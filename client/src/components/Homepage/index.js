@@ -18,7 +18,6 @@ const HomePage = () => {
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [lastMessages, setLastMessages] = useState([]);
-  const [selectedUserChats, setSelectedUserChats] = useState([]);
 
   const [dataIsLoaded, setDataIsLoaded] = useState(true);
   const [chatLoad, setChatLoad] = useState(true);
@@ -225,7 +224,7 @@ const HomePage = () => {
       console.log("%cMessage Recived '" + message + "'", "color:gold;font-side:1rem");
       setAllChats((chat) => {
         //Cloning chat obj
-        const newChat = JSON.parse(JSON.stringify(chat));
+        const newChat = [...chat];
         if (!newChat) return newChat;
 
         newChat.forEach((c) => {
@@ -314,7 +313,7 @@ const HomePage = () => {
     if (selectedUser) {
       const selectedUserId = selectedUser._id;
       //cloning lastmessages
-      const messages = JSON.parse(JSON.stringify(lastMessages));
+      const messages = [...lastMessages];
       let chatId;
       messages.forEach((message) => {
         if (message.unseen[selectedUserId] !== undefined) {
@@ -325,7 +324,6 @@ const HomePage = () => {
 
       setLastMessages(messages);
       chatId && clearUnseenCount(chatId, selectedUserId);
-      setSelectedUserChats(getChatForUser(selectedUserId));
     }
   }, [selectedUser, allChats]);
 
@@ -347,10 +345,9 @@ const HomePage = () => {
                 <div className="chatBox" id="chatBox">
                   <FullChat
                     setAllChats={setAllChats}
-                    setLastMessages={setLastMessages}
                     setSelectedUser={setSelectedUser}
                     user={selectedUser}
-                    chats={selectedUserChats}
+                    chats={getChatForUser(selectedUser._id)}
                   />
                 </div>
               )
@@ -377,10 +374,9 @@ const HomePage = () => {
                   ) : (
                     <FullChat
                       setAllChats={setAllChats}
-                      setLastMessages={setLastMessages}
                       setSelectedUser={setSelectedUser}
                       user={selectedUser}
-                      chats={selectedUserChats}
+                      chats={getChatForUser(selectedUser._id)}
                     />
                   )
                 ) : (
