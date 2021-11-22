@@ -56,7 +56,7 @@ export function AuthProvider({ children }) {
         console.log(data);
         localStorage.setItem("token", data.token);
         // getAllUsers(data.loggedUser);
-        storeProfileInfo("./homepage", data.loggedUser, true);
+        storeProfileInfo("./chat", data.loggedUser, true);
       })
       .catch(function (json) {});
   };
@@ -131,7 +131,7 @@ export function AuthProvider({ children }) {
 
   function checkLoggedIn() {
     if (checkLogin(false)) {
-      window.location.href = "./homepage";
+      window.location.href = "./chat";
     }
   }
 

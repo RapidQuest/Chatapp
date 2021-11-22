@@ -9,7 +9,7 @@ import { stringToHash, moveElement } from "../../utils";
 import "./style.css";
 import "./loader.css";
 
-const HomePage = () => {
+const Chat = () => {
   const unParseCurrentUser = useAuth().currentUser;
   const isSmall = useMediaQuery("(max-width: 760px)", false);
 
@@ -398,4 +398,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Chat;
