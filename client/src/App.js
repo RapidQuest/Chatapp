@@ -6,19 +6,16 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./components/Login";
 import PrivateRoute from "./components/privateRoute";
 import "bootstrap/dist/css/bootstrap.min.css";
-import HomePage from "./components/Homepage";
+import Chat from "./components/Homepage";
 
 const App = () => {
   return (
     <Router>
       <AuthProvider>
         <Switch>
-          {/* <PrivateRoute exact path="/" component={Dashboard} /> */}
-          <PrivateRoute path="/homepage" exact component={HomePage} />
-          {/* <PrivateRoute path="/update-profile" component={UpdateProfile} /> */}
+          <PrivateRoute path="/chat" exact component={Chat} />
           <Route path="/signup" component={Signup} />
           <Route path="/" component={Login} />
-          {/* <Route path="/forgot-password" component={ForgotPassword} /> */}
         </Switch>
       </AuthProvider>
     </Router>
