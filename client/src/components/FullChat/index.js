@@ -69,7 +69,7 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats }) 
       const newChat = JSON.parse(JSON.stringify(chat));
       newChat &&
         newChat.forEach((c, i) => {
-          if (c && c.chatid == chats.chatid) {
+          if (c && c.chatid === chats.chatid) {
             c.messages.push({
               value: message,
               sentBy: currentUserParsed._id,

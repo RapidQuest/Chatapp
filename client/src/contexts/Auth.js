@@ -44,7 +44,7 @@ export function AuthProvider({ children }) {
       },
     })
       .then((response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
           return response.json();
         } else {
           return response.json().then((json) => {
