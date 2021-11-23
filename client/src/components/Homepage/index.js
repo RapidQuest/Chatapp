@@ -4,7 +4,7 @@ import useMediaQuery from "../../hooks/useMediaQuery";
 import SideBar from "../SideBar";
 import FullChat from "../FullChat";
 import io from "socket.io-client";
-import { stringToHash, moveElement } from "../../utils";
+import { getHash } from "../../utils";
 
 import "./style.css";
 import "./loader.css";
@@ -102,7 +102,7 @@ const Chat = () => {
         "Content-Type": "application/json",
       },
     }).then(function (response) {
-      if (response.status == 200) {
+      if (response.status === 200) {
       } else {
         return response.json().then((json) => {
           throw new Error(json.msg);
@@ -182,12 +182,9 @@ const Chat = () => {
     if (!allChats || !userId) return null;
 
     //chatsId is the chatids for the selectedUser
-    const chatId1 = stringToHash(userId + currentUser._id);
-    const chatId2 = stringToHash(currentUser._id + userId);
+    const chatId = getHash(userId, currentUser._id);
 
-    let chatsForSelectedUser = allChats.filter((chat) => {
-      return chat.chatid == chatId1 || chat.chatid == chatId2;
-    });
+    let chatsForSelectedUser = allChats.filter((chat) => chat.chatid === chatId);
 
     if (chatsForSelectedUser.length > 1) {
       const messages = [...chatsForSelectedUser[0].messages, ...chatsForSelectedUser[1].messages];
@@ -218,7 +215,7 @@ const Chat = () => {
   };
 
   const handleMessageRecived = (message, userId, timeStamp, chatId, messageId) => {
-    if (userId == currentUser._id) {
+    if (userId === currentUser._id) {
       console.log("%cMessage Sent Succesfully '" + message + "'", "color:blue;font-side:1rem");
     } else {
       console.log("%cMessage Recived '" + message + "'", "color:gold;font-side:1rem");
@@ -228,7 +225,7 @@ const Chat = () => {
         if (!newChat) return newChat;
 
         newChat.forEach((c) => {
-          if (c && c.chatid == chatId) {
+          if (c && c.chatid === chatId) {
             if (selectedUserRef.current && userId === selectedUserRef.current._id) {
               c.unseen[userId] = 0;
             } else {
@@ -256,16 +253,14 @@ const Chat = () => {
     const cUser = currentUser;
 
     users.forEach((user) => {
-      const chatId1 = stringToHash(user._id + currentUser._id);
-      const chatId2 = stringToHash(currentUser._id + user._id);
+      const chatId = getHash(user._id, currentUser._id);
 
-      const check1 = user.chatId.find((element) => element === chatId1);
-      const check2 = user.chatId.find((element) => element === chatId2);
+      const check = user.chatId.find((element) => element === chatId);
 
-      if (check1 === undefined && check2 === undefined) {
-        createChat(chatId2, user);
-        user.chatId.push(chatId2);
-        cUser.chatId.push(chatId2);
+      if (check === undefined) {
+        createChat(chatId, user);
+        user.chatId.push(chatId);
+        cUser.chatId.push(chatId);
       }
     });
 

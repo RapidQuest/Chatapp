@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ProfileImage from "../ProfileImage";
 import { useAuth } from "../../contexts/Auth";
 import useMediaQuery from "../../hooks/useMediaQuery";
-import { stringToHash } from "../../utils";
+import { getHash } from "../../utils";
 
 import "./tags.css";
 import "./style.css";
@@ -15,27 +15,19 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
   const currentUserParsed = JSON.parse(currentUser);
 
   const getLastMessage = (userId) => {
-    const chatId1 = stringToHash(userId + currentUserParsed._id);
-    const chatId2 = stringToHash(currentUserParsed._id + userId);
+    const chatId = getHash(userId, currentUserParsed._id);
 
     const message =
-      lastMessages &&
-      lastMessages.filter(
-        (lastMessage) => lastMessage.chatId == chatId1 || lastMessage.chatId == chatId2
-      )[0];
+      lastMessages && lastMessages.filter((lastMessage) => lastMessage.chatId === chatId)[0];
 
     return message?.value;
   };
 
   const getUnseenNumber = (userId) => {
-    const chatId1 = stringToHash(userId + currentUserParsed._id);
-    const chatId2 = stringToHash(currentUserParsed._id + userId);
+    const chatId = getHash(userId, currentUserParsed._id);
 
     const message =
-      lastMessages &&
-      lastMessages.filter(
-        (lastMessage) => lastMessage.chatId == chatId1 || lastMessage.chatId == chatId2
-      )[0];
+      lastMessages && lastMessages.filter((lastMessage) => lastMessage.chatId === chatId)[0];
 
     return message?.unseen?.[userId];
   };
