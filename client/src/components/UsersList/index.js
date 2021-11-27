@@ -20,9 +20,18 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
     const message =
       lastMessages && lastMessages.filter((lastMessage) => lastMessage.chatId === chatId)[0];
 
-    return message?.value;
+    return message;
   };
 
+  if(users){
+    users.forEach(user => {
+      user.lastMessage = getLastMessage(user._id);
+    });
+    console.log(users);
+    users.sort((a, b) => a.lastMessage.time < b.lastMessage.time ? 1:-1).map(
+      (item, i) => {console.log(item, i)}
+    )
+  }
   const getUnseenNumber = (userId) => {
     const chatId = getHash(userId, currentUserParsed._id);
 
@@ -62,7 +71,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
                 <div className="row h-100">
                   <p className="col-8 name-last-msg">
                     <span className="item_name">{user.name}</span>
-                    <span className="lastMessage">{getLastMessage(user._id)}</span>
+                    <span className="lastMessage">{getLastMessage(user._id).value}</span>
                   </p>
                   <p className="col-4 item_role">
                     <span className="role">{user.role}</span>

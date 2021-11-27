@@ -196,17 +196,26 @@ const Chat = () => {
 
   const reloadLastMessage = () => {
     if (!allChats) return;
+    
     const messages = [];
 
     allChats.forEach((chat) => {
       if (!chat) return;
-
       const chatsMessages = chat.messages;
+
       if (chatsMessages && chatsMessages.length > 0) {
         messages.push({
           chatId: chat.chatid,
           unseen: chat.unseen,
+          time: chatsMessages[chatsMessages.length - 1].time,
           value: chatsMessages[chatsMessages.length - 1].value,
+        });
+      }else{
+        messages.push({
+          chatId: chat.chatid,
+          unseen: chat.unseen,
+          time: 0,
+          value: "Start a new conversation",
         });
       }
     });
