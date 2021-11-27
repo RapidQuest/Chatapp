@@ -19,7 +19,7 @@ const Chat = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [lastMessages, setLastMessages] = useState([]);
 
-  const [dataIsLoaded, setDataIsLoaded] = useState(true);
+  const [dataIsLoaded, setDataIsLoaded] = useState(false);
   const [chatLoad, setChatLoad] = useState(true);
 
   const [currentUser, setCurrentUser] = useState(JSON.parse(unParseCurrentUser));
@@ -78,7 +78,7 @@ const Chat = () => {
   };
 
   const getAllUsers = () => {
-    setDataIsLoaded(true);
+    setDataIsLoaded(false);
     fetch(apiUrl + "users/getUsers")
       .then((res) => res.json())
       .then((users) => {
@@ -87,7 +87,7 @@ const Chat = () => {
         });
 
         setAllUsers(users);
-        setDataIsLoaded(false);
+        setDataIsLoaded(true);
       })
       .catch((err) => {
         console.error(err);
@@ -337,8 +337,8 @@ const Chat = () => {
 
   return (
     <>
-      {dataIsLoaded ? (
-        <div className="loader"></div>
+      {!dataIsLoaded ? (
+        <div className="loader --4"></div>
       ) : (
         <div className="joinOuterContainer ">
           {isSmall ? (
