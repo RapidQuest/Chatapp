@@ -28,7 +28,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
       user.lastMessage = getLastMessage(user._id);
     });
     console.log(users);
-    users.sort((a, b) => a.lastMessage.time < b.lastMessage.time ? 1:-1).map(
+    users.sort((a, b) => a?.lastMessage?.time < b?.lastMessage?.time ? 1:-1).map(
       (item, i) => {console.log(item, i)}
     )
   }
