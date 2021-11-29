@@ -338,7 +338,7 @@ const Chat = () => {
   return (
     <>
       {!dataIsLoaded ? (
-        <div className="loader --4"></div>
+        <div className="loader simple-circle"></div>
       ) : (
         <div className="joinOuterContainer ">
           {isSmall ? (
