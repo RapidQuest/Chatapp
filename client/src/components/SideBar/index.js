@@ -26,20 +26,17 @@ const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allC
       chat.messages.filter((message) => {
         if (query === "") {
           //if query is empty
-          return 0;
+          return;
         } else if (message.value.toLowerCase().includes(query.toLowerCase())) {
-          setSearchedUsers([]);
-          console.log(chat.chatid);
 
           allUsers.filter((user) =>{
-            console.log(user);
-            if(user.chatId.find((id) => id === chat.chatid)){
-              setSearchedUsers((searchedUsers) => [...searchedUsers, user]);
+            if(user.chatId.find((id) => id === chat.chatid) && user._id !== currentUserParsed._id){
+              console.log(user);
+              return setSearchedUsers((searchedUsers) => [...searchedUsers, user]);
             }else{
               return;
             }
           });
-          console.log(searchedUsers);
           //return setSearchedUsers((searchedUsers) => [...searchedUsers, foundUser]);
         }
       });
@@ -63,7 +60,10 @@ const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allC
             className="form-control search rounded-0 border_left_0 shadow-none"
             placeholder="Search here..."
             aria-label="Search"
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              setQuery(event.target.value)
+              setSearchedUsers([])
+            }}
             value={query}
           />
           {query ? (
