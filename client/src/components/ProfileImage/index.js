@@ -11,9 +11,9 @@ export default function ProfileImage({ userName, color }) {
   return (
     <div className={"tag " + color} id="profileImage">
       <span className="text">
-        {userName.split(" ").length > 1
-          ? getFirstString(userName.split(" "))
-          : userName.charAt(0).toUpperCase()}
+        {userName?.split(" ").length > 1
+          ? getFirstString(userName?.split(" "))
+          : userName?.charAt(0).toUpperCase()}
       </span>
     </div>
   );

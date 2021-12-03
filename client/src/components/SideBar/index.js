@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import UsersList from "../UsersList";
 import "./style.css";
 
-const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId }) => {
+const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allChats }) => {
   const [query, setQuery] = useState("");
   const [searchedUsers, setSearchedUsers] = useState([]);
 
@@ -17,6 +17,21 @@ const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId }) =>
         //returns filtered array
         return setSearchedUsers((searchedUsers) => [...searchedUsers, user]);
       }
+    });
+    
+    allChats.forEach(chat => {
+      chat.messages.filter((message) => {
+        if (query === "") {
+          //if query is empty
+          return 0;
+        } else if (message.value.toLowerCase().includes(query.toLowerCase())) {
+          //returns filtered array
+          const foundUser = allUsers.find((element) => element._id === message.sentBy);
+          console.log(message);
+          return setSearchedUsers((searchedUsers) => [...searchedUsers, foundUser]);
+          // return;
+        }
+      });
     });
   };
 

@@ -173,6 +173,7 @@ const Chat = () => {
       })
       .then((allChats) => {
         setAllChats(allChats);
+        console.log(allChats);
         setChatLoad(false);
       })
       .catch((err) => console.error(err));
@@ -361,6 +362,7 @@ const Chat = () => {
                 allUsers={allUsers}
                 setSelectedUser={setSelectedUser}
                 selectedUserId={selectedUser && selectedUser._id}
+                allChats={allChats}
               />
             )
           ) : (
@@ -370,6 +372,7 @@ const Chat = () => {
                 allUsers={allUsers}
                 setSelectedUser={setSelectedUser}
                 selectedUserId={selectedUser && selectedUser._id}
+                allChats={allChats}
               />
               <div className="chatBox">
                 {selectedUser ? (
