@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import UsersList from "../UsersList";
+import { useAuth } from "../../contexts/Auth";
 import "./style.css";
 
 const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allChats }) => {
   const [query, setQuery] = useState("");
   const [searchedUsers, setSearchedUsers] = useState([]);
+  const { currentUser } = useAuth();
+  const currentUserParsed = JSON.parse(currentUser);
 
   const search = () => {
     setSearchedUsers([]);
-
+    console.log(allUsers);
     allUsers.filter((user) => {
       if (query === "") {
         //if query is empty
@@ -25,11 +28,19 @@ const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allC
           //if query is empty
           return 0;
         } else if (message.value.toLowerCase().includes(query.toLowerCase())) {
-          //returns filtered array
-          const foundUser = allUsers.find((element) => element._id === message.sentBy);
-          console.log(message);
-          return setSearchedUsers((searchedUsers) => [...searchedUsers, foundUser]);
-          // return;
+          setSearchedUsers([]);
+          console.log(chat.chatid);
+
+          allUsers.filter((user) =>{
+            console.log(user);
+            if(user.chatId.find((id) => id === chat.chatid)){
+              setSearchedUsers((searchedUsers) => [...searchedUsers, user]);
+            }else{
+              return;
+            }
+          });
+          console.log(searchedUsers);
+          //return setSearchedUsers((searchedUsers) => [...searchedUsers, foundUser]);
         }
       });
     });
