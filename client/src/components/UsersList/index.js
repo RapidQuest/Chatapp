@@ -71,7 +71,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
                 <div className="row h-100">
                   <p className="col-8 name-last-msg">
                     <span className="item_name">{user.name? user.name : user.value}</span>
-                    <span className="lastMessage">{getLastMessage(user._id)?.value}</span>
+                    <span className="lastMessage">{user.foundedMessage ? user.foundedMessage.value :getLastMessage(user._id)?.value}</span>
                   </p>
                   <p className="col-4 item_role">
                     <span className="role">{user?.role}</span>

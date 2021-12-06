@@ -28,16 +28,15 @@ const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allC
           //if query is empty
           return;
         } else if (message.value.toLowerCase().includes(query.toLowerCase())) {
-
-          allUsers.filter((user) =>{
-            if(user.chatId.find((id) => id === chat.chatid) && user._id !== currentUserParsed._id){
-              console.log(user);
-              return setSearchedUsers((searchedUsers) => [...searchedUsers, user]);
-            }else{
-              return;
-            }
-          });
-          //return setSearchedUsers((searchedUsers) => [...searchedUsers, foundUser]);
+            allUsers.filter((user) =>{
+              if(user.chatId.find((id) => id === chat.chatid) && user._id !== currentUserParsed._id){
+                user.foundedMessage = message;
+                console.log(user);
+                return setSearchedUsers((searchedUsers) => [...searchedUsers, user]);
+              }else{
+                return;
+              }
+            });
         }
       });
     });
