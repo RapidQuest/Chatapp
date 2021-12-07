@@ -11,7 +11,6 @@ const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allC
 
   const search = () => {
     setSearchedUsers([]);
-    console.log(allUsers);
     allUsers.filter((user) => {
       if (query === "") {
         //if query is empty
@@ -31,7 +30,6 @@ const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allC
             allUsers.filter((user) =>{
               if(user.chatId.find((id) => id === chat.chatid) && user._id !== currentUserParsed._id){
                 user.foundedMessage = message;
-                console.log(user);
                 return setSearchedUsers((searchedUsers) => [...searchedUsers, user]);
               }else{
                 return;

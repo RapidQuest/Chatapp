@@ -173,7 +173,6 @@ const Chat = () => {
       })
       .then((allChats) => {
         setAllChats(allChats);
-        console.log(allChats);
         setChatLoad(false);
       })
       .catch((err) => console.error(err));
@@ -264,7 +263,6 @@ const Chat = () => {
 
     users.forEach((user) => {
       const chatId = getHash(user._id, currentUser._id);
-
       const check = user.chatId.find((element) => element === chatId);
 
       if (check === undefined) {
