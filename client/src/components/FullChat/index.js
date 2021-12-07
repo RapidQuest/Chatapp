@@ -73,6 +73,7 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats }) 
             c.messages.push({
               value: message,
               sentBy: currentUserParsed._id,
+              type: 'string',
               time: Date.now(),
               id: messageId,
             });
@@ -85,6 +86,7 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats }) 
       value: message,
       sentBy: currentUserParsed._id,
       time: Date.now(),
+      type: 'string',
       id: messageId,
     });
     setMessage("");

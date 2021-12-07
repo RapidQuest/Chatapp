@@ -14,9 +14,10 @@ const Input = ({ message, setMessage, sendMessage }) => (
         onKeyPress={(event) => (event.key === "Enter" ? sendMessage(event) : null)}
       />
       <span className="input-group-append">
-        <span className="input-group-text attachIcon bg-transparent border-left-0 rounded-0 h-100">
-          <i className="fas fa-paperclip"></i>
-        </span>
+        <div className="input-group-text attachIcon bg-transparent border-left-0 rounded-0 h-100">
+            <input id="files" className="hidden" type="file" />
+            <label for="files"><i className="fas fa-paperclip"></i></label>
+        </div>
       </span>
     </div>
     <button className="sendButton" onClick={(e) => sendMessage(e)}>
