@@ -210,6 +210,7 @@ const Chat = () => {
           chatId: chat.chatid,
           unseen: chat.unseen,
           value: chatsMessages[chatsMessages.length - 1].value,
+          type: chatsMessages[chatsMessages.length - 1].type,
         });
       }
     });

@@ -86,6 +86,12 @@
   text-overflow: ellipsis;
   text-align: left;
 }
+
+.lastMessage .fa-camera {
+  color: #3c3c3c;
+  margin-right: 2px;
+}
+
 .item_role {
   margin: 0;
   display: flex;
