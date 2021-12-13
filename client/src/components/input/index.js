@@ -16,6 +16,7 @@ const Input = ({ message, setMessage, sendMessage }) => {
 
   const handleSendMessage = (event) => {
     event.preventDefault();
+
     if (!file) {
       sendMessage(message, "string", event);
       return;
