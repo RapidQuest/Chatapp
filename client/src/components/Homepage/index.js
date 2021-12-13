@@ -275,7 +275,7 @@ const Chat = () => {
     socket.on("messageRecived", handleMessageRecived);
 
     localStorage.setItem("currentUser", JSON.stringify(cUser));
-    getAllChats();
+    getAllChats(cUser.chatId);
     setAllUsers(users);
     setCurrentUser(cUser);
   };
