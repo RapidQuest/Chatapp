@@ -1,15 +1,9 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import TextContainer from "./TextContainer";
+import ImageContainer from "./ImageContainer";
+
 import "./style.css";
 
 const Message = ({ message, id }) => {
-  const [isSentByCurrentUser, setIsSentByCurrentUser] = useState(false);
-  useEffect(() => {
-    if (message.sentBy === id) {
-      setIsSentByCurrentUser(true);
-    }
-  }, [message, id]);
-
   function getTimeZone() {
     let timezone = localStorage.getItem("timezone");
     if (timezone == null) {
@@ -29,24 +23,15 @@ const Message = ({ message, id }) => {
     };
     return new Date(timeStanmp * 1000).toLocaleString("en-US", options);
   }
-
-  return message === undefined ? (
-    <div>Start A new Conversation</div>
-  ) : isSentByCurrentUser ? (
-    <div className="messageContainer justifyEnd">
-      <p className="sentText pr-10">{getFormatedTime(message.time)}</p>
-      <div className="messageBox backgroundLight2">
-        <p className="messageText colorDark">{message.value}</p>
-      </div>
-    </div>
+  console.log({ message });
+  return message ? (
+    message.type !== "string" ? (
+      <ImageContainer message={message} id={id} getFormatedTime={getFormatedTime} />
+    ) : (
+      <TextContainer message={message} id={id} getFormatedTime={getFormatedTime} />
+    )
   ) : (
-    <div className="messageContainer justifyStart">
-      <div className="messageBox backgroundLight">
-        <p className="messageText colorDark">{message.value}</p>
-      </div>
-      <p className="sentText pl-10 ">{getFormatedTime(message.time)}</p>
-    </div>
+    <div>Start A new Conversation</div>
   );
 };
-
 export default Message;

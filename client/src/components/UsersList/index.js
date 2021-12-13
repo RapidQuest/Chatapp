@@ -20,6 +20,12 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
     const message =
       lastMessages && lastMessages.filter((lastMessage) => lastMessage.chatId === chatId)[0];
 
+    if (message && message.type !== "string") {
+      return `
+        <span class="fas fa-camera"></span>
+        <span>Image</span>
+      `;
+    }
     return message?.value;
   };
 
@@ -62,7 +68,10 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
                 <div className="row h-100">
                   <p className="col-8 name-last-msg">
                     <span className="item_name">{user.name}</span>
-                    <span className="lastMessage">{getLastMessage(user._id)}</span>
+                    <span
+                      className="lastMessage"
+                      dangerouslySetInnerHTML={{ __html: getLastMessage(user._id) }}
+                    ></span>
                   </p>
                   <p className="col-4 item_role">
                     <span className="role">{user.role}</span>
