@@ -42,7 +42,7 @@ io.on("connect", (socket) => {
     socket.join(chatId);
   });
 
-  socket.on("sendMessage", (message, senderUserId, chatId, messageId) => {
-    socket.to(chatId).emit("messageRecived", message, senderUserId, Date.now(), chatId, messageId);
+  socket.on("sendMessage", (message, senderUserId, chatId, messageId, type) => {
+    socket.to(chatId).emit("messageRecived", message, senderUserId, Date.now(), chatId, messageId, type);
   });
 });

@@ -217,7 +217,7 @@ const Chat = () => {
     setLastMessages(messages);
   };
 
-  const handleMessageRecived = (message, userId, timeStamp, chatId, messageId) => {
+  const handleMessageRecived = (message, userId, timeStamp, chatId, messageId, type) => {
     if (userId == currentUser._id) {
       console.log("%cMessage Sent Succesfully '" + message + "'", "color:blue;font-side:1rem");
     } else {
@@ -240,6 +240,7 @@ const Chat = () => {
               sentBy: userId,
               time: timeStamp,
               id: messageId,
+              type,
             });
           }
         });
