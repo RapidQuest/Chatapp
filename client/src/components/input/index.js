@@ -17,10 +17,11 @@ const Input = ({ message, setMessage, sendMessage }) => {
   const handleSendMessage = (event) => {
     event.preventDefault();
     if (!file) {
-      sendMessage(message, "string", event);
+      sendMessage({ value: message, type: "string" }, event);
       return;
     }
 
+    const fileName = file.name;
     const fileType = file.type;
     const formData = new FormData();
     formData.append("file", file);
@@ -33,7 +34,7 @@ const Input = ({ message, setMessage, sendMessage }) => {
         const data = res.data;
         const filePath = data.filePath;
 
-        sendMessage(filePath, fileType, event);
+        sendMessage({ value: filePath, type: fileType, fileName }, event);
         setFile(null);
       });
   };
@@ -59,7 +60,7 @@ const Input = ({ message, setMessage, sendMessage }) => {
             value={message}
             onChange={({ target: { value } }) => setMessage(value)}
             onKeyPress={(event) =>
-              event.key === "Enter" ? sendMessage(message, "string", event) : null
+              event.key === "Enter" ? sendMessage({ value: message, type: "string" }, event) : null
             }
           />
 

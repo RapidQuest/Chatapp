@@ -1,0 +1,76 @@
+.full-screen-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 10;
+
+  --padding: 0.55rem 2rem;
+}
+
+.full-screen-container .nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: var(--padding);
+}
+
+.name-info-container {
+  margin-left: 1rem;
+}
+
+.full-screen-container .nav-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.full-screen-container .nav-icons {
+  display: flex;
+}
+
+.nav-icon {
+  margin-left: 4rem;
+  display: block;
+}
+
+.nav-avatar .name {
+  font-size: 1.1rem;
+}
+
+.nav-avatar .profileImage {
+  margin: 0;
+}
+
+.name-info-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-screen-img-container {
+  margin: auto;
+  padding: var(--padding);
+}
+
+.full-screen-container .fas {
+  transition: color 200ms ease;
+  color: rgb(212, 212, 212);
+}
+
+.full-screen-container .fas:hover {
+  color: white;
+}
+
+.full-screen-container .fas {
+  font-size: 1.275rem;
+  cursor: pointer;
+}
+
+.full-screen-img {
+  max-width: 100%;
+  max-height: 100%;
+}

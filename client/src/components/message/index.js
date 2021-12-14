@@ -3,7 +3,7 @@ import ImageContainer from "./ImageContainer";
 
 import "./style.css";
 
-const Message = ({ message, id }) => {
+const Message = ({ message, id, showFullScreenImage }) => {
   function getTimeZone() {
     let timezone = localStorage.getItem("timezone");
     if (timezone == null) {
@@ -23,10 +23,15 @@ const Message = ({ message, id }) => {
     };
     return new Date(timeStanmp * 1000).toLocaleString("en-US", options);
   }
-  console.log({ message });
+
   return message ? (
     message.type !== "string" ? (
-      <ImageContainer message={message} id={id} getFormatedTime={getFormatedTime} />
+      <ImageContainer
+        showFullScreenImage={showFullScreenImage}
+        message={message}
+        id={id}
+        getFormatedTime={getFormatedTime}
+      />
     ) : (
       <TextContainer message={message} id={id} getFormatedTime={getFormatedTime} />
     )

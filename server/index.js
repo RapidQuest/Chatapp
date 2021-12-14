@@ -40,10 +40,10 @@ io.on("connect", (socket) => {
     socket.join(chatId);
   });
 
-  socket.on("sendMessage", (message, senderUserId, chatId, messageId, type) => {
+  socket.on("sendMessage", (message, senderUserId, chatId, messageId, type, fileName) => {
     socket
       .to(chatId)
-      .emit("messageRecived", message, senderUserId, Date.now(), chatId, messageId, type);
+      .emit("messageRecived", message, senderUserId, Date.now(), chatId, messageId, type, fileName);
   });
 });
 
@@ -72,5 +72,8 @@ app.get("/file/:key", (req, res) => {
   const key = req.params.key;
   const readStream = getFileStream(key);
 
+  res.set("Content-Type", "application/octet-stream");
+  res.set("responseType", "blob");
+  res.attachment(key);
   readStream.pipe(res);
 });

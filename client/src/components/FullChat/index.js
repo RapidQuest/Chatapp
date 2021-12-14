@@ -18,6 +18,7 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats }) 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const currentUserParsed = JSON.parse(currentUser);
   // let existingMessages = JSON.parse(localStorage.getItem(user._id));
 
@@ -57,7 +58,7 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats }) 
     }
   }
 
-  const sendMessage = (message, type, event) => {
+  const sendMessage = (message, event) => {
     event && event.preventDefault();
     if (!message) return;
 
@@ -65,8 +66,27 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats }) 
     const time = Date.now();
 
     // Sending event to socketio
-    socket.emit("sendMessage", message, currentUserParsed._id, chats.chatid, messageId, type);
+    socket.emit(
+      "sendMessage",
+      message.value,
+      currentUserParsed._id,
+      chats.chatid,
+      messageId,
+      message.type,
+      message.fileName
+    );
 
+    const tempObj = {
+      value: message.value,
+      sentBy: currentUserParsed._id,
+      time,
+      id: messageId,
+      type: message.type,
+    };
+
+    if (message.fileName) {
+      tempObj.fileName = message.fileName;
+    }
     // Adding to all chats array
     setAllChats((chat) => {
       //Cloning chat obj
@@ -74,13 +94,7 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats }) 
       newChat &&
         newChat.forEach((c, i) => {
           if (c && c.chatid == chats.chatid) {
-            c.messages.push({
-              value: message,
-              sentBy: currentUserParsed._id,
-              time,
-              id: messageId,
-              type,
-            });
+            c.messages.push(tempObj);
           }
         });
 
@@ -88,13 +102,7 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats }) 
     });
 
     // Saving to mongodb
-    saveMessage({
-      value: message,
-      sentBy: currentUserParsed._id,
-      time,
-      id: messageId,
-      type,
-    });
+    saveMessage(tempObj);
 
     // Clear message feild
     setMessage("");
@@ -107,7 +115,7 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats }) 
         {loading ? (
           <div className="loader"></div>
         ) : (
-          <Messages messages={messages} id={currentUserParsed._id} />
+          <Messages user={user} messages={messages} id={currentUserParsed._id} />
         )}
         <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>

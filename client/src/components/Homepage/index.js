@@ -218,7 +218,7 @@ const Chat = () => {
     setLastMessages(messages);
   };
 
-  const handleMessageRecived = (message, userId, timeStamp, chatId, messageId, type) => {
+  const handleMessageRecived = (message, userId, timeStamp, chatId, messageId, type, fileName) => {
     if (userId == currentUser._id) {
       console.log("%cMessage Sent Succesfully '" + message + "'", "color:blue;font-side:1rem");
     } else {
@@ -236,13 +236,17 @@ const Chat = () => {
               c.unseen[userId] += 1;
             }
 
-            c.messages.push({
+            const tempObj = {
               value: message,
               sentBy: userId,
               time: timeStamp,
               id: messageId,
               type,
-            });
+            };
+
+            if (fileName) tempObj.fileName = fileName;
+
+            c.messages.push(tempObj);
           }
         });
 
