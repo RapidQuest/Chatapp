@@ -33,9 +33,9 @@ const Input = ({ message, setMessage, sendMessage }) => {
       .then((res) => {
         const data = res.data;
         const filePath = data.filePath;
+
         sendMessage(filePath, fileType, event);
         setFile(null);
-        console.log({ filePath });
       });
   };
 
