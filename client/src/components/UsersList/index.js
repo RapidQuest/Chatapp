@@ -27,7 +27,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
     if (message && message.type !== "string") {
       return `
         <span class="fas fa-camera"></span>
-        <span>Image</span>
+        <span>${message.fileName}</span>
       `;
     }
     return message?.value;

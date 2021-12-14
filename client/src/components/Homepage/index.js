@@ -196,7 +196,6 @@ const Chat = () => {
 
     return chatsForSelectedUser[0];
   };
-
   const reloadLastMessage = () => {
     if (!allChats) return;
     const messages = [];
@@ -206,15 +205,20 @@ const Chat = () => {
 
       const chatsMessages = chat.messages;
       if (chatsMessages && chatsMessages.length > 0) {
-        messages.push({
+        const tempObj = {
           chatId: chat.chatid,
           unseen: chat.unseen,
           value: chatsMessages[chatsMessages.length - 1].value,
           type: chatsMessages[chatsMessages.length - 1].type,
-        });
+        };
+
+        if (chatsMessages[chatsMessages.length - 1].fileName) {
+          tempObj.fileName = chatsMessages[chatsMessages.length - 1].fileName;
+        }
+
+        messages.push(tempObj);
       }
     });
-
     setLastMessages(messages);
   };
 
