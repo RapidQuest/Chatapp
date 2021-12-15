@@ -219,13 +219,6 @@ const Chat = () => {
           value: "Start a new conversation",
           type: 'string'
         });
-      }else{
-        messages.push({
-          chatId: chat.chatid,
-          unseen: chat.unseen,
-          time: 0,
-          value: "Start a new conversation",
-        });
       }
     });
 

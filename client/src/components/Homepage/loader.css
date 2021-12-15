@@ -27,6 +27,8 @@ variables above and don't change anything in the actual loader code
     border-radius: 50%;
     animation: circle-loader var(--animation-duration, 1s) infinite ease-out;
 }
+
+@keyframes circle-loader {
   0% {
       transform: rotate(0deg);
   }
