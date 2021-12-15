@@ -72,9 +72,11 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
                 <div className="row h-100">
                   <p className="col-8 name-last-msg">
                     <span className="item_name">{user.name}</span>
-                    {user.lastMessage?.type !== 'string' ? <span className="lastMessage"><span class="fas fa-camera"> </span>Image</span> : 
+                    {!user.foundedMessage ? user.lastMessage?.type !== 'string' ? <span className="lastMessage"><span class="fas fa-camera"> </span>Image</span> : 
                     
-                    <span className="lastMessage">{user.foundedMessage ? user.foundedMessage.value :getLastMessage(user._id)?.value}</span>
+                    <span className="lastMessage">{getLastMessage(user._id)?.value}</span>:
+
+                    <span className="lastMessage">{user.foundedMessage.value}</span>
 //                       <span
 //                       className="lastMessage"
 //                       dangerouslySetInnerHTML={{ __html: getLastMessage(user._id)?.value }}
