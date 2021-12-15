@@ -86,6 +86,12 @@
   text-overflow: ellipsis;
   text-align: left;
 }
+
+.lastMessage .fa-camera {
+  color: #3c3c3c;
+  margin-right: 2px;
+}
+
 .item_role {
   margin: 0;
   display: flex;
@@ -126,7 +132,7 @@ div.block_item.active {
 
 @media (max-width: 940px) and (min-width: 800px) {
   .pd-l {
-    padding-left: 1.25rem;
+    padding-left: 1.55rem;
   }
 }
 

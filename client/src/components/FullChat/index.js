@@ -57,13 +57,18 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats }) 
     }
   }
 
-  const sendMessage = (event) => {
-    event.preventDefault();
+  const sendMessage = (message, type, event) => {
+    event && event.preventDefault();
     if (!message) return;
 
     const messageId = uuidv4();
-    socket.emit("sendMessage", message, currentUserParsed._id, chats?.chatid, messageId);
 
+    const time = Date.now();
+
+    // Sending event to socketio
+    socket.emit("sendMessage", message, currentUserParsed._id, chats.chatid, messageId, type);
+
+    // Adding to all chats array
     setAllChats((chat) => {
       //Cloning chat obj
       const newChat = JSON.parse(JSON.stringify(chat));
@@ -73,23 +78,27 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats }) 
             c.messages.push({
               value: message,
               sentBy: currentUserParsed._id,
-              time: Date.now(),
+              time,
               id: messageId,
+              type,
             });
           }
         });
 
       return newChat;
     });
+
+    // Saving to mongodb
     saveMessage({
       value: message,
       sentBy: currentUserParsed._id,
-      time: Date.now(),
+      time,
       id: messageId,
+      type,
     });
-    setMessage("");
 
-    // localStorage.setItem(user._id, JSON.stringify(existingMessages));
+    // Clear message feild
+    setMessage("");
   };
 
   return (

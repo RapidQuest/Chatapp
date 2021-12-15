@@ -209,6 +209,15 @@ const Chat = () => {
           unseen: chat.unseen,
           time: chatsMessages[chatsMessages.length - 1].time,
           value: chatsMessages[chatsMessages.length - 1].value,
+          type: chatsMessages[chatsMessages.length - 1].type,
+        });
+      }else{
+        messages.push({
+          chatId: chat.chatid,
+          unseen: chat.unseen,
+          time: 0,
+          value: "Start a new conversation",
+          type: 'string'
         });
       }else{
         messages.push({
@@ -223,8 +232,8 @@ const Chat = () => {
     setLastMessages(messages);
   };
 
-  const handleMessageRecived = (message, userId, timeStamp, chatId, messageId) => {
-    if (userId === currentUser._id) {
+  const handleMessageRecived = (message, userId, timeStamp, chatId, messageId, type) => {
+    if (userId == currentUser._id) {
       console.log("%cMessage Sent Succesfully '" + message + "'", "color:blue;font-side:1rem");
     } else {
       console.log("%cMessage Recived '" + message + "'", "color:gold;font-side:1rem");
@@ -246,6 +255,7 @@ const Chat = () => {
               sentBy: userId,
               time: timeStamp,
               id: messageId,
+              type,
             });
           }
         });

@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /.pnp
+/.env
 .pnp.js
 
 # testing
@@ -17,6 +18,8 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.env
+/server/files
 
 npm-debug.log*
 yarn-debug.log*

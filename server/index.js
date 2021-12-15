@@ -9,13 +9,10 @@ const PORT = process.env.PORT || 5000;
 require("./db");
 
 const bodyParser = require("body-parser");
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
-// parse application/json
 app.use(bodyParser.json());
 
 app.use(cors());
-
 app.use((req, res, next) => {
   if (req.headers && req.headers.authorization) {
     jwt.verify(req.headers.authorization, "RESTfulAPIs", (err, decode) => {
@@ -31,6 +28,7 @@ app.use((req, res, next) => {
 
 routes(app);
 
+// socketio
 const server = app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
@@ -42,7 +40,37 @@ io.on("connect", (socket) => {
     socket.join(chatId);
   });
 
-  socket.on("sendMessage", (message, senderUserId, chatId, messageId) => {
-    socket.to(chatId).emit("messageRecived", message, senderUserId, Date.now(), chatId, messageId);
+  socket.on("sendMessage", (message, senderUserId, chatId, messageId, type) => {
+    socket
+      .to(chatId)
+      .emit("messageRecived", message, senderUserId, Date.now(), chatId, messageId, type);
   });
+});
+
+// file uploads
+const multer = require("multer");
+const fs = require("fs");
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink);
+const upload = multer({ dest: "files/" });
+
+const { uploadFile, getFileStream } = require("./s3");
+
+app.post("/file/upload", upload.single("file"), async (req, res) => {
+  // const description = req.body.description;
+  const file = req.file;
+  console.log(file);
+  const result = await uploadFile(file);
+
+  // Deleteing file from server
+  await unlinkFile(file.path);
+  res.send({ filePath: `/file/${result.Key}` });
+});
+
+app.get("/file/:key", (req, res) => {
+  console.log(req.params);
+  const key = req.params.key;
+  const readStream = getFileStream(key);
+
+  readStream.pipe(res);
 });

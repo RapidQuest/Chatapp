@@ -71,3 +71,13 @@
 .backgroundLight {
   background: rgba(241, 241, 241, 0.9);
 }
+
+.message-image-container {
+  max-width: 35%;
+  display: block;
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+.message-image-container img {
+  border-radius: 8px;
+}

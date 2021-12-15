@@ -32,6 +32,7 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
       (item, i) => {}
     )
   }
+
   const getUnseenNumber = (userId) => {
     const chatId = getHash(userId, currentUserParsed._id);
 
@@ -67,11 +68,18 @@ const UsersList = ({ users, lastMessages, setSelectedUser, selectedUserId }) => 
               >
                 <ProfileImage userName={user?.name} color={user?.color} />
               </div>
-              <div className={isSmall ? "col-11 pd-l" : "col-10"}>
+              <div className={isSmall ? "col-11 pd-l" : "col-10 pd-l"}>
                 <div className="row h-100">
                   <p className="col-8 name-last-msg">
-                    <span className="item_name">{user.name? user.name : user.value}</span>
+                    <span className="item_name">{user.name}</span>
+                    {user.lastMessage?.type !== 'string' ? <span className="lastMessage"><span class="fas fa-camera"> </span>Image</span> : 
+                    
                     <span className="lastMessage">{user.foundedMessage ? user.foundedMessage.value :getLastMessage(user._id)?.value}</span>
+//                       <span
+//                       className="lastMessage"
+//                       dangerouslySetInnerHTML={{ __html: getLastMessage(user._id)?.value }}
+//                     ></span>
+                        }
                   </p>
                   <p className="col-4 item_role">
                     <span className="role">{user?.role}</span>
