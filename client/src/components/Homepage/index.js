@@ -196,12 +196,13 @@ const Chat = () => {
 
   const reloadLastMessage = () => {
     if (!allChats) return;
+    
     const messages = [];
 
     allChats.forEach((chat) => {
       if (!chat) return;
-
       const chatsMessages = chat.messages;
+
       if (chatsMessages && chatsMessages.length > 0) {
         messages.push({
           chatId: chat.chatid,
@@ -217,6 +218,13 @@ const Chat = () => {
           time: 0,
           value: "Start a new conversation",
           type: 'string'
+        });
+      }else{
+        messages.push({
+          chatId: chat.chatid,
+          unseen: chat.unseen,
+          time: 0,
+          value: "Start a new conversation",
         });
       }
     });
@@ -265,7 +273,6 @@ const Chat = () => {
 
     users.forEach((user) => {
       const chatId = getHash(user._id, currentUser._id);
-
       const check = user.chatId.find((element) => element === chatId);
 
       if (check === undefined) {
@@ -363,6 +370,7 @@ const Chat = () => {
                 allUsers={allUsers}
                 setSelectedUser={setSelectedUser}
                 selectedUserId={selectedUser && selectedUser._id}
+                allChats={allChats}
               />
             )
           ) : (
@@ -372,6 +380,7 @@ const Chat = () => {
                 allUsers={allUsers}
                 setSelectedUser={setSelectedUser}
                 selectedUserId={selectedUser && selectedUser._id}
+                allChats={allChats}
               />
               <div className="chatBox">
                 {selectedUser ? (

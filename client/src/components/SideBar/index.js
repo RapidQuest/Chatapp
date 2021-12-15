@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import UsersList from "../UsersList";
+import { useAuth } from "../../contexts/Auth";
 import "./style.css";
 
-const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId }) => {
+const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allChats }) => {
   const [query, setQuery] = useState("");
   const [searchedUsers, setSearchedUsers] = useState([]);
+  const { currentUser } = useAuth();
+  const currentUserParsed = JSON.parse(currentUser);
 
   const search = () => {
     setSearchedUsers([]);
-
     allUsers.filter((user) => {
       if (query === "") {
         //if query is empty
@@ -17,6 +19,24 @@ const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId }) =>
         //returns filtered array
         return setSearchedUsers((searchedUsers) => [...searchedUsers, user]);
       }
+    });
+    
+    allChats.forEach(chat => {
+      chat.messages.filter((message) => {
+        if (query === "") {
+          //if query is empty
+          return;
+        } else if (message.value.toLowerCase().includes(query.toLowerCase())) {
+            allUsers.filter((user) =>{
+              if(user.chatId.find((id) => id === chat.chatid) && user._id !== currentUserParsed._id){
+                user.foundedMessage = message;
+                return setSearchedUsers((searchedUsers) => [...searchedUsers, user]);
+              }else{
+                return;
+              }
+            });
+        }
+      });
     });
   };
 
@@ -37,7 +57,10 @@ const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId }) =>
             className="form-control search rounded-0 border_left_0 shadow-none"
             placeholder="Search here..."
             aria-label="Search"
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              setQuery(event.target.value)
+              setSearchedUsers([])
+            }}
             value={query}
           />
           {query ? (
