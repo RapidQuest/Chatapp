@@ -1,7 +1,14 @@
 import ImageWithLoading from "../../ImageWithLoading";
+import React, { useEffect, useRef, useState } from "react";
 const apiUrl = "http://localhost:5000";
 
-export default function ImageContainer({ message, id, getFormatedTime }) {
+export default function ImageContainer({setMessagesLoaded, message, id, getFormatedTime, user }) {
+  useEffect(() => {
+    if(user.lastMessage.value === message.value){
+      console.log("message loaded");
+      setMessagesLoaded(true);
+    }
+  }, [message])
   return message.sentBy === id ? (
     <div className="messageContainer justifyEnd">
       <p className="sentText pr-10">{getFormatedTime(message.time)}</p>

@@ -12,7 +12,7 @@ import "./style.css";
 const apiUrl = "http://localhost:5000/";
 const socket = io(apiUrl, { transports: ["websocket"] });
 
-export default function FullChat({ user, setSelectedUser, chats, setAllChats }) {
+export default function FullChat({ user, setSelectedUser, chats, setAllChats,foundedMessageIndex }) {
   const { currentUser, logout } = useAuth();
   const history = useHistory();
   const [message, setMessage] = useState("");
@@ -27,6 +27,7 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats }) 
     setMessages(chats ? chats.messages : null);
     setLoading(false);
   }, [chats]);
+
 
   const saveMessage = async (message) => {
     const data = {
@@ -108,7 +109,7 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats }) 
         {loading ? (
           <div className="loader"></div>
         ) : (
-          <Messages messages={messages} id={currentUserParsed._id} />
+          <Messages messages={messages} id={currentUserParsed._id} user={user} foundedMessageIndex={foundedMessageIndex} />
         )}
         <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>

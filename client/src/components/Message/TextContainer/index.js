@@ -1,13 +1,20 @@
-export default function TextContainer({ message, id, getFormatedTime }) {
+import React, { useEffect, useRef, useState } from "react";
+export default function TextContainer({setMessagesLoaded, message, id, getFormatedTime, user }) {
+  useEffect(() => {
+    if(user.lastMessage.value === message.value){
+      setMessagesLoaded(true);
+    }
+  }, [message, user])
+
   return message.sentBy === id ? (
-    <div className="messageContainer justifyEnd">
+    <div className="messageContainer justifyEnd" id={message.id}>
       <p className="sentText pr-10">{getFormatedTime(message.time)}</p>
       <div className="messageBox backgroundLight2">
         <p className="messageText colorDark">{message.value}</p>
       </div>
     </div>
   ) : (
-    <div className="messageContainer justifyStart">
+    <div className="messageContainer justifyStart" id={message.id}>
       <div className="messageBox backgroundLight">
         <p className="messageText colorDark">{message.value}</p>
       </div>

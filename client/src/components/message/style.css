@@ -8,6 +8,22 @@
   height: fit-content;
 }
 
+@keyframes highlight {
+  0% {
+      background: #cacccc; 
+  }
+  100% {
+      background: none;
+  }
+}
+
+.highlight {
+  animation: highlight 4s;
+  /* margin-left: 0.5rem;
+  margin-right: 0.5rem; */
+  border-radius: 4px;
+}
+
 .messageText {
   color: rgba(0, 0, 0, 0.68);
   width: 100%;

@@ -1,12 +1,15 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import Message from "../Message";
 
 import "./style.css";
 
-const Messages = ({ messages, id }) => {
+const Messages = ({ messages, id, user,foundedMessageIndex }) => {
+  const [messagesLoaded, setMessagesLoaded] = useState(false);
   const messagesContainerRef = useRef(null);
-
+  useEffect(() => {
+    console.log(messagesLoaded);
+  }, [messagesLoaded])
   const scrollToBottom = (ele) => {
     if (!ele) return;
     ele.scrollTop = ele.scrollHeight - ele.clientHeight;
@@ -22,7 +25,7 @@ const Messages = ({ messages, id }) => {
         <div ref={messagesContainerRef} className="messages">
           {messages.map((message, i) => (
             <div key={i}>
-              <Message message={message} id={id} />
+              <Message foundedMessageIndex={foundedMessageIndex} messagesLoaded={messagesLoaded} setMessagesLoaded={setMessagesLoaded} message={message} id={id} user={user} />
             </div>
           ))}
         </div>

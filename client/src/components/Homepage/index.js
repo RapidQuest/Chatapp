@@ -17,6 +17,7 @@ const Chat = () => {
   const [allChats, setAllChats] = useState([]);
 
   const [selectedUser, setSelectedUser] = useState(null);
+  const [foundedMessageIndex, setFoundedMessageIndex] = useState(null);
   const [lastMessages, setLastMessages] = useState([]);
 
   const [dataIsLoaded, setDataIsLoaded] = useState(false);
@@ -354,6 +355,7 @@ const Chat = () => {
                     setSelectedUser={setSelectedUser}
                     user={selectedUser}
                     chats={getChatForUser(selectedUser._id)}
+                    foundedMessageIndex={foundedMessageIndex}
                   />
                 </div>
               )
@@ -364,6 +366,7 @@ const Chat = () => {
                 setSelectedUser={setSelectedUser}
                 selectedUserId={selectedUser && selectedUser._id}
                 allChats={allChats}
+                setFoundedMessageIndex={setFoundedMessageIndex}
               />
             )
           ) : (
@@ -374,6 +377,7 @@ const Chat = () => {
                 setSelectedUser={setSelectedUser}
                 selectedUserId={selectedUser && selectedUser._id}
                 allChats={allChats}
+                setFoundedMessageIndex={setFoundedMessageIndex}
               />
               <div className="chatBox">
                 {selectedUser ? (
@@ -385,6 +389,7 @@ const Chat = () => {
                       setSelectedUser={setSelectedUser}
                       user={selectedUser}
                       chats={getChatForUser(selectedUser._id)}
+                      foundedMessageIndex={foundedMessageIndex}
                     />
                   )
                 ) : (

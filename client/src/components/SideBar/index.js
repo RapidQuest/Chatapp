@@ -3,11 +3,12 @@ import UsersList from "../UsersList";
 import { useAuth } from "../../contexts/Auth";
 import "./style.css";
 
-const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allChats }) => {
+const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUser, allChats,setFoundedMessageIndex }) => {
   const [query, setQuery] = useState("");
   const [searchedUsers, setSearchedUsers] = useState([]);
   const { currentUser } = useAuth();
   const currentUserParsed = JSON.parse(currentUser);
+  
 
   const search = () => {
     setSearchedUsers([]);
@@ -29,8 +30,9 @@ const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allC
         } else if (message.value.toLowerCase().includes(query.toLowerCase())) {
             allUsers.filter((user) =>{
               if(user.chatId.find((id) => id === chat.chatid) && user._id !== currentUserParsed._id){
-                user.foundedMessage = message;
-                return setSearchedUsers((searchedUsers) => [...searchedUsers, user]);
+                user.foundedMessage.push(message)
+                setSearchedUsers((searchedUsers) => [...searchedUsers, user]);
+                return;
               }else{
                 return;
               }
@@ -40,7 +42,13 @@ const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allC
     });
   };
 
+  const clearFoundedMessages = () => {
+    allUsers.forEach(user => {
+      user.foundedMessage = [];
+    })
+  };
   useEffect(() => {
+    clearFoundedMessages();
     search();
   }, [query]);
   return (
@@ -64,7 +72,10 @@ const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allC
             value={query}
           />
           {query ? (
-            <div className="x-icon-wrapper" onClick={() => setQuery("")}>
+            <div className="x-icon-wrapper" onClick={() => {
+              setQuery("");
+             clearFoundedMessages();
+             }}>
               <span className="fas fa-times"></span>
             </div>
           ) : (
@@ -76,7 +87,8 @@ const SideBar = ({ allUsers, lastMessages, setSelectedUser, selectedUserId, allC
         lastMessages={lastMessages}
         users={searchedUsers}
         setSelectedUser={setSelectedUser}
-        selectedUserId={selectedUserId}
+        selectedUser={selectedUser}
+        setFoundedMessageIndex={setFoundedMessageIndex}
       />
     </div>
   );

@@ -159,7 +159,7 @@ button:focus {
     font-size: 13rem;
   }
 }
-
+html { scroll-behavior: smooth; }
 .chatArea {
   background-color: rgba(226, 214, 214, 0.09);
 }
