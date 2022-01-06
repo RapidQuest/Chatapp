@@ -11,6 +11,7 @@ const ImageWithLoading = ({ src, height, className }) => {
         src={src}
         className={loaded ? className : "loading-img"}
         onLoad={() => setLoaded(true)}
+        alt="Loading Image"
       />
     </>
   );

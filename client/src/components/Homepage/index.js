@@ -227,7 +227,7 @@ const Chat = () => {
   };
 
   const handleMessageRecived = (message, userId, timeStamp, chatId, messageId, type) => {
-    if (userId == currentUser._id) {
+    if (userId === currentUser._id) {
       console.log("%cMessage Sent Succesfully '" + message + "'", "color:blue;font-side:1rem");
     } else {
       console.log("%cMessage Recived '" + message + "'", "color:gold;font-side:1rem");

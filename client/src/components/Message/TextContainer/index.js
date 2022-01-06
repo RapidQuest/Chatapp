@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect} from "react";
 export default function TextContainer({setMessagesLoaded, message, id, getFormatedTime, user }) {
   useEffect(() => {
     if(user.lastMessage.value === message.value){

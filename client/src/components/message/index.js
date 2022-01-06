@@ -1,7 +1,6 @@
 import TextContainer from "./TextContainer";
 import ImageContainer from "./ImageContainer";
 import React, { useEffect } from "react";
-import $ from 'jquery'; 
 
 import "./style.css";
 

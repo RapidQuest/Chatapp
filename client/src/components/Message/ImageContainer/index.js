@@ -1,5 +1,5 @@
 import ImageWithLoading from "../../ImageWithLoading";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect} from "react";
 const apiUrl = "http://localhost:5000";
 
 export default function ImageContainer({setMessagesLoaded, message, id, getFormatedTime, user }) {
