@@ -8,7 +8,6 @@ const Messages = ({ messages, id, user,foundedMessageIndex }) => {
   const [messagesLoaded, setMessagesLoaded] = useState(false);
   const messagesContainerRef = useRef(null);
   useEffect(() => {
-    console.log(messagesLoaded);
   }, [messagesLoaded])
   const scrollToBottom = (ele) => {
     if (!ele) return;

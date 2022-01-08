@@ -59,7 +59,6 @@ const { uploadFile, getFileStream } = require("./s3");
 app.post("/file/upload", upload.single("file"), async (req, res) => {
   // const description = req.body.description;
   const file = req.file;
-  console.log(file);
   const result = await uploadFile(file);
 
   // Deleteing file from server
@@ -68,7 +67,6 @@ app.post("/file/upload", upload.single("file"), async (req, res) => {
 });
 
 app.get("/file/:key", (req, res) => {
-  console.log(req.params);
   const key = req.params.key;
   const readStream = getFileStream(key);
 

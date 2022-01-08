@@ -12,7 +12,7 @@ import "./style.css";
 const apiUrl = "http://localhost:5000/";
 const socket = io(apiUrl, { transports: ["websocket"] });
 
-export default function FullChat({ user, setSelectedUser, chats, setAllChats,foundedMessageIndex }) {
+export default function FullChat({ user, setSelectedUser, chats, setAllChats,foundedMessageIndex,handleShow }) {
   const { currentUser, logout } = useAuth();
   const history = useHistory();
   const [message, setMessage] = useState("");
@@ -97,7 +97,10 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats,fou
       id: messageId,
       type,
     });
+    
+    if(type === 'videoCall'){
 
+    }
     // Clear message feild
     setMessage("");
   };
@@ -105,7 +108,7 @@ export default function FullChat({ user, setSelectedUser, chats, setAllChats,fou
   return (
     <div className="outerContainer">
       <div className="containerC" id={user._id}>
-        <InfoBar user={user} setSelectedUser={setSelectedUser} />
+        <InfoBar user={user} setSelectedUser={setSelectedUser} handleShow={handleShow} sendMessage={sendMessage} />
         {loading ? (
           <div className="loader"></div>
         ) : (

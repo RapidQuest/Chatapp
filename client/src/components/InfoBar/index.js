@@ -5,7 +5,7 @@ import useMediaQuery from "../../hooks/useMediaQuery";
 
 import "./style.css";
 
-const InfoBar = ({ user, setSelectedUser }) => {
+const InfoBar = ({ user, setSelectedUser,handleShow, sendMessage }) => {
   const isSmall = useMediaQuery("(max-width: 760px)", false);
 
   return (
@@ -24,6 +24,11 @@ const InfoBar = ({ user, setSelectedUser }) => {
           <br />
           <p className="userRole">{user.role}</p>
         </h4>
+      </div>
+      <div className="rightInnerContainer">
+        <i class="fas fa-video" onClick={(e) => {
+          handleShow()
+          sendMessage("Video Call Started", "videoCall", e)}}></i>
       </div>
     </div>
   );
