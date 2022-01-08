@@ -1,5 +1,6 @@
 import TextContainer from "./TextContainer";
 import ImageContainer from "./ImageContainer";
+import VideoCallContainer from "./VideoCallContainer";
 import React, { useEffect } from "react";
 
 import "./style.css";
@@ -41,10 +42,12 @@ const Message = ({messagesLoaded, setMessagesLoaded, message, id,user,foundedMes
     return new Date(timeStamp).toLocaleString("en-IN", options);
   }
   return message ? (
-    message.type !== "string" ? (
-      <ImageContainer setMessagesLoaded={setMessagesLoaded} message={message} id={id} getFormatedTime={getFormatedTime} user={user}  />
-    ) : (
+    message.type === "string"? (
       <TextContainer setMessagesLoaded={setMessagesLoaded} message={message} id={id} getFormatedTime={getFormatedTime} user={user} />
+    ) : message.type === 'videoCall' ? (
+      <VideoCallContainer setMessagesLoaded={setMessagesLoaded} message={message} id={id} getFormatedTime={getFormatedTime} user={user} />
+    ) :(
+      <ImageContainer setMessagesLoaded={setMessagesLoaded} message={message} id={id} getFormatedTime={getFormatedTime} user={user}  />
     )
   ) : (
     <div>Start A new Conversation</div>
