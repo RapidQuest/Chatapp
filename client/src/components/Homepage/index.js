@@ -5,7 +5,8 @@ import SideBar from "../SideBar";
 import FullChat from "../FullChat";
 import io from "socket.io-client";
 import { getHash } from "../../utils";
-import { Modal } from "react-bootstrap";
+import CallReceiveModal from "../VideoModal/CallReceiveModal"
+import CallModal from "../VideoModal/CallModal"
 
 // import Button from "@material-ui/core/Button"
 // import IconButton from "@material-ui/core/IconButton"
@@ -55,7 +56,9 @@ const Chat = () => {
     window.localStream.getVideoTracks()[0].stop();
     window.localStream.getAudioTracks()[0].stop();
     }
-    setShow(false)};
+    setReceivingCall(false)
+    setShow(false)
+  };
   /**
    * Make stateRef always have the current selectedvalue.
    * Callbacks can refer to this object whenever they need the current value.
@@ -117,6 +120,16 @@ const Chat = () => {
         users.forEach((user) => {
           user.color = profileColor(user._id);
         });
+
+        // socket.emit('getSocketId',)
+        // socket.on('requestedSocketId', (id) => {
+        //   console.log(id);
+        // })
+
+        // socket.on('connect', function() {
+        //   const sessionID = socket.sessionid; 
+        //   console.log(sessionID);
+        // });
 
         setAllUsers(users);
         setDataIsLoaded(true);
@@ -288,7 +301,7 @@ const Chat = () => {
         return newChat;
       });
       if(type === 'videoCall'){
-        setReceivingCall(true);
+        // setReceivingCall(true);
       }
     }
   };
@@ -305,19 +318,18 @@ const Chat = () => {
     }else if(window.localStream !== undefined){;
     }
 
-	socket.on("me", (id) => {
-			setMe(id)
-		})
+  socket.on("sendCall", (data) => {
+    console.log(data);
+    setReceivingCall(true)
+    setCaller(data.from)
+    setName(data.name)
+    setCallerSignal(data.signal)
+  })
 
-		socket.on("callUser", (data) => {
-			setReceivingCall(true)
-			setCaller(data.from)
-			setName(data.name)
-			setCallerSignal(data.signal)
-		})
-	}, [show])
+	}, [show, callAccepted, idToCall, selectedUser])
 
 	const callUser = (id) => {
+    setIdToCall(id);
 		const peer = new Peer({
 			initiator: true,
 			trickle: false,
@@ -325,22 +337,20 @@ const Chat = () => {
 		})
 		peer.on("signal", (data) => {
 			socket.emit("callUser", {
-				userToCall: id,
+				userToCall: idToCall,
 				signalData: data,
-				from: me,
-				name: name
+				from: currentUser._id,
+				name: currentUser.name
 			})
 		})
 		peer.on("stream", (stream) => {
-			
 				userVideo.current.srcObject = stream
-			
 		})
+
 		socket.on("callAccepted", (signal) => {
 			setCallAccepted(true)
 			peer.signal(signal)
 		})
-
 		connectionRef.current = peer
 	}
 
@@ -357,7 +367,6 @@ const Chat = () => {
 		peer.on("stream", (stream) => {
 			userVideo.current.srcObject = stream
 		})
-
 		peer.signal(callerSignal)
 		connectionRef.current = peer
 	}
@@ -464,47 +473,9 @@ const Chat = () => {
 
   return (
     <>
-    <Modal show={receivingCall} onHide={handleClose}>
-      <Modal.Header closeButton>
-        {/* <Modal.Title>Login Form</Modal.Title> */}
-      </Modal.Header>
-      <Modal.Body>
-        <div className="video-container">
-          <div className="video">
-            {stream &&  <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
-          </div>
-          <div className="video">
-            {callAccepted && !callEnded ?
-            <video playsInline ref={userVideo} autoPlay style={{ width: "300px"}} />:
-            null}
-          </div>
-        </div>
-        <div className="" onClick={answerCall}>Receive Call</div>
-      </Modal.Body>
-      {/* <Modal.Footer>
-        <button variant="secondary">Close Modal</button>
-      </Modal.Footer> */}
-    </Modal>
-  <Modal show={show} onHide={handleClose}>
-    <Modal.Header closeButton>
-    </Modal.Header>
-    <Modal.Body>
-			<div className="video-container">
-				<div className="video">
-					{stream &&  <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
-				</div>
-				<div className="video">
-					{callAccepted && !callEnded ?
-					<video playsInline ref={userVideo} autoPlay style={{ width: "300px"}} />:
-					null}
-				</div>
-			</div>
-      
-    </Modal.Body>
-    <Modal.Footer>
-      <button variant="secondary">Close Modal</button>
-    </Modal.Footer>
-  </Modal>
+      <CallReceiveModal receivingCall={receivingCall} handleClose={handleClose} stream={stream} myVideo={myVideo} callAccepted={callAccepted} callEnded={callEnded} userVideo={userVideo} answerCall={answerCall}/>
+
+      <CallModal show={show} handleClose={handleClose} stream={stream} myVideo={myVideo} callAccepted={callAccepted} callEnded={callEnded} userVideo={userVideo}/>
       {!dataIsLoaded ? (
         <div className="loader simple-circle"></div>
       ) : (
@@ -522,6 +493,9 @@ const Chat = () => {
                     chats={getChatForUser(selectedUser._id)}
                     foundedMessageIndex={foundedMessageIndex}
                     handleShow={handleShow}
+                    callUser={callUser}
+                    setIdToCall={setIdToCall}
+                    setMe={setMe}
                   />
                 </div>
               )
@@ -557,6 +531,9 @@ const Chat = () => {
                       chats={getChatForUser(selectedUser._id)}
                       foundedMessageIndex={foundedMessageIndex}
                       handleShow={handleShow}
+                      callUser={callUser}
+                      setIdToCall={setIdToCall}
+                      setMe={setMe}
                     />
                   )
                 ) : (

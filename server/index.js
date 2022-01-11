@@ -45,6 +45,30 @@ io.on("connect", (socket) => {
       .to(chatId)
       .emit("messageRecived", message, senderUserId, Date.now(), chatId, messageId, type);
   });
+
+  // socket.on("getSocketId", () => {
+  //   socket
+  //     .to(chatId)
+  //     .emit("requestSocketId", socket.id);
+  // });
+
+	// socket.emit("requestSocketId", socket.id)
+
+	socket.on("disconnect", () => {
+		socket.broadcast.emit("callEnded")
+	})
+
+	socket.on("callUser", (data) => {
+		socket
+      .to(data.userToCall)
+      .emit("sendCall", { signal: data.signalData, from: data.from, name: data.name })
+	})
+
+	socket.on("answerCall", (data) => {
+		socket
+      .to(data.to)
+      .emit("callAccepted", data.signal)
+	})
 });
 
 // file uploads

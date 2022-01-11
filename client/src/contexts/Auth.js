@@ -1,8 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Auth } from "../firebase";
+import io from "socket.io-client";
 
 const AuthContext = React.createContext();
 const apiUrl = "http://localhost:5000/";
+const socket = io(apiUrl, { transports: ["websocket"] });
 export function useAuth() {
   return useContext(AuthContext);
 }
@@ -119,6 +121,10 @@ export function AuthProvider({ children }) {
 
   function checkLogin(redirect) {
     if (localStorage.getItem("token") != null) {
+      // console.log(currentUser.role)
+      // socket.on("me", (id) => {
+      // setMe(id)
+      // })
       return true;
     } else {
       if (redirect) {
