@@ -3,7 +3,7 @@ import axios from "axios";
 
 import "./style.css";
 
-const apiUrl = "http://localhost:5000/";
+const apiUrl = "https://chatapp-v.herokuapp.com/";
 
 const Input = ({ message, setMessage, sendMessage }) => {
   const [file, setFile] = useState(null);

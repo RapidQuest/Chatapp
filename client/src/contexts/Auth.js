@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Auth } from "../firebase";
 
 const AuthContext = React.createContext();
-const apiUrl = "http://localhost:5000/";
+const apiUrl = "https://chatapp-v.herokuapp.com/";
 export function useAuth() {
   return useContext(AuthContext);
 }

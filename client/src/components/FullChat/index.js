@@ -9,7 +9,7 @@ import Input from "../Input";
 import Messages from "../Messages";
 import "./style.css";
 
-const apiUrl = "http://localhost:5000/";
+const apiUrl = "https://chatapp-v.herokuapp.com/";
 const socket = io(apiUrl, { transports: ["websocket"] });
 
 export default function FullChat({ user, setSelectedUser, chats, setAllChats,foundedMessageIndex }) {

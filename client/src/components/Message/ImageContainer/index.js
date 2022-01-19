@@ -1,6 +1,6 @@
 import ImageWithLoading from "../../ImageWithLoading";
 import React, { useEffect} from "react";
-const apiUrl = "http://localhost:5000";
+const apiUrl = "https://chatapp-v.herokuapp.com";
 
 export default function ImageContainer({setMessagesLoaded, message, id, getFormatedTime, user }) {
   useEffect(() => {

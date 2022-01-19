@@ -35,7 +35,7 @@ const Chat = () => {
   const selectedUserRef = useRef();
   selectedUserRef.current = selectedUser;
 
-  const apiUrl = "http://localhost:5000/";
+  const apiUrl = "https://chatapp-v.herokuapp.com/";
 
   let tagCount = 0;
   let tagClasses = {};
